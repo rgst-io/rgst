@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex
+  namespace: media-center
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: media
+  ports:
+    - port: 32400
+      targetPort: plex-http
+      protocol: TCP
+      name: http
+    - name: unknown
+      port: 32469
+      protocol: TCP
+      targetPort: 32469

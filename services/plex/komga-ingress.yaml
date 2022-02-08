@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: komga
+  namespace: media-center
+  annotations:
+    cert-manager.io/cluster-issuer: main
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: manga.satania.social
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: komga
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - manga.satania.social
+      secretName: komga-tls
