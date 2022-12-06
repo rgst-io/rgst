@@ -1,10 +1,4 @@
 directory: charts
-repositories:
-- name: stable
-  url: https://charts.helm.sh/stable
-- name: groundhog2k
-  url: https://groundhog2k.github.io/helm-charts/
-requires:
-- chart: groundhog2k/redis
-  version: 0.5.8
+repositories: []
+requires: []
 version: 1
