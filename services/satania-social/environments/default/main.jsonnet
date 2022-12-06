@@ -94,7 +94,7 @@ local tolerations = [{
   web: {
     local port = 3000,
     deployment: appsv1.deployment.new(
-      name='web', replicas=3, containers=[
+      name='web', replicas=2, containers=[
         container.new('web', image, [
           container.withCommand([
             'bash',
@@ -129,7 +129,7 @@ local tolerations = [{
   },
   streaming: {
     local port = 4000,
-    deployment: appsv1.deployment.new(name='streaming', replicas=3, containers=[
+    deployment: appsv1.deployment.new(name='streaming', replicas=2, containers=[
       container.new('streaming', image, [
         container.withCommand(['node', './streaming']),
         container.withEnvFrom(corev1.envFromSource.configMapRef.withName($.config.configmap.metadata.name)),
