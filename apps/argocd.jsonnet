@@ -18,7 +18,7 @@ local argo = import '../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='argo-cd',
   repoURL='https://argoproj.github.io/argo-helm',
-  version='5.16.1',
+  version='5.16.2',
   values={
     'redis-ha': {
       enabled: true,
