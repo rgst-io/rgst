@@ -13,26 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
-local secrets = import '../libs/external-secrets.libsonnet';
-local k = import '../libs/k.libsonnet';
+local argo = import '../../../libs/argocd.libsonnet';
 
-local all = {
-  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
-  application: argo.HelmApplication(
-    chart='external-secrets',
-    repoURL='https://charts.external-secrets.io',
-    version='0.7.0-rc1',
-  ),
-  secret_store: secrets.ClusterSecretStore('kubernetes') {
-    doppler_:: {
-      secret: {
-        name: 'doppler-token-auth-api',
-        namespace: $.application.namespace,
-        key: 'dopplerToken',
-      },
-    },
-  },
-};
-
-k.List() { items_:: all }
+argo.JsonnetApplication(
+  name='plex',
+  install_namespace='media-center',
+)

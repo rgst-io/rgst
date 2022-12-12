@@ -14,24 +14,25 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 local argo = import '../../libs/argocd.libsonnet';
+local secrets = import '../../libs/external-secrets.libsonnet';
+local k = import '../../libs/k.libsonnet';
 
-argo.HelmApplication(
-  chart='mysql',
-  install_namespace='ghost',
-  repoURL='https://groundhog2k.github.io/helm-charts',
-  version='0.1.4',
-  values={
-    fullnameOverride: 'ghost-mysql',
-    resources: {
-      requests: {
-        cpu: 1,
-        memory: '1Gi',
+local all = {
+  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
+  application: argo.HelmApplication(
+    chart='external-secrets',
+    repoURL='https://charts.external-secrets.io',
+    version='0.7.0-rc1',
+  ),
+  secret_store: secrets.ClusterSecretStore('kubernetes') {
+    doppler_:: {
+      secret: {
+        name: 'doppler-token-auth-api',
+        namespace: $.application.namespace,
+        key: 'dopplerToken',
       },
-      limits: self.requests,
-    },
-    extraEnvSecrets: ['ghost-mysql'],
-    storage: {
-      requestedSize: '40Gi',
     },
   },
-)
+};
+
+k.List() { items_:: all }

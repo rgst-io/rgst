@@ -13,9 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
+local argo = import '../../libs/argocd.libsonnet';
 
-argo.JsonnetApplication(
-  name='plex',
-  install_namespace='media-center',
+argo.HelmApplication(
+  chart='metrics-server',
+  repoURL='https://kubernetes-sigs.github.io/metrics-server',
+  version='3.8.2',
+  install_namespace='kube-system',
+  values={
+    args: ['--kubelet-insecure-tls'],
+  },
 )

@@ -13,31 +13,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../../libs/argocd.libsonnet';
-local k = import '../../libs/k.libsonnet';
+local argo = import '../../../libs/argocd.libsonnet';
+local k = import '../../../libs/k.libsonnet';
 
 local all = {
-  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
   application: argo.HelmApplication(
     chart='ingress-nginx',
     repoURL='https://kubernetes.github.io/ingress-nginx',
     version='4.4.0',
+    release_name='gcp',
     values={
       controller: {
-        dnsPolicy: 'ClusterFirstWithHostNet',
-        service: {
-          type: 'ClusterIP',
-        },
-        hostPort: {
-          enabled: true,
-        },
-        replicaCount: 1,
-        nodeSelector: {
-          'kubernetes.io/hostname': 'shino',
-        },
-        updateStrategy: {
-          type: 'Recreate',
-        },
+        // Run with 3 replicas to avoid downtime during upgrades
+        replicaCount: 3,
 
         // Cloudflare Origin Pull
         extraVolumes: [{
@@ -58,7 +46,11 @@ local all = {
         },
       },
     }
-  ),
+  ) + {
+    metadata+: {
+      name: 'ingress-nginx-gcp',
+    },
+  },
   origin_secret: k._Object('v1', 'Secret', 'cloudflare-origin', $.application.namespace) {
     type: 'Opaque',
     stringData: {

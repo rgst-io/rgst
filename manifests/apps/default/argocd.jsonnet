@@ -13,7 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
+local cluster_name = std.extVar('cluster_name');
+local cluster_domain = std.extVar('config_cluster_domain');
+local fqdn = '%s.%s' % [cluster_name, cluster_domain];
+local argo = import '../../libs/argocd.libsonnet';
 
 argo.HelmApplication(
   chart='argo-cd',
@@ -96,10 +99,10 @@ argo.HelmApplication(
           'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
         },
         ingressClassName: 'nginx',
-        hosts: ['argocd.rgst.io'],
+        hosts: [fqdn],
         tls: [{
           secretName: 'argocd-secret',
-          hosts: ['argocd.rgst.io'],
+          hosts: [fqdn],
         }],
       },
 

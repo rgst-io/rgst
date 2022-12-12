@@ -16,8 +16,13 @@
 local argo = import '../libs/argocd.libsonnet';
 
 argo.JsonnetApplication(
-  name='rgst',
-  path='./apps',
+  name='default',
+  path='./manifests/apps/default',
+  extVars={
+    cluster_name: '{{ .Cluster.Name }}',
+    config_domain: '{{ .Config.Domain }}',
+    config_cluster_domain: '{{ .Config.ClusterDomain }}',
+  },
   // No namespace because we let apps decide where to deploy
   install_namespace=null,
 )

@@ -13,14 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
+local argo = import '../../../../libs/argocd.libsonnet';
 
 argo.HelmApplication(
-  chart='metrics-server',
-  repoURL='https://kubernetes-sigs.github.io/metrics-server',
-  version='3.8.2',
-  install_namespace='kube-system',
+  chart='mysql',
+  install_namespace='ghost',
+  repoURL='https://groundhog2k.github.io/helm-charts',
+  version='0.1.4',
   values={
-    args: ['--kubelet-insecure-tls'],
+    fullnameOverride: 'ghost-mysql',
+    resources: {
+      requests: {
+        cpu: 1,
+        memory: '1Gi',
+      },
+      limits: self.requests,
+    },
+    extraEnvSecrets: ['ghost-mysql'],
+    storage: {
+      requestedSize: '40Gi',
+    },
   },
 )

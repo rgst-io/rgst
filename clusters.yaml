@@ -1,0 +1,9 @@
+domain: rgst.io
+cluster_domain: clusters.rgst.io
+clusters:
+  - name: satania-social
+    gke:
+      project: triton-ops
+      region: us-central1
+  - name: rgst
+    rgst: {}

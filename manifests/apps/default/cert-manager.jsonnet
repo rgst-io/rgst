@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
-local secrets = import '../libs/external-secrets.libsonnet';
-local k = import '../libs/k.libsonnet';
+local argo = import '../../libs/argocd.libsonnet';
+local secrets = import '../../libs/external-secrets.libsonnet';
+local k = import '../../libs/k.libsonnet';
 
 local name = 'cert-manager';
 

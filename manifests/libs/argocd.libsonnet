@@ -37,7 +37,7 @@ local k = import './k.libsonnet';
     },
   },
 
-  HelmApplication(chart, repoURL, version, values={}, install_namespace=chart, release_name=null,):: $.Application(name=chart, install_namespace=install_namespace) {
+  HelmApplication(chart, repoURL, version, values={}, install_namespace=chart, release_name=null):: $.Application(name=chart, install_namespace=install_namespace) {
     spec+: {
       source+: {
         chart: chart,
@@ -51,11 +51,13 @@ local k = import './k.libsonnet';
     },
   },
 
-  JsonnetApplication(name, path=('./services/' + name), install_namespace=name):: $.Application(name=name, install_namespace=install_namespace) {
+  JsonnetApplication(name, path=('./services/' + name), install_namespace=name, extVars=null):: $.Application(name=name, install_namespace=install_namespace) {
     spec+: {
       source+: {
         directory: {
-          jsonnet: {},
+          jsonnet: {
+            [if extVars != null then 'extVars']: [{ name: k, value: extVars[k] } for k in std.objectFields(extVars)],
+          },
           recurse: true,
         },
         path: path,

@@ -15,20 +15,14 @@
 
 local argo = import '../libs/argocd.libsonnet';
 
-argo.HelmApplication(
-  chart='nfs-subdir-external-provisioner',
-  repoURL='https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner',
-  version='4.0.17',
-  install_namespace='kube-system',
-  values={
-    nfs: {
-      server: '100.69.242.81',
-      mountOptions: ['nfsvers=4.1'],
-      path: '/volume1/kubernetes/generated',
-    },
-    storageClass: {
-      accessModes: 'ReadWriteMany',
-      defaultClass: true,
-    },
+argo.JsonnetApplication(
+  name='{{ .Cluster.Name }}',
+  path='./manifests/apps/by-cluster/{{ .Cluster.Name }}',
+  extVars={
+    cluster_name: '{{ .Cluster.Name }}',
+    config_domain: '{{ .Config.Domain }}',
+    config_cluster_domain: '{{ .Config.ClusterDomain }}',
   },
+  // No namespace because we let apps decide where to deploy
+  install_namespace=null,
 )

@@ -13,34 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
-local secrets = import '../libs/external-secrets.libsonnet';
-local k = import '../libs/k.libsonnet';
+local argo = import '../../../libs/argocd.libsonnet';
 
-local name = 'jsonnet-dev';
-
-local all = {
-  application: std.mergePatch(argo.HelmApplication(
-    chart=name,
-    repoURL='https://github.com/rgst-io/rgst',
-    version='HEAD',
-    values={
-      replicaCount: 3,
+argo.HelmApplication(
+  chart='nfs-subdir-external-provisioner',
+  repoURL='https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner',
+  version='4.0.17',
+  install_namespace='kube-system',
+  values={
+    nfs: {
+      server: '100.69.242.81',
+      mountOptions: ['nfsvers=4.1'],
+      path: '/volume1/kubernetes/generated',
     },
-  ), {
-    spec+: {
-      source: {
-        chart: null,
-        path: './charts/jsonnet-dev',
-      },
+    storageClass: {
+      accessModes: 'ReadWriteMany',
+      defaultClass: true,
     },
-  }),
-  external_secret: secrets.ExternalSecret(name, name) {
-    all_keys:: true,
-    secret_store:: $.doppler.secret_store,
-    target:: '%s-postgres' % name,
   },
-  doppler: secrets.DopplerSecretStore(name),
-};
-
-k.List() { items_:: all }
+)
