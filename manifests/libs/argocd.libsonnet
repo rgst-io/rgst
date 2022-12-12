@@ -51,7 +51,7 @@ local k = import './k.libsonnet';
     },
   },
 
-  JsonnetApplication(name, path=('./services/' + name), install_namespace=name, extVars=null):: $.Application(name=name, install_namespace=install_namespace) {
+  JsonnetApplication(name, path=('./manifests/services/' + name), install_namespace=name, extVars=null):: $.Application(name=name, install_namespace=install_namespace) {
     spec+: {
       source+: {
         directory: {

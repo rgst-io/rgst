@@ -22,7 +22,7 @@ local name = 'mstdn-satania-social';
 local all = {
   application: argo.TankaApplication(
     name=name,
-    path='./services/satania-social'
+    path='./manifests/services/satania-social'
   ),
   external_secret: secrets.ExternalSecret(name, name) {
     all_keys:: true,
