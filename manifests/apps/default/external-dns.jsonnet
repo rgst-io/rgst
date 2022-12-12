@@ -28,15 +28,26 @@ local all = {
     values={
       txtOwnerId: cluster_name,
       provider: 'cloudflare',
-      env: [{
-        name: 'CF_API_KEY',
-        valueFrom: {
-          secretKeyRef: {
-            name: 'external-dns',
-            key: 'cloudflare-api-key',
+      env: [
+        {
+          name: 'CF_API_KEY',
+          valueFrom: {
+            secretKeyRef: {
+              name: 'external-dns',
+              key: 'cloudflare-api-key',
+            },
           },
         },
-      }],
+        {
+          name: 'CF_API_EMAIL',
+          valueFrom: {
+            secretKeyRef: {
+              name: 'external-dns',
+              key: 'cloudflare-api-email',
+            },
+          },
+        },
+      ],
     },
   ),
   external_secret: secrets.ExternalSecret('external-dns', 'kube-system') {
@@ -46,6 +57,11 @@ local all = {
       'cloudflare-api-key': {
         remoteRef: {
           key: 'CLOUDFLARE_API_KEY',
+        },
+      },
+      'cloudflare-api-email': {
+        remoteRef: {
+          key: 'CLOUDFLARE_API_EMAIL',
         },
       },
     },
