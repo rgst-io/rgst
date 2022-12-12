@@ -26,12 +26,28 @@ argo.HelmApplication(
     'redis-ha': {
       enabled: true,
     },
+    redis: {
+      resources: {
+        requests: {
+          memory: '256Mi',
+          cpu: '100m',
+        },
+        limits: self.requests,
+      },
+    },
 
     controller: {
       replicas: 1,
     },
 
     repoServer: {
+      resources: {
+        requests: {
+          memory: '256Mi',
+          cpu: '300m',
+        },
+        limits: self.requests,
+      },
       volumes: [
         {
           name: 'custom-tools',
@@ -74,6 +90,13 @@ argo.HelmApplication(
     server: {
       // We're only accessible via Cloudflare's Zero-Trust.
       extraArgs: ['--disable-auth'],
+      resources: {
+        requests: {
+          memory: '256Mi',
+          cpu: '500m',
+        },
+        limits: self.requests,
+      },
 
       config: {
         configManagementPlugins: std.manifestYamlDoc([{
@@ -112,7 +135,7 @@ argo.HelmApplication(
         minReplicas: 2,
       },
 
-      repoServer: {
+      repoServer: self.repoServer {
         autoscaling: {
           enabled: true,
           minReplicas: 2,

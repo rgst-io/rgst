@@ -3,6 +3,7 @@ module github.com/rgst-io/rgst
 go 1.19
 
 require (
+	github.com/magefile/mage v1.14.0
 	github.com/rs/zerolog v1.28.0
 	github.com/spf13/cobra v1.6.1
 	gopkg.in/yaml.v3 v3.0.1

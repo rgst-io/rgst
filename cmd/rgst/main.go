@@ -22,8 +22,10 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"text/template"
 
+	"github.com/magefile/mage/sh"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -121,23 +123,39 @@ func applyAppTemplates(cs *Clusters, c *Cluster) error {
 
 // applyAppTemplate applies a single template to the cluster.
 func applyAppTemplate(cs *Clusters, c *Cluster, path string) error {
+	fileName := filepath.Base(path)
 	contents, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
 
-	tpl, err := template.New(filepath.Base(path)).Parse(string(contents))
+	tpl, err := template.New(fileName).Parse(string(contents))
 	if err != nil {
 		return err
 	}
 
-	return tpl.Execute(os.Stdout, map[string]interface{}{
+	tmpFile, err := os.Create(filepath.Join(ApplicationsDirectory, strings.TrimSuffix(fileName, ".tpl")))
+	if err != nil {
+		return err
+	}
+	defer tmpFile.Close()
+	defer os.Remove(tmpFile.Name())
+
+	if err := tpl.Execute(tmpFile, map[string]interface{}{
 		"Cluster": *c,
 		"Config": map[string]interface{}{
 			"Domain":        cs.Domain,
 			"ClusterDomain": cs.ClusterDomain,
 		},
-	})
+	}); err != nil {
+		return err
+	}
+
+	if err := sh.RunV("kubecfg", "show", tmpFile.Name()); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // bootstrapRGST bootstraps a RGST Kubernetes cluster.
@@ -148,6 +166,23 @@ func bootstrapRGST(cs *Clusters, c *Cluster) error {
 
 func bootstrapGKE(cs *Clusters, c *Cluster) error {
 	log.Info().Msg("Bootstrapping GKE cluster")
+
+	if c.GKE.Name == "" {
+		c.GKE.Name = c.Name
+	}
+
+	os.Setenv("USE_GKE_GCLOUD_AUTH_PLUGIN", "true")
+	if err := sh.RunV("gcloud", "container", "clusters", "get-credentials", c.GKE.Name, "--region", c.GKE.Region, "--project", c.GKE.Project); err != nil {
+		return err
+	}
+	if err := sh.RunV("kubectx", "gke_"+c.GKE.Project+"_"+c.GKE.Region+"_"+c.GKE.Name); err != nil {
+		return err
+	}
+
+	log.Info().Msg("Installing ArgoCD")
+	if err := sh.RunV("./scripts/install-argocd.sh", c.Name, cs.ClusterDomain); err != nil {
+		return err
+	}
 
 	if err := applyAppTemplates(cs, c); err != nil {
 		return err
@@ -189,6 +224,8 @@ func entrypoint(cmd *cobra.Command, args []string) {
 		"argocd",
 		"gcloud",
 		"jsonnet",
+		"kubectx",
+		"kubecfg",
 	}
 	for _, tool := range requiredTools {
 		if path, err := exec.LookPath(tool); err != nil || path == "" {
