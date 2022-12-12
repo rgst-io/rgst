@@ -23,7 +23,7 @@ local all = {
   application: argo.HelmApplication(
     chart='external-dns',
     repoURL='https://kubernetes-sigs.github.io/external-dns/',
-    version='3.8.2',
+    version='1.12.0',
     install_namespace='kube-system',
     values={
       txtOwnerId: cluster_name,
