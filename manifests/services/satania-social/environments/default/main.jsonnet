@@ -45,7 +45,6 @@ local tolerations = [];
       },
     },
     spec+: {
-      ingressClassName: 'gcp-nginx',
       tls: [{
         hosts: ['mstdn.satania.social'],
         secretName: 'mstdn-satania-social',
