@@ -135,7 +135,7 @@ argo.HelmApplication(
         minReplicas: 2,
       },
 
-      repoServer: self.repoServer {
+      repoServer: {
         autoscaling: {
           enabled: true,
           minReplicas: 2,
