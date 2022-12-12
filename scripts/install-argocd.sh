@@ -15,10 +15,10 @@ trap 'rm -f $tmpFile' EXIT
 
 jsonnet -V "cluster_name=$cluster_name" -V "config_cluster_domain=$config_cluster_domain" \
   ./manifests/apps/default/argocd.jsonnet | yq -r .spec.source.helm.values >"$tmpFile"
-kubectl create namespace argocd
-helm install -f "$tmpFile" -n argocd argocd argocd/argo-cd
+kubectl create namespace argocd || true
+helm install -f "$tmpFile" -n argocd argocd argocd/argo-cd || helm upgrade -f "$tmpFile" -n argocd argocd argocd/argo-cd
 
-until kubectl get configmap -n argocd argocd-cm -o jsonpath='{.data.admin.password}' | grep -q .; do
+until kubectl get configmap -n argocd argocd-cm 2>/dev/null; do
   echo "Waiting for ArgoCD to be ready..."
   sleep 5
 done
@@ -27,4 +27,5 @@ pemTmpFile=$(mktemp)
 trap 'rm -f $pemTmpFile' EXIT
 
 op document get "Github Application (rgst-io/argocd)" --output="$pemTmpFile"
-argocd repo add https://github.com/rgst-io/rgst --github-app-id 245660 --github-app-installation-id 30025489 --github-app-private-key-path "$pemTmpFile" --core
+kubens argocd
+argocd repo add https://github.com/rgst-io/rgst --github-app-id 245660 --github-app-installation-id 31907708 --github-app-private-key-path "$pemTmpFile" --core

@@ -4,6 +4,6 @@ clusters:
   - name: satania-social
     gke:
       project: triton-ops
-      region: us-central1
+      region: us-central1-c
   - name: rgst
     rgst: {}

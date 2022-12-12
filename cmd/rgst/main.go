@@ -151,7 +151,7 @@ func applyAppTemplate(cs *Clusters, c *Cluster, path string) error {
 		return err
 	}
 
-	if err := sh.RunV("kubecfg", "show", tmpFile.Name()); err != nil {
+	if err := sh.RunV("kubecfg", "update", tmpFile.Name()); err != nil {
 		return err
 	}
 
