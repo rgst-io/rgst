@@ -26,6 +26,15 @@ done
 pemTmpFile=$(mktemp)
 trap 'rm -f $pemTmpFile' EXIT
 
-op document get "Github Application (rgst-io/argocd)" --output="$pemTmpFile"
 kubens argocd
-argocd repo add https://github.com/rgst-io/rgst --github-app-id 245660 --github-app-installation-id 31907708 --github-app-private-key-path "$pemTmpFile" --core
+
+if ! argocd repo list --core | grep -q rgst-io/rgst; then
+  echo "Adding rgst-io/rgst repo to ArgoCD..."
+  op document get "Github Application (rgst-io/argocd)" --output="$pemTmpFile"
+  argocd repo add https://github.com/rgst-io/rgst --github-app-id 245660 --github-app-installation-id 31907708 --github-app-private-key-path "$pemTmpFile" --core
+fi
+
+if ! kubectl get secret -n external-secrets doppler-token-auth-api 2>/dev/null; then
+  echo "Adding doppler secret"
+  kubectl create secret generic --namespace external-secrets doppler-token-auth-api --from-literal dopplerToken="$(op read op://Private/oibj3d5llgsg64jdviaedmf5ty/credential)"
+fi
