@@ -25,14 +25,8 @@ local ingress = k.networking.v1.ingress;
 
 local image = 'ghcr.io/glitch-soc/mastodon:edge';
 
-local nodeSelector = {
-  'rgst.io/cloud': 'gcp',
-};
-local tolerations = [{
-  effect: 'NoSchedule',
-  key: 'rgst.io/cloud',
-  operator: 'Exists',
-}];
+local nodeSelector = {};
+local tolerations = [];
 
 {
   config: {
