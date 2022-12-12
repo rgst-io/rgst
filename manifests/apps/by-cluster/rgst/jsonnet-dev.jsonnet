@@ -23,7 +23,7 @@ local all = {
   application: std.mergePatch(argo.HelmApplication(
     chart=name,
     repoURL='https://github.com/rgst-io/rgst',
-    version='HEAD',
+    version='jaredallard/feat/multiple-clusters',
     values={
       replicaCount: 3,
     },
