@@ -30,6 +30,11 @@ argo.HelmApplication(
     ingress: {
       main: {
         enabled: true,
+        annotations: {
+          'cert-manager.io/cluster-issuer': 'main',
+          // Ensure client IPs from Cloudflare are preserved
+          'nginx.ingress.kubernetes.io/configuration-snippet': 'real_ip_header CF-Connecting-IP;',
+        },
         ingressClassName: 'nginx',
         tls: [{
           hosts: ['video.rgst.io'],
