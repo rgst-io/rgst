@@ -21,7 +21,7 @@ argo.HelmApplication(
   version='3.4.2',
   release_name='gcp',
   values={
-    iamge: {
+    image: {
       tag: '0.0.13',
     },
     env: {
