@@ -27,6 +27,7 @@ argo.HelmApplication(
     env: {
       TZ: 'America/Los_Angeles',
     },
+    args: ['--enableVerboseLogging'],
     ingress: {
       main: {
         enabled: true,
