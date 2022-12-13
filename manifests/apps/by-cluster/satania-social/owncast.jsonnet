@@ -37,7 +37,10 @@ argo.HelmApplication(
         },
         hosts: [{
           host: 'video.rgst.io',
-          paths: ['/'],
+          paths: [{
+            path: '/',
+            pathType: 'ImplementationSpecific',
+          }],
         }],
         ingressClassName: 'nginx',
         tls: [{
