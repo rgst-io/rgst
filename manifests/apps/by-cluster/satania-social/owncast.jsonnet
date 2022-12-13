@@ -49,5 +49,11 @@ argo.HelmApplication(
         }],
       },
     },
+    persistence: {
+      config: {
+        enabled: true,
+        size: '1Gi',
+      },
+    },
   }
 )
