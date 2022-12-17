@@ -36,7 +36,7 @@ local config = {
 
   // Redis
   // -----
-  REDIS_URL: 'redis://10.11.0.3:6379',
+  REDIS_URL: 'redis://redis:6379',
 
   // PostgreSQL
   // ----------

@@ -16,6 +16,7 @@
 local corev1 = import 'corev1.libsonnet';
 local tanka = import 'github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet';
 local k = import 'k.libsonnet';
+local helm = tanka.helm.new(std.thisFile);
 
 local appsv1 = k.apps.v1;
 local container = corev1.container;
@@ -29,6 +30,12 @@ local nodeSelector = {};
 local tolerations = [];
 
 {
+  redis: helm.template('redis', '../../charts/redis', {
+    values: {
+      tolerations: tolerations,
+      nodeSelector: nodeSelector,
+    },
+  }),
   config: {
     configmap: corev1.configMap.new('mastodon', import './config.jsonnet'),
     // fake secret for usage later
