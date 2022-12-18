@@ -23,7 +23,6 @@ local all = {
   application: std.mergePatch(argo.HelmApplication(
     chart='ghost',
     repoURL='https://github.com/rgst-io/rgst',
-    version='jaredallard/feat/multiple-clusters',
     values={
       fullnameOverride: 'ghost-jaredallard',
       settings: {

@@ -62,7 +62,6 @@ local k = import './k.libsonnet';
         },
         path: path,
         repoURL: 'https://github.com/rgst-io/rgst',
-        targetRevision: 'jaredallard/feat/multiple-clusters',
       },
     },
   },
