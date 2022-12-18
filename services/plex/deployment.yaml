@@ -58,11 +58,15 @@ spec:
             - name: TZ
               value: America/Los_Angeles
             - name: PUID
-              value: "999"
+              value: "0"
             - name: PGID
-              value: "999"
+              value: "0"
             - name: VERSION
               value: "docker"
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: true
           livenessProbe:
             httpGet:
               path: /identity
