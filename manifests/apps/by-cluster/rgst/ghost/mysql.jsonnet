@@ -19,7 +19,7 @@ argo.HelmApplication(
   chart='mysql',
   install_namespace='ghost',
   repoURL='https://groundhog2k.github.io/helm-charts',
-  version='0.1.4',
+  version='0.1.5',
   values={
     fullnameOverride: 'ghost-mysql',
     resources: {
