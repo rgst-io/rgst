@@ -66,7 +66,7 @@ local all = {
       source: {
         chart: null,
         // Forked until we get rid of secureconfig.yaml (secret in repos :()
-        path: './charts/ghost',
+        path: './manifests/charts/ghost',
       },
     },
   }),
