@@ -31,7 +31,7 @@ local all = {
     spec+: {
       source: {
         chart: null,
-        path: './charts/jsonnet-dev',
+        path: './manifests/charts/jsonnet-dev',
       },
     },
   }),
