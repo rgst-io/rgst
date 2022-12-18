@@ -161,7 +161,16 @@ func applyAppTemplate(cs *Clusters, c *Cluster, path string) error {
 // bootstrapRGST bootstraps a RGST Kubernetes cluster.
 // Not implemented.
 func bootstrapRGST(cs *Clusters, c *Cluster) error {
-	return fmt.Errorf("not implemented")
+	log.Info().Msg("Installing ArgoCD")
+	if err := sh.RunV("./scripts/install-argocd.sh", c.Name, cs.ClusterDomain); err != nil {
+		return err
+	}
+
+	if err := applyAppTemplates(cs, c); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func bootstrapGKE(cs *Clusters, c *Cluster) error {
