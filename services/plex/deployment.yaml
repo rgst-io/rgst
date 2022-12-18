@@ -44,7 +44,9 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media-storage
-
+        - name: dri
+          hostPath:
+            path: /dev/dri
         # Temp Dirs
         - name: transcoding
           emptyDir: {}
@@ -100,6 +102,8 @@ spec:
               mountPath: /data/media
             - name: transcoding
               mountPath: /transcoding
+            - name: dri
+              mountPath: /dev/dri
           resources:
             requests:
               cpu: 2
