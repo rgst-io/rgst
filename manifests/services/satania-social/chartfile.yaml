@@ -1,0 +1,8 @@
+directory: charts
+repositories:
+  - name: groundhog2k
+    url: https://groundhog2k.github.io/helm-charts/
+requires:
+  - chart: groundhog2k/redis
+    version: 0.5.9
+version: 1
