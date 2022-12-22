@@ -37,7 +37,9 @@ argo.HelmApplication(
       },
       hosts: [{
         host: 'portainer.rgst.io',
-        paths: ['/'],
+        paths: [{
+          path: '/',
+        }],
       }],
     },
   }
