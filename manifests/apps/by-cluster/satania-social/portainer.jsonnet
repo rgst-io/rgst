@@ -33,6 +33,7 @@ argo.HelmApplication(
       enabled: true,
       ingressClassName: 'nginx',
       annotations: {
+        'cert-manager.io/cluster-issuer': 'main',
         'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
       },
       hosts: [{
