@@ -44,6 +44,10 @@ local all = {
             ssl_verify_client on;
           |||,
         },
+
+        admissionWebhooks: {
+          enabled: false,
+        },
       },
     }
   ) + {
