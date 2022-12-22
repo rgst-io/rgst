@@ -42,6 +42,10 @@ argo.HelmApplication(
           path: '/',
         }],
       }],
+      tls: [{
+        hosts: ['portainer.rgst.io'],
+        secretName: 'portainer-rgst-io-tls',
+      }],
     },
   }
 )
