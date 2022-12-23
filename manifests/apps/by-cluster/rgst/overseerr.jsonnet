@@ -20,6 +20,9 @@ argo.HelmApplication(
   repoURL='https://k8s-at-home.com/charts',
   version='5.4.2',
   values={
+    nodeSelector: {
+      'kubernetes.io/hostname': 'shino',
+    },
     image: {
       tag: '1.31.0',
     },
