@@ -35,7 +35,7 @@ argo.HelmApplication(
           'nginx.ingress.kubernetes.io/configuration-snippet': 'real_ip_header CF-Connecting-IP;',
         },
         hosts: [{
-          host: 'requests.rgst.io',
+          host: 'media.rgst.io',
           paths: [{
             path: '/',
             pathType: 'ImplementationSpecific',
@@ -43,8 +43,8 @@ argo.HelmApplication(
         }],
         ingressClassName: 'nginx',
         tls: [{
-          hosts: ['requests.rgst.io'],
-          secretName: 'requests-rgst-io-tls',
+          hosts: ['media.rgst.io'],
+          secretName: 'media-rgst-io-tls',
         }],
       },
     },
