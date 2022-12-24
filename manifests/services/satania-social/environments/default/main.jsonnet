@@ -37,6 +37,7 @@ local tolerations = [];
       storage: {
         requestedSize: '20Gi',
       },
+      extraEnvSecrets: ['postgres'],
     },
   }),
   redis: helm.template('redis', '../../charts/redis', {
