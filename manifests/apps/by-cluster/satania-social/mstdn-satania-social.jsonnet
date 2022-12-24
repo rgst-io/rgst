@@ -29,6 +29,11 @@ local all = {
     secret_store:: $.doppler.secret_store,
     target:: 'mastodon',
   },
+  external_secret_postgres: secrets.ExternalSecret('postgres', name) {
+    all_keys:: true,
+    secret_store:: $.doppler.secret_store,
+    target:: 'postgres',
+  },
   doppler: secrets.DopplerSecretStore(name),
 };
 

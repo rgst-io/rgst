@@ -30,6 +30,15 @@ local nodeSelector = {};
 local tolerations = [];
 
 {
+  postgres: helm.template('postgres', '../../charts/postgres', {
+    values: {
+      tolerations: tolerations,
+      nodeSelector: nodeSelector,
+      storage: {
+        requestedSize: '20Gi',
+      },
+    },
+  }),
   redis: helm.template('redis', '../../charts/redis', {
     values: {
       tolerations: tolerations,
