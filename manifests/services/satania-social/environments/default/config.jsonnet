@@ -47,10 +47,10 @@ local config = {
 
   // Elasticsearch (optional)
   // ------------------------
-  ES_ENABLED: true,
-  ES_HOST: 'https://satania-social.es.us-central1.gcp.cloud.es.io',
+  ES_ENABLED: false,
+  ES_HOST: '',
   ES_PORT: 443,
-  ES_USER: 'elastic',
+  ES_USER: '',
 
   // Sending mail
   // ------------
