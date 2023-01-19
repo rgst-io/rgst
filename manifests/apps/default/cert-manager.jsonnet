@@ -23,7 +23,7 @@ local all = {
   application: argo.HelmApplication(
     chart=name,
     repoURL='https://charts.jetstack.io',
-    version='v1.10.1',
+    version='v1.11.0',
     values={
       installCRDs: true,
     },

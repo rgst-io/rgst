@@ -18,7 +18,7 @@ local argo = import '../../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='metrics-server',
   repoURL='https://kubernetes-sigs.github.io/metrics-server',
-  version='3.8.2',
+  version='3.8.3',
   install_namespace='kube-system',
   values={
     args: ['--kubelet-insecure-tls'],
