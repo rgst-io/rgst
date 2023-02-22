@@ -24,7 +24,7 @@ argo.HelmApplication(
       'kubernetes.io/hostname': 'shino',
     },
     image: {
-      tag: '1.32.4',
+      tag: '1.32.5',
     },
     env: {
       TZ: 'America/Los_Angeles',
