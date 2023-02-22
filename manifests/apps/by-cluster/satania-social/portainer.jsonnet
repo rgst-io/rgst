@@ -18,7 +18,7 @@ local argo = import '../../../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='portainer',
   repoURL='https://portainer.github.io/k8s/',
-  version='1.0.38',
+  version='1.0.40',
   values={
     enterpriseEdition: {
       enabled: true,
