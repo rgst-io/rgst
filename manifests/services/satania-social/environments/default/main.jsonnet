@@ -124,7 +124,6 @@ local tolerations = [];
           container.withEnvFrom(corev1.envFromSource.configMapRef.withName($.config.configmap.metadata.name)),
           container.withEnvFromMixin(corev1.envFromSource.secretRef.withName($.config.secret.metadata.name)),
           readinessProbe.httpGet.new('/health', port),
-          livenessProbe.httpGet.new('/health', port),
         ]),
       ],
     ) + appsv1.deployment.spec.template.spec.withNodeSelector(nodeSelector) + appsv1.deployment.spec.template.spec.withTolerations(tolerations),
@@ -155,7 +154,6 @@ local tolerations = [];
           },
         },
         readinessProbe.httpGet.new('/api/v1/streaming/health', port),
-        livenessProbe.httpGet.new('/api/v1/streaming/health', port),
       ]),
     ]) + appsv1.deployment.spec.template.spec.withNodeSelector(nodeSelector) + appsv1.deployment.spec.template.spec.withTolerations(tolerations),
     service: corev1.service.new(
@@ -184,7 +182,6 @@ local tolerations = [];
         container.withEnvFrom(corev1.envFromSource.configMapRef.withName($.config.configmap.metadata.name)),
         container.withEnvFromMixin(corev1.envFromSource.secretRef.withName($.config.secret.metadata.name)),
         readinessProbe.exec.withCommand(['bash', '-c', "ps aux | grep '[s]idekiq\\ 6' || false"]),
-        livenessProbe.exec.withCommand(['bash', '-c', "ps aux | grep '[s]idekiq\\ 6' || false"]),
       ]),
     ]) + appsv1.deployment.spec.template.spec.withNodeSelector(nodeSelector) + appsv1.deployment.spec.template.spec.withTolerations(tolerations),
   },
