@@ -4,7 +4,7 @@ repositories:
     url: https://groundhog2k.github.io/helm-charts/
 requires:
   - chart: groundhog2k/redis
-    version: 0.5.9
+    version: 0.6.3
   - chart: groundhog2k/postgres
-    version: 0.4.1
+    version: 0.4.2
 version: 1
