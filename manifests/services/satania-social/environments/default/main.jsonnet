@@ -35,8 +35,8 @@ local tolerations = [];
       tolerations: tolerations,
       nodeSelector: nodeSelector,
       livenessProbe: {
-        // 10 minutes to allow for db data directory sync
-        initialDelaySeconds: 600,
+        // 20 minutes to allow for db data directory sync
+        initialDelaySeconds: 1200,
       },
       storage: {
         requestedSize: '20Gi',
