@@ -38,6 +38,7 @@ local tolerations = [];
         // 20 minutes to allow for db data directory sync
         initialDelaySeconds: 1200,
       },
+      startupProbe: self.livenessProbe,
       storage: {
         requestedSize: '20Gi',
       },
