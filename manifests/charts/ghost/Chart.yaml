@@ -9,7 +9,7 @@ maintainers:
 
 version: 0.68.0
 
-appVersion: "5.35.1"
+appVersion: "5.48.0"
 
 dependencies:
   - name: mariadb
