@@ -21,7 +21,7 @@ local all = {
   application: argo.HelmApplication(
     chart='ingress-nginx',
     repoURL='https://kubernetes.github.io/ingress-nginx',
-    version='4.6.0',
+    version='4.7.1',
     values={
       controller: {
         dnsPolicy: 'ClusterFirstWithHostNet',
