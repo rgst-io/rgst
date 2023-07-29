@@ -40,10 +40,10 @@ local config = {
 
   // PostgreSQL
   // ----------
-  DB_HOST: 'postgres',
+  DB_HOST: '100.69.242.81',
   DB_USER: 'mstdn_satania_social',
   DB_NAME: 'mstdn_satania_social',
-  DB_PORT: 5432,
+  DB_PORT: 5433,
 
   // Elasticsearch (optional)
   // ------------------------
