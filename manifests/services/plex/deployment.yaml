@@ -18,10 +18,11 @@ spec:
       hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: shino
+      runtimeClassName: nvidia
       securityContext:
         supplementalGroups:
-          - 999
-        fsGroup: 999
+          - 1000
+        fsGroup: 1000
       initContainers:
         - name: chown
           image: alpine
@@ -32,10 +33,12 @@ spec:
               mountPath: /data/config
             - name: media
               mountPath: /data/media
+            - name: transcoding
+              mountPath: /data/transcoding
           command:
             - sh
             - -c
-            - (chmod 0775 /data/*; chgrp 999 /data/*; exit 0)
+            - (chmod 0775 /data/*; chown -R 1000:1000 /data/*; exit 0)
       volumes:
         - name: plex-config
           persistentVolumeClaim:
@@ -43,10 +46,6 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media-storage
-        - name: dri
-          hostPath:
-            path: /dev/dri
-            type: Directory
         # Temp Dirs
         - name: transcoding
           emptyDir: {}
@@ -58,15 +57,15 @@ spec:
             - name: TZ
               value: America/Los_Angeles
             - name: PUID
-              value: "0"
+              value: "999"
             - name: PGID
-              value: "0"
+              value: "1000"
             - name: VERSION
               value: "docker"
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-            privileged: true
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: all
           livenessProbe:
             httpGet:
               path: /identity
@@ -104,12 +103,7 @@ spec:
               mountPath: /data/media
             - name: transcoding
               mountPath: /transcoding
-            - name: dri
-              mountPath: /dev/dri
           resources:
             requests:
-              cpu: 2
+              cpu: "2"
               memory: 3Gi
-            limits:
-              cpu: 8
-              memory: 5Gi
