@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  type: ClusterIP
+  selector: {}
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+subsets:
+  - addresses:
+      - ip: 100.109.240.128
+    ports:
+      - name: http
+        port: 11000
+        protocol: TCP
