@@ -19,10 +19,9 @@ argo.HelmApplication(
   chart='mysql',
   install_namespace='ghost',
   repoURL='https://groundhog2k.github.io/helm-charts',
-  version='0.1.5',
+  version='0.2.0',
   values={
     fullnameOverride: 'ghost-mysql',
-    customConfig: '[mysqld]\ninnodb_force_recovery = 1',
     resources: {
       requests: {
         cpu: 1,
