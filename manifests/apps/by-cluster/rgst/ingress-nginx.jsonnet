@@ -24,6 +24,7 @@ local all = {
     version='4.8.0',
     values={
       controller: {
+        allowSnippetAnnotations: true,
         dnsPolicy: 'ClusterFirstWithHostNet',
         service: {
           type: 'ClusterIP',
