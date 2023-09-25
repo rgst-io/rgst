@@ -10,7 +10,7 @@ spec:
     app.kubernetes.io/name: media
   ports:
     - port: 32400
-      targetPort: plex-http
+      targetPort: plex-https
       protocol: TCP
       name: http
     - name: unknown
