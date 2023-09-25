@@ -22,6 +22,7 @@ argo.HelmApplication(
   version='0.1.5',
   values={
     fullnameOverride: 'ghost-mysql',
+    customConfig: '[mysqld]\ninnodb_force_recovery = 1',
     resources: {
       requests: {
         cpu: 1,
