@@ -69,15 +69,17 @@ spec:
           livenessProbe:
             httpGet:
               path: /identity
-              port: plex-http
+              port: plex-https
+              scheme: HTTPS
             initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /identity
-              port: plex-http
+              port: plex-https
+              scheme: HTTPS
           ports:
             - containerPort: 32400
-              name: plex-http
+              name: plex-https
               hostPort: 32400
               protocol: TCP
             - containerPort: 32400
