@@ -17,7 +17,7 @@ jsonnet -V "cluster_name=$cluster_name" -V "config_cluster_domain=$config_cluste
 	./manifests/apps/default/argocd.jsonnet | yq -r .spec.source.helm.values >"$tmpFile"
 kubectl create namespace argocd || true
 helm repo add argo https://argoproj.github.io/argo-helm || true
-helm install -f "$tmpFile" -n argocd argocd argo/argo-cd || helm upgrade -f "$tmpFile" -n argocd argocd argocd/argo-cd
+helm install -f "$tmpFile" -n argocd argocd argo/argo-cd || helm upgrade -f "$tmpFile" -n argocd argocd argo/argo-cd
 
 until kubectl get configmap -n argocd argocd-cm 2>/dev/null; do
 	echo "Waiting for ArgoCD to be ready..."
