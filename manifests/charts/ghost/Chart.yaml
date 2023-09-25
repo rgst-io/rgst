@@ -9,14 +9,14 @@ maintainers:
 
 version: 0.68.0
 
-appVersion: "5.48.0"
+appVersion: "5.65.0"
 
 dependencies:
   - name: mariadb
-    version: 0.2.24
+    version: "0.2.28"
     repository: "https://groundhog2k.github.io/helm-charts"
     condition: mariadb.enabled
   - name: mysql
-    version: 0.1.4
+    version: "0.2.0"
     repository: "https://groundhog2k.github.io/helm-charts"
     condition: mysql.enabled
