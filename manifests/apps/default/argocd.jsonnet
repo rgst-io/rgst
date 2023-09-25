@@ -21,11 +21,8 @@ local argo = import '../../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='argo-cd',
   repoURL='https://argoproj.github.io/argo-helm',
-  version='5.36.13',
+  version='5.46.7',
   values={
-    'redis-ha': {
-      enabled: true,
-    },
     redis: {
       resources: {
         requests: {
@@ -48,43 +45,6 @@ argo.HelmApplication(
         },
         limits: self.requests,
       },
-      volumes: [
-        {
-          name: 'custom-tools',
-          emptyDir: {},
-        },
-      ],
-      initContainers: [
-        {
-          name: 'download-tools',
-          image: 'curlimages/curl',
-          command: [
-            'sh',
-            '-ec',
-          ],
-          args: [  // Using curl to fetch both Tanka and Jsonnet-bundler
-            'export ARCH=$(uname -m); if [ "$ARCH" == "x86_64" ]; then ARCH="amd64"; fi; if [ "$ARCH" == "aarch64" ]; then ARCH="arm64"; fi; echo "Download jsonnet-bundler and tanka for $ARCH"; curl -Lo /custom-tools/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/latest/download/jb-linux-"$ARCH" && curl -Lo /custom-tools/tk https://github.com/grafana/tanka/releases/download/v0.23.1/tk-linux-"$ARCH" && chmod +x /custom-tools/tk && chmod +x /custom-tools/jb',
-          ],
-          volumeMounts: [
-            {
-              mountPath: '/custom-tools',
-              name: 'custom-tools',
-            },
-          ],
-        },
-      ],
-      volumeMounts: [
-        {
-          mountPath: '/usr/local/bin/jb',  // Mount jb
-          name: 'custom-tools',
-          subPath: 'jb',
-        },
-        {
-          mountPath: '/usr/local/bin/tk',  // Mount tk
-          name: 'custom-tools',
-          subPath: 'tk',
-        },
-      ],
     },
 
     server: {
@@ -96,20 +56,6 @@ argo.HelmApplication(
           cpu: '500m',
         },
         limits: self.requests,
-      },
-
-      config: {
-        configManagementPlugins: std.manifestYamlDoc([{
-          name: 'tanka',
-          init: {
-            command: ['sh', '-c'],
-            args: ['jb install && tk tool charts vendor'],
-          },
-          generate: {
-            command: ['sh', '-c'],
-            args: ['tk show environments/default --dangerous-allow-redirect'],
-          },
-        }]),
       },
 
       // Ingress Object

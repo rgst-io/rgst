@@ -20,10 +20,11 @@ local k = import '../../libs/k.libsonnet';
 local name = 'cert-manager';
 
 local all = {
+  // https://artifacthub.io/packages/helm/cert-manager/cert-manager
   application: argo.HelmApplication(
     chart=name,
     repoURL='https://charts.jetstack.io',
-    version='v1.11.0',
+    version='v1.13.0',
     values={
       installCRDs: true,
     },

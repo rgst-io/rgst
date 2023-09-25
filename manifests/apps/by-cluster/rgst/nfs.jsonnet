@@ -18,7 +18,7 @@ local argo = import '../../../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='nfs-subdir-external-provisioner',
   repoURL='https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner',
-  version='4.0.17',
+  version='4.0.18',
   install_namespace='kube-system',
   values={
     nfs: {

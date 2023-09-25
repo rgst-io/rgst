@@ -66,15 +66,4 @@ local k = import './k.libsonnet';
       },
     },
   },
-
-  TankaApplication(name, path=null, install_namespace=name):: $.JsonnetApplication(name=name, path=path, install_namespace=install_namespace) {
-    spec+: {
-      source: std.mergePatch(super.source, {
-        directory: null,
-        plugin: {
-          name: 'tanka',
-        },
-      }),
-    },
-  },
 }

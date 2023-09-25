@@ -17,11 +17,11 @@ local argo = import '../../../libs/argocd.libsonnet';
 local k = import '../../../libs/k.libsonnet';
 
 local all = {
-  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
+  // https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
   application: argo.HelmApplication(
     chart='ingress-nginx',
     repoURL='https://kubernetes.github.io/ingress-nginx',
-    version='4.7.1',
+    version='4.8.0',
     values={
       controller: {
         dnsPolicy: 'ClusterFirstWithHostNet',
