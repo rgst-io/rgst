@@ -21,7 +21,7 @@ local all = {
   application: argo.HelmApplication(
     chart='ingress-nginx',
     repoURL='https://kubernetes.github.io/ingress-nginx',
-    version='4.8.0',
+    version='4.8.3',
     values={
       controller: {
         allowSnippetAnnotations: true,

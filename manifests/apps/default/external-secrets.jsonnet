@@ -22,7 +22,7 @@ local all = {
   application: argo.HelmApplication(
     chart='external-secrets',
     repoURL='https://charts.external-secrets.io',
-    version='0.9.5',
+    version='0.9.8',
   ),
   secret_store: secrets.ClusterSecretStore('kubernetes') {
     doppler_:: {
