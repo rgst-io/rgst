@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: uptime-kuma
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: uptime-kuma
+  namespace: uptime-kuma
+  annotations:
+    cert-manager.io/cluster-issuer: "main"
+    # Ensure client IPs from Cloudflare are preserved
+    nginx.ingress.kubernetes.io/configuration-snippet: "real_ip_header CF-Connecting-IP;"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - status.rgst.io
+      secretName: status-rgst-io
+  rules:
+    - host: status.rgst.io
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: uptime-kuma
+                port:
+                  name: http
