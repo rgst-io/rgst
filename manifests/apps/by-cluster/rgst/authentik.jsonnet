@@ -42,7 +42,7 @@ local all = {
         postgresql: {
           // ruka.koi-insen.ts.net
           host: '100.109.240.128',
-          port: 5434,
+          port: 5432,
         },
       },
       ingress: {
