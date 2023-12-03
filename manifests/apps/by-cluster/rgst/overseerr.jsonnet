@@ -34,8 +34,6 @@ argo.HelmApplication(
         enabled: true,
         annotations: {
           'cert-manager.io/cluster-issuer': 'main',
-          // Ensure client IPs from Cloudflare are preserved
-          'nginx.ingress.kubernetes.io/configuration-snippet': 'real_ip_header CF-Connecting-IP;',
         },
         hosts: [{
           host: 'media.rgst.io',

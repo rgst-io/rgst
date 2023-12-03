@@ -47,8 +47,6 @@ local tolerations = [];
         'cert-manager.io/cluster-issuer': 'main',
         // 200 Megabytes
         'nginx.ingress.kubernetes.io/proxy-body-size': '200m',
-        // Ensure client IPs from Cloudflare are preserved
-        'nginx.ingress.kubernetes.io/configuration-snippet': 'real_ip_header CF-Connecting-IP;',
       },
     },
     spec+: {
