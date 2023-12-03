@@ -30,10 +30,12 @@ spec:
             runAsUser: 0
           volumeMounts:
             - name: plex-config
-              mountPath: /data/config
+              mountPath: /data/plex-config
+            - name: plex-config
+              mountPath: /data/jellyfin-config
             - name: media
               mountPath: /data/media
-            - name: transcoding
+            - name: plex-transcoding
               mountPath: /data/transcoding
           command:
             - sh
@@ -43,11 +45,17 @@ spec:
         - name: plex-config
           persistentVolumeClaim:
             claimName: plex-config
+        - name: jellyfin-config
+          persistentVolumeClaim:
+            claimName: jellyfin-config
         - name: media
           persistentVolumeClaim:
             claimName: media-storage
+
         # Temp Dirs
-        - name: transcoding
+        - name: plex-transcoding
+          emptyDir: {}
+        - name: jellyfin-transcoding
           emptyDir: {}
       containers:
         - name: plex
@@ -103,9 +111,42 @@ spec:
               mountPath: /config
             - name: media
               mountPath: /data/media
-            - name: transcoding
+            - name: plex-transcoding
               mountPath: /transcoding
-          resources:
-            requests:
-              cpu: "2"
-              memory: 3Gi
+        - name: jellyfin
+          image: linuxserver/jellyfin
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: America/Los_Angeles
+            - name: PUID
+              value: "999"
+            - name: PGID
+              value: "1000"
+            - name: VERSION
+              value: "docker"
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: all
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: jellyfin-http
+            initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: jellyfin-http
+          ports:
+            - containerPort: 8096
+              name: jellyfin-http
+              hostPort: 8096
+              protocol: TCP
+          volumeMounts:
+            - name: jellyfin-config
+              mountPath: /config
+            - name: media
+              mountPath: /data/media
+            - name: jellyfin-transcoding
+              mountPath: /transcoding

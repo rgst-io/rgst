@@ -22,6 +22,7 @@ argo.HelmApplication(
   install_namespace='kube-system',
   values={
     nfs: {
+      // yui.koi-insen.ts.net
       server: '100.69.242.81',
       mountOptions: ['nfsvers=4.1'],
       path: '/volume1/kubernetes/generated',

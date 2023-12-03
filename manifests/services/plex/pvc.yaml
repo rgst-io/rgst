@@ -37,6 +37,42 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: jellyfin-config
+  namespace: media-center
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 150Gi
+  volumeName: jellyfin-config
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-config
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 150Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /home/kubernetes_mounts/jellyfin
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - shino
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: media-storage
   namespace: media-center
 spec:
