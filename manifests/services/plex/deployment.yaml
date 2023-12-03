@@ -21,8 +21,8 @@ spec:
       runtimeClassName: nvidia
       securityContext:
         supplementalGroups:
-          - 1000
-        fsGroup: 1000
+          - 65537
+        fsGroup: 65537
       initContainers:
         - name: chown
           image: alpine
@@ -40,7 +40,7 @@ spec:
           command:
             - sh
             - -c
-            - (chmod 0775 /data/*; chown -R 1000:1000 /data/*; exit 0)
+            - (chmod 0775 /data/*; chown -R 1031:65537 /data/*; exit 0)
       volumes:
         - name: plex-config
           persistentVolumeClaim:
@@ -65,9 +65,9 @@ spec:
             - name: TZ
               value: America/Los_Angeles
             - name: PUID
-              value: "999"
+              value: "1031"
             - name: PGID
-              value: "1000"
+              value: "65537"
             - name: VERSION
               value: "docker"
             - name: NVIDIA_VISIBLE_DEVICES
@@ -120,9 +120,9 @@ spec:
             - name: TZ
               value: America/Los_Angeles
             - name: PUID
-              value: "999"
+              value: "1031"
             - name: PGID
-              value: "1000"
+              value: "65537"
             - name: VERSION
               value: "docker"
             - name: NVIDIA_VISIBLE_DEVICES
