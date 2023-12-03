@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyfin
+  namespace: media-center
+  annotations:
+    cert-manager.io/cluster-issuer: "main"
+    # Ensure client IPs from Cloudflare are preserved
+    nginx.ingress.kubernetes.io/configuration-snippet: "real_ip_header CF-Connecting-IP;"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - jellyfin.rgst.io
+      secretName: jellyfin-rgst-io
+  rules:
+    - host: jellyfin.rgst.io
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  name: http
