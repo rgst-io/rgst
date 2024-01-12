@@ -17,19 +17,11 @@ local argo = import '../../libs/argocd.libsonnet';
 local secrets = import '../../libs/external-secrets.libsonnet';
 local k = import '../../libs/k.libsonnet';
 
+local name = 'external-secrets-clustersecretstore';
+
 local all = {
-  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
-  application: argo.HelmApplication(
-    chart='external-secrets',
-    repoURL='https://charts.external-secrets.io',
-    version='0.9.8',
-  ) + {  // Everything depends on the CRDs existing so set this to sync-wave -2.
-    metadata+: {
-      annotations+: {
-        'argocd.argoproj.io/sync-wave': '-2',
-      },
-    },
-  },
+  // https://artifacthub.io/packages/helm/cert-manager/cert-manager
+  application: argo.JsonnetApplication(name, install_namespace='external-secrets'),
 };
 
 k.List() { items_:: all }

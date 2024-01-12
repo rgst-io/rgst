@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Jared Allard <jared@rgst.io>
+// Copyright (C) 2024 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,22 +14,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 local argo = import '../../libs/argocd.libsonnet';
-local secrets = import '../../libs/external-secrets.libsonnet';
-local k = import '../../libs/k.libsonnet';
 
-local all = {
-  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
-  application: argo.HelmApplication(
-    chart='external-secrets',
-    repoURL='https://charts.external-secrets.io',
-    version='0.9.8',
-  ) + {  // Everything depends on the CRDs existing so set this to sync-wave -2.
-    metadata+: {
-      annotations+: {
-        'argocd.argoproj.io/sync-wave': '-2',
-      },
+argo.HelmApplication(
+  chart='kube-cleanup-operator',
+  repoURL='https://charts.lwolf.org',
+  version='1.0.4',
+  values={
+    rbac: {
+      create: true,
+      global: true,
     },
-  },
-};
-
-k.List() { items_:: all }
+    args: [
+      '--delete-failed-after=60m',
+      '--delete-successful-after=60m',
+      '--delete-pending-pods-after=60m',
+      '--delete-evicted-pods-after=60m',
+      '--delete-orphaned-pods-after=60m',
+      '--legacy-mode=false',
+    ],
+  }
+)

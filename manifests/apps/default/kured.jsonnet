@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Jared Allard <jared@rgst.io>
+// Copyright (C) 2024 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,22 +14,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 local argo = import '../../libs/argocd.libsonnet';
-local secrets = import '../../libs/external-secrets.libsonnet';
-local k = import '../../libs/k.libsonnet';
 
-local all = {
-  // https://artifacthub.io/packages/helm/external-secrets-operator/external-secrets
-  application: argo.HelmApplication(
-    chart='external-secrets',
-    repoURL='https://charts.external-secrets.io',
-    version='0.9.8',
-  ) + {  // Everything depends on the CRDs existing so set this to sync-wave -2.
-    metadata+: {
-      annotations+: {
-        'argocd.argoproj.io/sync-wave': '-2',
-      },
+argo.HelmApplication(
+  chart='kured',
+  repoURL='https://kubereboot.github.io/charts',
+  version='5.3.2',
+  values={
+    updateStrategy: 'RollingUpdate',
+    configuration: {
+      startTime: '0:00',
+      endTime: '6:00',
+      timeZone: 'America/Los_Angeles',
     },
-  },
-};
-
-k.List() { items_:: all }
+  }
+)
