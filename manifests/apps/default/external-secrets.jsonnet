@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Jared Allard <jared@rgst.io>
+// Copyright (C) 2024 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ local all = {
   application: argo.HelmApplication(
     chart='external-secrets',
     repoURL='https://charts.external-secrets.io',
-    version='0.9.8',
+    version='0.9.11',
   ),
   secret_store: secrets.ClusterSecretStore('kubernetes') {
     doppler_:: {

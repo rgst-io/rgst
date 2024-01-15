@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Jared Allard <jared@rgst.io>
+// Copyright (C) 2024 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ local all = {
   application: argo.HelmApplication(
     chart='authentik',
     repoURL='https://charts.goauthentik.io',
-    version='2023.10.5',
+    version='2023.10.6',
     values={
       // Secrets come from here.
       envFrom: [{ secretRef: { name: secName } }],
