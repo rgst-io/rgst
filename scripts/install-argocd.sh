@@ -37,5 +37,6 @@ fi
 
 if ! kubectl get secret -n external-secrets doppler-token-auth-api 2>/dev/null; then
 	echo "Adding doppler secret"
+	kubectl create namespace external-secrets || true
 	kubectl create secret generic --namespace external-secrets doppler-token-auth-api --from-literal dopplerToken="$(op read op://Private/oibj3d5llgsg64jdviaedmf5ty/credential)"
 fi
