@@ -59,7 +59,7 @@ local all = {
           // curl https://www.cloudflare.com/ips-v4/ | sed 's/^/"/' | sed 's/$/",/' | pbcopy
           // curl https://www.cloudflare.com/ips-v6/ | sed 's/^/"/' | sed 's/$/",/' | pbcopy
           //
-          // Last Updated: Sep 28, 2023
+          // Last Updated: Jan 14, 2024
           'proxy-real-ip-cidr': std.join(',', [
             '173.245.48.0/20',
             '103.21.244.0/22',

@@ -13,28 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../../libs/argocd.libsonnet';
-local secrets = import '../../libs/external-secrets.libsonnet';
-local k = import '../../libs/k.libsonnet';
+local argo = import '../../../libs/argocd.libsonnet';
 
-local name = 'cert-manager';
-
-local all = {
-  // https://artifacthub.io/packages/helm/cert-manager/cert-manager
-  application: argo.HelmApplication(
-    chart=name,
-    repoURL='https://charts.jetstack.io',
-    version='v1.13.3',
-    values={
-      installCRDs: true,
-    },
-  ) + {  // Everything depends on the CRDs existing so set this to sync-wave -1.
-    metadata+: {
-      annotations+: {
-        'argocd.argoproj.io/sync-wave': '-1',
-      },
-    },
-  },
-};
-
-k.List() { items_:: all }
+argo.JsonnetApplication(
+  name='kavita',
+)

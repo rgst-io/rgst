@@ -22,7 +22,7 @@ local all = {
   application: argo.HelmApplication(
     chart='external-secrets',
     repoURL='https://charts.external-secrets.io',
-    version='0.9.8',
+    version='0.9.11',
   ) + {  // Everything depends on the CRDs existing so set this to sync-wave -2.
     metadata+: {
       annotations+: {

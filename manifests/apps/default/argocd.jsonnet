@@ -18,10 +18,11 @@ local cluster_domain = std.extVar('config_cluster_domain');
 local fqdn = '%s.%s' % [cluster_name, cluster_domain];
 local argo = import '../../libs/argocd.libsonnet';
 
+// https://artifacthub.io/packages/helm/argo/argo-cd
 argo.HelmApplication(
   chart='argo-cd',
   repoURL='https://argoproj.github.io/argo-helm',
-  version='5.51.4',
+  version='5.52.1',
   values={
     redis: {
       resources: {
