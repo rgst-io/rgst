@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Jared Allard <jared@rgst.io>
+// Copyright (C) 2024 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ local k = import '../../libs/k.libsonnet';
 local name = 'cert-manager-clusterissuer';
 
 local all = {
-  // https://artifacthub.io/packages/helm/cert-manager/cert-manager
   application: argo.JsonnetApplication(name, install_namespace='cert-manager'),
 };
 
