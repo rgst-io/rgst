@@ -21,7 +21,7 @@ local all = {
     doppler_:: {
       secret: {
         name: 'doppler-token-auth-api',
-        namespace: $.application.namespace,
+        namespace: 'external-secrets',
         key: 'dopplerToken',
       },
     },

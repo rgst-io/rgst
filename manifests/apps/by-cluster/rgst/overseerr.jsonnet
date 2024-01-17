@@ -16,18 +16,26 @@
 local argo = import '../../../libs/argocd.libsonnet';
 
 argo.HelmApplication(
-  chart='overseerr',
-  repoURL='https://k8s-at-home.com/charts',
-  version='5.4.2',
+  app_name='overseerr',
+  chart='app-template',
+  repoURL='https://bjw-s.github.io/helm-charts/',
+  version='2.4.0',
   values={
-    nodeSelector: {
-      'kubernetes.io/hostname': 'shino',
+    controller: {
+      main: {
+        image: {
+          repository: 'ghcr.io/sct/overseerr',
+          tag: '1.33.2',
+        },
+        env: {
+          TZ: 'America/Los_Angeles',
+        },
+      },
     },
-    image: {
-      tag: '1.33.2',
-    },
-    env: {
-      TZ: 'America/Los_Angeles',
+    pod: {
+      nodeSelector: {
+        'kubernetes.io/hostname': 'shino',
+      },
     },
     ingress: {
       main: {
@@ -55,5 +63,5 @@ argo.HelmApplication(
         size: '1Gi',
       },
     },
-  }
+  },
 )
