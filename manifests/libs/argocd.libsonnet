@@ -1,4 +1,4 @@
-// Copyright (C) 2022 Jared Allard <jared@rgst.io>
+// Copyright (C) 2024 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ local k = import './k.libsonnet';
     },
   },
 
-  HelmApplication(chart, repoURL, version, values={}, install_namespace=chart, release_name=null):: $.Application(name=chart, install_namespace=install_namespace) {
+  HelmApplication(chart, repoURL, version, values={}, install_namespace=chart, release_name=null, app_name=null):: $.Application(name=if app_name == null then chart else app_name, install_namespace=install_namespace) {
     spec+: {
       source+: {
         chart: chart,

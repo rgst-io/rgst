@@ -15,21 +15,34 @@
 
 local argo = import '../../../libs/argocd.libsonnet';
 local k = import '../../../libs/k.libsonnet';
-
 local name = 'overseerr';
 local namespace = name;
 
 local all = {
   helm_chart: argo.HelmApplication(
-    chart=name,
-    repoURL='https://k8s-at-home.com/charts',
-    version='5.4.2',
+    app_name=name,
+    install_namespace=namespace,
+    chart='app-template',
+    repoURL='https://bjw-s.github.io/helm-charts/',
+    version='2.4.0',
     values={
-      image: {
-        tag: '1.33.2',
-      },
-      env: {
-        TZ: 'America/Los_Angeles',
+      controller: {
+        main: {
+          containers: {
+            image: {
+              repository: 'ghcr.io/sct/overseerr',
+              tag: '1.33.2',
+            },
+            env: {
+              TZ: 'America/Los_Angeles',
+            },
+          },
+        },
+        pod: {
+          nodeSelector: {
+            'kubernetes.io/hostname': 'shino',
+          },
+        },
       },
       ingress: {
         main: {
@@ -43,21 +56,21 @@ local all = {
               path: '/',
               pathType: 'ImplementationSpecific',
             }],
-          }],
-          ingressClassName: 'nginx',
-          tls: [{
-            hosts: ['media.rgst.io'],
-            secretName: 'media-rgst-io-tls',
+            ingressClassName: 'nginx',
+            tls: [{
+              hosts: ['media.rgst.io'],
+              secretName: 'media-rgst-io-tls',
+            }],
           }],
         },
       },
-      persistence: {
-        config: {
-          enabled: true,
-          existingClaim: $.pv.metadata.name,
+        persistence: {
+          config: {
+            enabled: true,
+            existingClaim: $.pv.metadata.name,
+          },
         },
       },
-    }
   ),
 
   pv: k._Object('v1', 'PersistentVolume', name, namespace) {

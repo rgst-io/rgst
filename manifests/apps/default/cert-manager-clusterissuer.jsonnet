@@ -13,16 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
+local argo = import '../../libs/argocd.libsonnet';
+local secrets = import '../../libs/external-secrets.libsonnet';
+local k = import '../../libs/k.libsonnet';
 
-argo.JsonnetApplication(
-  name='default',
-  path='./manifests/apps/default',
-  extVars={
-    cluster_name: '{{ .Cluster.Name }}',
-    config_domain: '{{ .Config.Domain }}',
-    config_cluster_domain: '{{ .Config.ClusterDomain }}',
-  },
-  // No namespace because we let apps decide where to deploy
-  install_namespace=null,
-)
+local name = 'cert-manager-clusterissuer';
+
+local all = {
+  application: argo.JsonnetApplication(name, install_namespace='cert-manager'),
+};
+
+k.List() { items_:: all }

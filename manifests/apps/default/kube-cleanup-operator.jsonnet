@@ -13,16 +13,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../libs/argocd.libsonnet';
+local argo = import '../../libs/argocd.libsonnet';
 
-argo.JsonnetApplication(
-  name='default',
-  path='./manifests/apps/default',
-  extVars={
-    cluster_name: '{{ .Cluster.Name }}',
-    config_domain: '{{ .Config.Domain }}',
-    config_cluster_domain: '{{ .Config.ClusterDomain }}',
-  },
-  // No namespace because we let apps decide where to deploy
-  install_namespace=null,
+argo.HelmApplication(
+  chart='kube-cleanup-operator',
+  repoURL='https://charts.lwolf.org',
+  version='1.0.4',
+  values={
+    rbac: {
+      create: true,
+      global: true,
+    },
+    args: [
+      '--delete-failed-after=60m',
+      '--delete-successful-after=60m',
+      '--delete-pending-pods-after=60m',
+      '--delete-evicted-pods-after=60m',
+      '--delete-orphaned-pods-after=60m',
+      '--legacy-mode=false',
+    ],
+  }
 )

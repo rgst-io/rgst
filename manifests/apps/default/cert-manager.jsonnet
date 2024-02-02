@@ -28,37 +28,10 @@ local all = {
     values={
       installCRDs: true,
     },
-  ),
-  cluster_issuer: k._Object('cert-manager.io/v1', 'ClusterIssuer', 'main') {
-    spec: {
-      acme: {
-        email: 'jared@rgst.io',
-        server: 'https://acme-v02.api.letsencrypt.org/directory',
-        privateKeySecretRef: {
-          name: 'main-issuer-key',
-        },
-        solvers: [{
-          dns01: {
-            cloudflare: {
-              email: 'jared@rgst.io',
-              apiTokenSecretRef: {
-                name: 'cloudflare-api-key',
-                key: 'api-key',
-              },
-            },
-          },
-        }],
-      },
-    },
-  },
-  external_secret: secrets.ExternalSecret('cloudflare-api-key', name) {
-    secret_store:: secrets.ClusterSecretStore('kubernetes'),
-    target:: 'cloudflare-api-key',
-    keys:: {
-      'api-key': {
-        remoteRef: {
-          key: 'CLOUDFLARE_API_KEY',
-        },
+  ) + {  // Everything depends on the CRDs existing so set this to sync-wave -1.
+    metadata+: {
+      annotations+: {
+        'argocd.argoproj.io/sync-wave': '-1',
       },
     },
   },

@@ -23,13 +23,10 @@ local all = {
     chart='external-secrets',
     repoURL='https://charts.external-secrets.io',
     version='0.9.11',
-  ),
-  secret_store: secrets.ClusterSecretStore('kubernetes') {
-    doppler_:: {
-      secret: {
-        name: 'doppler-token-auth-api',
-        namespace: $.application.namespace,
-        key: 'dopplerToken',
+  ) + {  // Everything depends on the CRDs existing so set this to sync-wave -2.
+    metadata+: {
+      annotations+: {
+        'argocd.argoproj.io/sync-wave': '-2',
       },
     },
   },
