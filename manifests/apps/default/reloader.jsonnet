@@ -15,9 +15,10 @@
 
 local argo = import '../../libs/argocd.libsonnet';
 
+// https://artifacthub.io/packages/helm/stakater/reloader
 argo.HelmApplication(
   chart='reloader',
   repoURL='https://stakater.github.io/stakater-charts',
-  version='1.0.60',
+  version='1.0.69',
   values={}
 )

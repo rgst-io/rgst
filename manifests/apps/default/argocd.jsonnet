@@ -22,8 +22,18 @@ local argo = import '../../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='argo-cd',
   repoURL='https://argoproj.github.io/argo-helm',
-  version='5.53.12',
+  version='6.3.1',
   values={
+    global: {
+      domain: fqdn,
+    },
+
+    configs: {
+      params: {
+        'server.insecure': true,
+      }
+    }
+
     redis: {
       resources: {
         requests: {
@@ -62,18 +72,13 @@ argo.HelmApplication(
       // Ingress Object
       ingress: {
         enabled: true,
-        https: true,
         annotations: {
           'cert-manager.io/cluster-issuer': 'main',
           'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
           'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
         },
         ingressClassName: 'nginx',
-        hosts: [fqdn],
-        tls: [{
-          secretName: 'argocd-secret',
-          hosts: [fqdn],
-        }],
+        tls: true,
       },
 
       // Autoscaling

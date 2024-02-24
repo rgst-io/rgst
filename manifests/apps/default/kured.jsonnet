@@ -15,10 +15,11 @@
 
 local argo = import '../../libs/argocd.libsonnet';
 
+// https://artifacthub.io/packages/helm/kured/kured
 argo.HelmApplication(
   chart='kured',
   repoURL='https://kubereboot.github.io/charts',
-  version='5.3.2',
+  version='5.4.2',
   values={
     updateStrategy: 'RollingUpdate',
     configuration: {
