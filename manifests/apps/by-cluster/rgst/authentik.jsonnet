@@ -30,7 +30,9 @@ local all = {
     version='2024.2.1',
     values={
       // Secrets come from here.
-      envFrom: [{ secretRef: { name: secName } }],
+      global: {
+        envFrom: [{ secretRef: { name: secName } }],
+      },
       authentik: {
         // This sends anonymous usage-data, stack traces on errors and
         // performance data to sentry.io, and is fully opt-in
