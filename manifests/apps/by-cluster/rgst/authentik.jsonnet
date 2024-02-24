@@ -49,25 +49,17 @@ local all = {
       },
       server: {
         ingress: {
-          // Specify kubernetes ingress controller class name
-          ingressClassName: 'nginx',
           enabled: true,
+          ingressClassName: 'nginx',
           annotations: {
             'cert-manager.io/cluster-issuer': 'main',
             // Ensure client IPs from Cloudflare are preserved
             'nginx.ingress.kubernetes.io/configuration-snippet': 'real_ip_header CF-Connecting-IP;',
           },
-          hosts: [{
-            // Specify external host name
-            host: 'auth.rgst.io',
-            paths: [{
-              path: '/',
-              pathType: 'Prefix',
-            }],
-            tls: [{
-              secretName: 'auth-rgst-io',
-              hosts: ['auth.rgst.io'],
-            }],
+          hosts: ['auth.rgst.io'],
+          tls: [{
+            secretName: 'auth-rgst-io',
+            hosts: ['auth.rgst.io'],
           }],
         },
       },
