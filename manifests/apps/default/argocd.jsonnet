@@ -31,8 +31,8 @@ argo.HelmApplication(
     configs: {
       params: {
         'server.insecure': true,
-      }
-    }
+      },
+    },
 
     redis: {
       resources: {
