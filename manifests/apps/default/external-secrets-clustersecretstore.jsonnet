@@ -20,7 +20,6 @@ local k = import '../../libs/k.libsonnet';
 local name = 'external-secrets-clustersecretstore';
 
 local all = {
-  // https://artifacthub.io/packages/helm/cert-manager/cert-manager
   application: argo.JsonnetApplication(name, install_namespace='external-secrets'),
 };
 
