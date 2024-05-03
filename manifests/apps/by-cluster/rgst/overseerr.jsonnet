@@ -24,7 +24,7 @@ local all = {
     install_namespace=namespace,
     chart='app-template',
     repoURL='https://bjw-s.github.io/helm-charts/',
-    version='2.4.0',
+    version='3.1.0',
     values={
       controller: {
         main: {
@@ -64,13 +64,13 @@ local all = {
           }],
         },
       },
-        persistence: {
-          config: {
-            enabled: true,
-            existingClaim: $.pv.metadata.name,
-          },
+      persistence: {
+        config: {
+          enabled: true,
+          existingClaim: $.pv.metadata.name,
         },
       },
+    },
   ),
 
   pv: k._Object('v1', 'PersistentVolume', name, namespace) {

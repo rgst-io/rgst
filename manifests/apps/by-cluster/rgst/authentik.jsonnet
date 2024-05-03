@@ -27,7 +27,7 @@ local all = {
   application: argo.HelmApplication(
     chart='authentik',
     repoURL='https://charts.goauthentik.io',
-    version='2024.2.3',
+    version='2024.4.1',
     values={
       // Secrets come from here.
       global: {
