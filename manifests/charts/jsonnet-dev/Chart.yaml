@@ -11,5 +11,5 @@ maintainers:
     name: jaredallard
 dependencies:
   - name: postgres
-    version: "0.3.14"
+    version: "1.4.3"
     repository: https://groundhog2k.github.io/helm-charts/
