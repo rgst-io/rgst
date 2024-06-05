@@ -19,12 +19,13 @@ local name = 'overseerr';
 local namespace = name;
 
 local all = {
+  // https://artifacthub.io/packages/helm/bjw-s/app-template
   helm_chart: argo.HelmApplication(
     app_name=name,
     install_namespace=namespace,
     chart='app-template',
     repoURL='https://bjw-s.github.io/helm-charts/',
-    version='3.1.0',
+    version='3.2.1',
     values={
       controller: {
         main: {

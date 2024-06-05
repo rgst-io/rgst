@@ -22,7 +22,7 @@ local argo = import '../../libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='argo-cd',
   repoURL='https://argoproj.github.io/argo-helm',
-  version='6.7.18',
+  version='7.1.1',
   values={
     global: {
       domain: fqdn,
