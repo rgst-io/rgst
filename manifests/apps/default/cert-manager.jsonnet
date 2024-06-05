@@ -22,7 +22,7 @@ local name = 'cert-manager';
 local all = {
   // https://artifacthub.io/packages/helm/cert-manager/cert-manager
   application: argo.HelmApplication(
-    chart=name,
+    chart='cert-manager,
     repoURL='https://charts.jetstack.io',
     version='v1.14.5',
     values={
