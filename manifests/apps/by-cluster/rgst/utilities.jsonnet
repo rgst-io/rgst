@@ -19,53 +19,55 @@ local k = import '../../../libs/k.libsonnet';
 
 local namespace = 'utilities';
 
-// app creates an application. Values are:
-// - name: the name of the application, used as the name of all
-//   associated resources.
-// - container: a container object, as defined in the app-template helm
-//   chart.
-// - secrets: a list of secret keys to be fetched from the secret store,
-//   should match the keys in the secret store and expected env var
-//   name.
-local app(name, container, secrets) = k.Container() {
-  // Allow callers to access the name of the application.
-  name:: name,
+local fns = {
+  // app creates an application. Values are:
+  // - name: the name of the application, used as the name of all
+  //   associated resources.
+  // - container: a container object, as defined in the app-template helm
+  //   chart.
+  // - secrets: a list of secret keys to be fetched from the secret store,
+  //   should match the keys in the secret store and expected env var
+  //   name.
+  app(name, container, secrets):: k.Container() {
+    // Allow callers to access the name of the application.
+    name:: name,
 
-  [name + '_helm_chart']: argo.HelmApplication(
-    app_name=name,
-    install_namespace=namespace,
-    chart='app-template',
-    repoURL='https://bjw-s.github.io/helm-charts/',
-    version='3.2.1',
-    values={
-      controllers: {
-        main: {
-          containers: {
-            main: container {
-              envFrom: [{ secretRef: { name: name } }],
+    [name + '_helm_chart']: argo.HelmApplication(
+      app_name=name,
+      install_namespace=namespace,
+      chart='app-template',
+      repoURL='https://bjw-s.github.io/helm-charts/',
+      version='3.2.1',
+      values={
+        controllers: {
+          main: {
+            containers: {
+              main: container {
+                envFrom: [{ secretRef: { name: name } }],
+              },
             },
           },
         },
       },
+    ),
+    [name + '_external_secret']: secrets.ExternalSecret(name, namespace) {
+      keys:: {
+        [key]: {
+          remoteRef: {
+            key: key,
+          },
+        }
+        for key in secrets
+      },
+      secret_store:: $.doppler.secret_store,
+      target:: name,
     },
-  ),
-  [name + '_external_secret']: secrets.ExternalSecret(name, namespace) {
-    keys:: {
-      [key]: {
-        remoteRef: {
-          key: key,
-        },
-      }
-      for key in secrets
-    },
-    secret_store:: $.doppler.secret_store,
-    target:: name,
   },
 };
 
 // Create applications here using the app() function.
 local apps = [
-  app(
+  fns.app(
     'plexanisync',
     {
       image: {
