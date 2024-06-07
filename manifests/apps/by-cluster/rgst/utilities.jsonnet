@@ -32,7 +32,7 @@ local fns = {
     // Allow callers to access the name of the application.
     name:: name,
 
-    [name + '_helm_chart']: argo.HelmApplication(
+    ['%s_helm_chart' % name]: argo.HelmApplication(
       app_name=name,
       install_namespace=namespace,
       chart='app-template',
@@ -50,7 +50,7 @@ local fns = {
         },
       },
     ),
-    [name + '_external_secret']: secrets.ExternalSecret(name, namespace) {
+    ['%s_external_secret' % name]: secrets.ExternalSecret(name, namespace) {
       keys:: {
         [key]: {
           remoteRef: {
