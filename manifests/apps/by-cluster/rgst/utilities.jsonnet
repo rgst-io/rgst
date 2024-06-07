@@ -82,7 +82,7 @@ local apps = [
         INTERVAL: '3600',
       }),
     },
-    ['PLEX_TOKEN', 'ANI_TOKEN'],
+    ['PLEX_TOKEN', 'PLEX_URL', 'ANI_TOKEN'],
   ),
 ];
 
