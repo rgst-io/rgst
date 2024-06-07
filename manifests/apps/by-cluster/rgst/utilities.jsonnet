@@ -25,10 +25,10 @@ local fns = {
   //   associated resources.
   // - container: a container object, as defined in the app-template helm
   //   chart.
-  // - secrets: a list of secret keys to be fetched from the secret store,
-  //   should match the keys in the secret store and expected env var
-  //   name.
-  app(name, container, secrets):: k.Container {
+  // - app_secrets: a list of secret keys to be fetched from the secret
+  //   store, should match the keys in the secret store and expected
+  //   env var name.
+  app(name, container, app_secrets):: k.Container {
     // Allow callers to access the name of the application.
     name:: name,
 
@@ -57,7 +57,7 @@ local fns = {
             key: key,
           },
         }
-        for key in secrets
+        for key in app_secrets
       },
       secret_store:: $.doppler.secret_store,
       target:: name,
