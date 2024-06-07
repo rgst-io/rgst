@@ -19,7 +19,7 @@ local k = import '../../../libs/k.libsonnet';
 
 local namespace = 'utilities';
 
-local secret_store = secrets.DopplerSecretStore(namespace);
+local doppler = secrets.DopplerSecretStore(namespace);
 
 local fns = {
   // app creates an application. Values are:
@@ -61,7 +61,7 @@ local fns = {
         }
         for key in app_secrets
       },
-      secret_store:: secret_store,
+      secret_store:: doppler.secret_store,
       target:: name,
     },
   },
@@ -93,7 +93,7 @@ local all = {
   for app in apps
 } + {
   // Secret store used by all of the external secret objects.
-  doppler: secret_store,
+  doppler: doppler,
 };
 
 k.List() { items_:: all }
