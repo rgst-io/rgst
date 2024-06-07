@@ -53,13 +53,13 @@ local all = {
           annotations: {
             'cert-manager.io/cluster-issuer': 'main',
           },
+          className: 'nginx',
           hosts: [{
             host: 'media.rgst.io',
             paths: [{
               path: '/',
               pathType: 'ImplementationSpecific',
             }],
-            ingressClassName: 'nginx',
             tls: [{
               hosts: ['media.rgst.io'],
               secretName: 'media-rgst-io-tls',
