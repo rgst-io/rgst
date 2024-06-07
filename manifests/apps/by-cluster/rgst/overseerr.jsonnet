@@ -27,21 +27,23 @@ local all = {
     repoURL='https://bjw-s.github.io/helm-charts/',
     version='3.2.1',
     values={
-      controller: {
+      controllers: {
         main: {
           containers: {
-            image: {
-              repository: 'ghcr.io/sct/overseerr',
-              tag: '1.33.2',
-            },
-            env: {
-              TZ: 'America/Los_Angeles',
+            main: {
+              image: {
+                repository: 'ghcr.io/sct/overseerr',
+                tag: '1.33.2',
+              },
+              env: {
+                TZ: 'America/Los_Angeles',
+              },
             },
           },
-        },
-        pod: {
-          nodeSelector: {
-            'kubernetes.io/hostname': 'shino',
+          pod: {
+            nodeSelector: {
+              'kubernetes.io/hostname': 'shino',
+            },
           },
         },
       },
