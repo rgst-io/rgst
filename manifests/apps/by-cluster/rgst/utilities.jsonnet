@@ -28,7 +28,7 @@ local fns = {
   // - secrets: a list of secret keys to be fetched from the secret store,
   //   should match the keys in the secret store and expected env var
   //   name.
-  app(name, container, secrets):: k.Container() {
+  app(name, container, secrets):: k.Container {
     // Allow callers to access the name of the application.
     name:: name,
 
