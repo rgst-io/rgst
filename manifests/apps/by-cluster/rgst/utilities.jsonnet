@@ -76,7 +76,7 @@ local apps = [
         repository: 'ghcr.io/rickdb/plexanisync',
         tag: '1.4.1',
       },
-      env: k.envToList({
+      env: k.envList({
         PLEX_SECTION: 'Anime|Movies',
         ANI_USERNAME: 'itsdwari',
         INTERVAL: '3600',
