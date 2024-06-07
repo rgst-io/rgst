@@ -58,7 +58,11 @@ local all = {
             host: 'media.rgst.io',
             paths: [{
               path: '/',
-              pathType: 'ImplementationSpecific',
+              pathType: 'Prefix',
+              service: {
+                name: 'main',
+                identifier: self.name,
+              },
             }],
           }],
           tls: [{
