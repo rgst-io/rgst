@@ -29,7 +29,7 @@ local all = {
     repoURL='https://bjw-s.github.io/helm-charts/',
     version='3.2.1',
     values={
-      controller: {
+      controllers: {
         main: {
           containers: {
             image: {
