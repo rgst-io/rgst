@@ -36,6 +36,11 @@ local all = {
                 repository: 'ghcr.io/rickdb/plexanisync',
                 tag: '1.4.1',
               },
+              env: [
+                { name: 'PLEX_SECTION', value: 'Anime|Movies' },
+                { name: 'ANI_USERNAME', value: 'itsdwari' },
+                { name: 'INTERVAL', value: '3600' },
+              ],
               envFrom: [{ secretRef: { name: 'plexanisync' } }],
             },
           },
