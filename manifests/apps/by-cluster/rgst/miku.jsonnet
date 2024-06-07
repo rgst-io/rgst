@@ -32,11 +32,13 @@ local all = {
       controllers: {
         main: {
           containers: {
-            image: {
-              repository: 'ghcr.io/jaredallard/miku',
-              tag: '1.2.0',
+            main: {
+              image: {
+                repository: 'ghcr.io/jaredallard/miku',
+                tag: '1.2.0',
+              },
+              envFrom: [{ secretRef: { name: name } }],
             },
-            envFrom: [{ secretRef: { name: name } }],
           },
         },
       },
