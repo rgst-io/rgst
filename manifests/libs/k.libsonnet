@@ -59,6 +59,14 @@
   // the key as the name field.
   mapToNamedList(o, nameKey='name'):: [{ [nameKey]: n } + o[n] for n in std.objectFields(o)],
 
+  // envList takes a map of environment variables and returns a list of
+  // objects with the key as the name field and the value as the value
+  // field.
+  envList(map):: [
+    if std.type(map[x]) == 'object' then { name: x, valueFrom: map[x] } else { name: x, value: map[x] }
+    for x in std.objectFields(map)
+  ],
+
   // List returns a list of Kubernetes Objects. Filters out null entries.
   List():: $._Object('v1', 'List') {
     items_:: {},

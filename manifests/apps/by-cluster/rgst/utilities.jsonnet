@@ -19,10 +19,20 @@ local k = import '../../../libs/k.libsonnet';
 
 local namespace = 'utilities';
 
-local all = {
-  // https://artifacthub.io/packages/helm/bjw-s/app-template
-  helm_chart: argo.HelmApplication(
-    app_name='plexanisync',
+// app creates an application. Values are:
+// - name: the name of the application, used as the name of all
+//   associated resources.
+// - container: a container object, as defined in the app-template helm
+//   chart.
+// - secrets: a list of secret keys to be fetched from the secret store,
+//   should match the keys in the secret store and expected env var
+//   name.
+local app(name, container, secrets) = k.Container() {
+  // Allow callers to access the name of the application.
+  name:: name,
+
+  [name + '_helm_chart']: argo.HelmApplication(
+    app_name=name,
     install_namespace=namespace,
     chart='app-template',
     repoURL='https://bjw-s.github.io/helm-charts/',
@@ -31,33 +41,53 @@ local all = {
       controllers: {
         main: {
           containers: {
-            main: {
-              image: {
-                repository: 'ghcr.io/rickdb/plexanisync',
-                tag: '1.4.1',
-              },
-              env: [
-                { name: 'PLEX_SECTION', value: 'Anime|Movies' },
-                { name: 'ANI_USERNAME', value: 'itsdwari' },
-                { name: 'INTERVAL', value: '3600' },
-              ],
-              envFrom: [{ secretRef: { name: 'plexanisync' } }],
+            main: container {
+              envFrom: [{ secretRef: { name: name } }],
             },
           },
         },
       },
     },
   ),
-  external_secret: secrets.ExternalSecret('plexanisync', namespace) {
+  [name + '_external_secret']: secrets.ExternalSecret(name, namespace) {
     keys:: {
-      ANI_TOKEN: { remoteRef: { key: 'ANI_TOKEN' } },
-      PLEX_TOKEN: { remoteRef: { key: 'PLEX_TOKEN' } },
-      PLEX_URL: { remoteRef: { key: 'PLEX_URL' } },
+      [key]: {
+        remoteRef: {
+          key: key,
+        },
+      }
+      for key in secrets
     },
     secret_store:: $.doppler.secret_store,
-    target:: 'plexanisync',
+    target:: name,
   },
+};
 
+// Create applications here using the app() function.
+local apps = [
+  app(
+    'plexanisync',
+    {
+      image: {
+        repository: 'ghcr.io/rickdb/plexanisync',
+        tag: '1.4.1',
+      },
+      env: k.envToList({
+        PLEX_SECTION: 'Anime|Movies',
+        ANI_USERNAME: 'itsdwari',
+        INTERVAL: '3600',
+      }),
+    },
+    ['PLEX_TOKEN', 'ANI_TOKEN'],
+  ),
+];
+
+
+local all = {
+  // Create an application key for each app in the apps list.
+  [app.name]: app
+  for app in apps
+} + {
   // Secret store used by all of the external secret objects.
   doppler: secrets.DopplerSecretStore(namespace),
 };
