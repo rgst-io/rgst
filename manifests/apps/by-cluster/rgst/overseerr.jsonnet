@@ -60,10 +60,10 @@ local all = {
               path: '/',
               pathType: 'ImplementationSpecific',
             }],
-            tls: [{
-              hosts: ['media.rgst.io'],
-              secretName: 'media-rgst-io-tls',
-            }],
+          }],
+          tls: [{
+            hosts: ['media.rgst.io'],
+            secretName: 'media-rgst-io-tls',
           }],
         },
       },
