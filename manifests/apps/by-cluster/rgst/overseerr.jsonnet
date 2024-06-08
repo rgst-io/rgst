@@ -47,6 +47,15 @@ local all = {
           },
         },
       },
+      service: {
+        main: {
+          ports: {
+            http: {
+              port: 5055,
+            },
+          },
+        },
+      },
       ingress: {
         main: {
           enabled: true,
@@ -59,9 +68,6 @@ local all = {
             paths: [{
               path: '/',
               pathType: 'Prefix',
-              service: {
-                name: 'main',
-              },
             }],
           }],
           tls: [{
