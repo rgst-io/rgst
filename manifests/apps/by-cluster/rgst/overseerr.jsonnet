@@ -69,6 +69,9 @@ local all = {
               path: '/',
               pathType: 'Prefix',
             }],
+            service: {
+              identifier: 'main',
+            },
           }],
           tls: [{
             hosts: ['media.rgst.io'],
