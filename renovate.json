@@ -11,6 +11,16 @@
       "matchStrings": [
         "chart='(?<depName>.+?)',\\s+repoURL='(?<registryUrl>.+?)',\\s+version='(?<currentValue>.+?)',"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update Docker image versions in jsonnet",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker",
+      "fileMatch": ["^manifests/apps/.*.jsonnet$"],
+      "matchStrings": [
+        "repository: '(?<depName>.+?)',\\s+tag: '(?<currentValue>.+?)',"
+      ]
     }
   ]
 }
