@@ -60,8 +60,7 @@ local all = {
               path: '/',
               pathType: 'Prefix',
               service: {
-                name: 'main',
-                identifier: self.name,
+                identifier: 'main',
               },
             }],
           }],
