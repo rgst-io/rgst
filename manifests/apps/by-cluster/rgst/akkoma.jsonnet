@@ -126,10 +126,10 @@ local all = {
       storageClassName: '',
       resources: {
         requests: {
-          storage: $.pv.spec.capacity.storage,
+          storage: $.config_pv.spec.capacity.storage,
         },
       },
-      volumeName: $.pv.metadata.name,
+      volumeName: $.config_pv.metadata.name,
     },
   },
 
@@ -160,10 +160,10 @@ local all = {
       storageClassName: '',
       resources: {
         requests: {
-          storage: $.pv.spec.capacity.storage,
+          storage: $.instance_pv.spec.capacity.storage,
         },
       },
-      volumeName: $.pv.metadata.name,
+      volumeName: $.instance_pv.metadata.name,
     },
   },
 
