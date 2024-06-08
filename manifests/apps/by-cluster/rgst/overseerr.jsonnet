@@ -84,6 +84,9 @@ local all = {
         config: {
           enabled: true,
           existingClaim: $.pv.metadata.name,
+          globalMounts: [{
+            path: '/app/config',
+          }],
         },
       },
     },
