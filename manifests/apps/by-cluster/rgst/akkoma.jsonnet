@@ -36,7 +36,6 @@ local all = {
                 repository: 'ghcr.io/jaredallard/akkoma',
                 tag: 'v3.13.2',
               },
-              command: ['sleep', 'infinity'],
               envFrom: [{ secretRef: { name: name } }],
             },
           },
