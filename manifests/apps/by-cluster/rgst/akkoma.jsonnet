@@ -37,6 +37,11 @@ local all = {
                 tag: 'v3.13.2',
               },
               envFrom: [{ secretRef: { name: name } }],
+              securityContext: {
+                runAsUser: 1000,
+                runAsGroup: 1000,
+                fsGroup: 1000,
+              },
             },
           },
           pod: {
