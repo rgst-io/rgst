@@ -14,7 +14,165 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 local argo = import '../../../libs/argocd.libsonnet';
+local secrets = import '../../../libs/external-secrets.libsonnet';
+local k = import '../../../libs/k.libsonnet';
+local name = 'akkoma';
+local namespace = name;
 
-argo.JsonnetApplication(
-  name='akkoma',
-)
+local all = {
+  // https://artifacthub.io/packages/helm/bjw-s/app-template
+  helm_chart: argo.HelmApplication(
+    app_name=name,
+    install_namespace=namespace,
+    chart='app-template',
+    repoURL='https://bjw-s.github.io/helm-charts/',
+    version='3.2.1',
+    values={
+      controllers: {
+        main: {
+          containers: {
+            main: {
+              image: {
+                repository: 'ghcr.io/jaredallard/akkoma',
+                tag: 'v3.13.2',
+              },
+              envFrom: [{ secretRef: { name: name } }],
+            },
+          },
+          pod: {
+            nodeSelector: {
+              'kubernetes.io/hostname': 'ruka',
+            },
+          },
+        },
+      },
+      service: {
+        main: {
+          controller: 'main',
+          ports: {
+            http: {
+              port: 4000,
+            },
+          },
+        },
+      },
+      ingress: {
+        main: {
+          enabled: true,
+          annotations: {
+            'cert-manager.io/cluster-issuer': 'main',
+            'nginx.ingress.kubernetes.io/proxy-body-size': '100m',
+          },
+          className: 'nginx',
+          hosts: [{
+            host: 'satania.social',
+            paths: [{
+              path: '/',
+              pathType: 'Prefix',
+              service: {
+                identifier: 'main',
+              },
+            }],
+          }],
+          tls: [{
+            hosts: ['satania.social'],
+            secretName: 'satania-social-tls',
+          }],
+        },
+      },
+      persistence: {
+        config: {
+          enabled: true,
+          existingClaim: $.config_pv.metadata.name,
+          globalMounts: [{
+            path: '/opt/akkoma/config',
+          }],
+        },
+        instance: {
+          enabled: true,
+          existingClaim: $.instance_pv.metadata.name,
+          globalMounts: [{
+            path: '/opt/akkoma/instance',
+          }],
+        },
+      },
+    },
+  ),
+
+  config_pv: k._Object('v1', 'PersistentVolume', '%s-config' % name, namespace) {
+    spec: {
+      storageClassName: '',
+      capacity: {
+        storage: '1Gi',
+      },
+      accessModes: [
+        'ReadWriteOnce',
+      ],
+      persistentVolumeReclaimPolicy: 'Retain',
+      mountOptions: [
+        'nfsvers=4.1',
+      ],
+      nfs: {
+        path: '/volume1/kubernetes/static/akkoma/config',
+        server: '100.69.242.81',  // yui.koi-insen.ts.net
+      },
+    },
+  },
+  config_pvc: k._Object('v1', 'PersistentVolumeClaim', '%s-config' % name, namespace) {
+    spec: {
+      accessModes: [
+        'ReadWriteOnce',
+      ],
+      storageClassName: '',
+      resources: {
+        requests: {
+          storage: $.pv.spec.capacity.storage,
+        },
+      },
+      volumeName: $.pv.metadata.name,
+    },
+  },
+
+  instance_pv: k._Object('v1', 'PersistentVolume', '%s-instance' % name, namespace) {
+    spec: {
+      storageClassName: '',
+      capacity: {
+        storage: '5Gi',
+      },
+      accessModes: [
+        'ReadWriteOnce',
+      ],
+      persistentVolumeReclaimPolicy: 'Retain',
+      mountOptions: [
+        'nfsvers=4.1',
+      ],
+      nfs: {
+        path: '/volume1/kubernetes/static/akkoma/instance',
+        server: '100.69.242.81',  // yui.koi-insen.ts.net
+      },
+    },
+  },
+  instance_pvc: k._Object('v1', 'PersistentVolumeClaim', '%s-instance' % name, namespace) {
+    spec: {
+      accessModes: [
+        'ReadWriteOnce',
+      ],
+      storageClassName: '',
+      resources: {
+        requests: {
+          storage: $.pv.spec.capacity.storage,
+        },
+      },
+      volumeName: $.pv.metadata.name,
+    },
+  },
+
+  external_secret: secrets.ExternalSecret(name, name) {
+    all_keys:: true,
+    secret_store:: $.doppler.secret_store,
+    target:: name,
+  },
+  doppler: secrets.DopplerSecretStore(name),
+};
+
+k.List() { items_:: all }
