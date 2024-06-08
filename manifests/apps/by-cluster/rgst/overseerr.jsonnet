@@ -49,6 +49,7 @@ local all = {
       },
       service: {
         main: {
+          controller: 'main',
           ports: {
             http: {
               port: 5055,
