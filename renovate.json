@@ -4,6 +4,7 @@
   "customManagers": [
     {
       "customType": "regex",
+      "depTypeTemplate": "helm",
       "description": "Update Helm chart versions in jsonnet",
       "datasourceTemplate": "helm",
       "versioningTemplate": "helm",
@@ -14,6 +15,7 @@
     },
     {
       "customType": "regex",
+      "depTypeTemplate": "docker",
       "description": "Update Docker image versions in jsonnet",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
