@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/magefile/mage v1.15.0
 	github.com/rs/zerolog v1.33.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
