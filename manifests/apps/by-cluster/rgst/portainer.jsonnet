@@ -36,8 +36,8 @@ local all = {
               containers: [{
                 name: 'default',
                 image: 'curlimages/curl:8.8.0',
-                command: ['ash', '-eo', 'pipefail', '-c'],
-                args: ['exec curl -X POST -L "${PORTAINER_HOST}/api/stacks/webhooks/${WEBHOOK_ID}"'],
+                command: ['ash', '-euxo', 'pipefail', '-c'],
+                args: ['exec curl --fail-with-body -s -L -X POST "${PORTAINER_HOST}/api/stacks/webhooks/${WEBHOOK_ID}"'],
                 env: k.envList({
                   PORTAINER_HOST: 'https://portainer.rgst.io',
                   WEBHOOK_ID: 'afd2f2ff-7b7d-4bf8-92af-d5ab2ecc36bc',
