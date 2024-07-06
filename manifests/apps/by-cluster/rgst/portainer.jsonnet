@@ -21,7 +21,7 @@ local all = {
       name: 'portainer',
     },
   },
-  cronjob: k._Object('v1', 'CronJob', 'update-portainer-stack') {
+  cronjob: k._Object('batch/v1', 'CronJob', 'update-portainer-stack') {
     metadata+: {
       name: 'update-portainer-stack',
       namespace: 'portainer',
