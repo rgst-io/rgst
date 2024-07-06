@@ -35,9 +35,13 @@ local all = {
             spec: {
               containers: [{
                 name: 'default',
-                image: 'alpine/httpie:3.2.2',
-                command: ['ash', '-e', '-c'],
-                args: ['exec http POST "$PORTAINER_HOST/api/stacks/webhooks/$WEBHOOK_ID"'],
+                image: 'curlimages/curl:8.8.0',
+                args: [
+                  '-X',
+                  'POST',
+                  '-L',
+                  '${PORTAINER_HOST}/api/stacks/webhooks/${WEBHOOK_ID}',
+                ],
                 env: k.envList({
                   PORTAINER_HOST: 'https://portainer.rgst.io',
                   WEBHOOK_ID: 'afd2f2ff-7b7d-4bf8-92af-d5ab2ecc36bc',
