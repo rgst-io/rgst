@@ -27,6 +27,9 @@ local all = {
     repoURL='https://groundhog2k.github.io/helm-charts',
     version='0.129.0',
     values={
+      settings: {
+        url: 'https://jaredallard.dev',
+      },
       fullnameOverride: 'ghost-jaredallard',
       image: {
         repository: 'ghost',
@@ -106,7 +109,6 @@ local all = {
       database__connection__user: { remoteRef: { key: 'GHOST_DATABASE_USER' } },
       mail__from: { remoteRef: { key: 'GHOST_MAIL_FROM' } },
       mail__transport: { remoteRef: { key: 'GHOST_MAIL_TRANSPORT' } },
-      url: { remoteRef: { key: 'GHOST_URL' } },
     },
     secret_store:: $.doppler.secret_store,
     target:: 'ghost-jaredallard',
