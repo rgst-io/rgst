@@ -106,6 +106,7 @@ local all = {
       database__connection__user: { remoteRef: { key: 'GHOST_DATABASE_USER' } },
       mail__from: { remoteRef: { key: 'GHOST_MAIL_FROM' } },
       mail__transport: { remoteRef: { key: 'GHOST_MAIL_TRANSPORT' } },
+      url: { remoteRef: { key: 'GHOST_URL' } },
     },
     secret_store:: $.doppler.secret_store,
     target:: 'ghost-jaredallard',
