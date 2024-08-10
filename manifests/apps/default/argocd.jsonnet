@@ -123,6 +123,18 @@ local all = {
     all_keys:: true,
     secret_store:: $.doppler.secret_store,
     target:: 'oidc',
+  } {
+    spec+: {
+      target+: {
+        template+: {
+          metadata+: {
+            labels+: {
+              'app.kubernetes.io/part-of': 'argocd',
+            },
+          },
+        },
+      },
+    },
   },
   doppler: secrets.DopplerSecretStore(name),
 };
