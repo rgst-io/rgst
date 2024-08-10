@@ -89,8 +89,8 @@ local all = {
           enabled: true,
           annotations: {
             'cert-manager.io/cluster-issuer': 'main',
-            'nginx.ingress.kubernetes.io/backend-protocol': 'HTTP',
-            'nginx.ingress.kubernetes.io/force-ssl-redirect': 'true',
+            'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
+            'nginx.ingress.kjubernetes.io/ssl-passthrough': 'true',
           },
           ingressClassName: 'nginx',
         },
