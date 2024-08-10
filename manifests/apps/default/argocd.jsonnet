@@ -13,95 +13,115 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local cluster_name = std.extVar('cluster_name');
-local cluster_domain = std.extVar('config_cluster_domain');
-local fqdn = '%s.%s' % [cluster_name, cluster_domain];
+// NOTE: We're using a single cluster again for now.
+//
+// local cluster_name = std.extVar('cluster_name');
+// local cluster_domain = std.extVar('config_cluster_domain');
+// local fqdn = '%s.%s' % [cluster_name, cluster_domain];
+local fqdn = 'argocd.rgst.io';
+
 local argo = import '../../libs/argocd.libsonnet';
+local secrets = import '../../libs/external-secrets.libsonnet';
+local k = import '../../libs/k.libsonnet';
+
+local name = 'argocd';
 
 // https://artifacthub.io/packages/helm/argo/argo-cd
-argo.HelmApplication(
-  chart='argo-cd',
-  repoURL='https://argoproj.github.io/argo-helm',
-  version='7.4.2',
-  values={
-    global: {
-      domain: fqdn,
-    },
-
-    configs: {
-      params: {
-        'server.insecure': true,
+local all = {
+  application: argo.HelmApplication(
+    chart='argo-cd',
+    repoURL='https://argoproj.github.io/argo-helm',
+    version='7.4.2',
+    values={
+      global: {
+        domain: fqdn,
       },
-    },
 
-    redis: {
-      resources: {
-        requests: {
-          memory: '256Mi',
-          cpu: '100m',
+      configs: {
+        cm: {
+          'oidc.config': {
+            connectors: [{
+              name: 'Authentik',
+              issuer: 'https://auth.rgst.io/application/o/argocd',
+              clientID: '$oidc:OIDC_CLIENT_ID',
+              clientSecret: '$oidc:OIDC_CLIENT_SECRET',
+            }],
+          },
         },
-        limits: self.requests,
       },
-    },
 
-    controller: {
-      replicas: 1,
-    },
-
-    repoServer: {
-      resources: {
-        requests: {
-          memory: '256Mi',
-          cpu: '300m',
+      redis: {
+        resources: {
+          requests: {
+            memory: '256Mi',
+            cpu: '100m',
+          },
+          limits: self.requests,
         },
-        limits: self.requests,
-      },
-    },
-
-    server: {
-      // We're only accessible via Cloudflare's Zero-Trust.
-      extraArgs: ['--disable-auth'],
-      resources: {
-        requests: {
-          memory: '256Mi',
-          cpu: '500m',
-        },
-        limits: self.requests,
       },
 
-      // Ingress Object
-      ingress: {
-        enabled: true,
-        annotations: {
-          'cert-manager.io/cluster-issuer': 'main',
-          'nginx.ingress.kubernetes.io/ssl-passthrough': 'true',
-          'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
-        },
-        ingressClassName: 'nginx',
-        tls: true,
-      },
-
-      // Autoscaling
-      autoscaling: {
-        enabled: true,
-        minReplicas: 2,
+      controller: {
+        replicas: 1,
       },
 
       repoServer: {
-        autoscaling: {
-          enabled: true,
-          minReplicas: 2,
+        resources: {
+          requests: {
+            memory: '256Mi',
+            cpu: '300m',
+          },
+          limits: self.requests,
         },
       },
 
-      applicationSet: {
-        replicaCount: 2,
-      },
-    },  // End Server Config
+      server: {
+        resources: {
+          requests: {
+            memory: '256Mi',
+            cpu: '500m',
+          },
+          limits: self.requests,
+        },
+
+        // Ingress Object
+        ingress: {
+          enabled: true,
+          annotations: {
+            'cert-manager.io/cluster-issuer': 'main',
+          },
+          ingressClassName: 'nginx',
+        },
+
+        // Autoscaling
+        autoscaling: {
+          enabled: true,
+          minReplicas: 1,
+        },
+
+        repoServer: {
+          autoscaling: {
+            enabled: true,
+            minReplicas: 1,
+          },
+        },
+
+        applicationSet: {
+          replicaCount: 1,
+        },
+      },  // End Server Config
+    },
+    install_namespace='argocd',
+  ) + {
+    metadata+: {
+      name: 'argocd',
+    },
   },
-  install_namespace='argocd',
-) + {
-  metadata+: {
-    name: 'argocd',
+  external_secret: secrets.ExternalSecret(name, name) {
+    all_keys:: true,
+    secret_store:: $.doppler.secret_store,
+    target:: 'oidc',
   },
-}
+  doppler: secrets.DopplerSecretStore(name),
+};
+
+k.List() { items_:: all }
