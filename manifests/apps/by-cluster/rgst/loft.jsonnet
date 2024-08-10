@@ -57,6 +57,7 @@ local all = {
             clientSecret: '$OIDC_CLIENT_SECRET',
             redirectURI: 'https://%s/auth/oidc/callback' % hostname,
           },
+          password: { disabled: true },
         },
         loftHost: hostname,
         devPodSubDomain: '*-%s' % hostname,
