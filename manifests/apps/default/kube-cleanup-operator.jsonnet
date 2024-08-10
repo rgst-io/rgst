@@ -22,7 +22,7 @@ argo.HelmApplication(
   values={
     image: {
       repository: 'quay.io/lwolf/kube-cleanup-operator',
-      tag: 'v0.8.4',
+      tag: '0.8.4',
     },
     rbac: {
       create: true,
