@@ -52,11 +52,10 @@ local all = {
         },
         auth: {
           oidc: {
-            enabled: true,
             issuerUrl: 'https://auth.rgst.io',
             clientId: '$OIDC_CLIENT_ID',
             clientSecret: '$OIDC_CLIENT_SECRET',
-            redirectUrl: 'https://%s/auth/oidc/callback' % hostname,
+            redirectURI: 'https://%s/auth/oidc/callback' % hostname,
           },
         },
         loftHost: hostname,
