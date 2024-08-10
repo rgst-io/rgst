@@ -39,12 +39,16 @@ local all = {
 
       configs: {
         cm: {
+          'admin.enabled': 'false',
           'oidc.config': std.manifestYamlDoc({
             name: 'Authentik',
             issuer: 'https://auth.rgst.io/application/o/argocd/',
             clientID: '$oidc:OIDC_CLIENT_ID',
             clientSecret: '$oidc:OIDC_CLIENT_SECRET',
           }),
+        },
+        rbac: {
+          'policy.csv': 'g, all, role:admin',
         },
       },
 
