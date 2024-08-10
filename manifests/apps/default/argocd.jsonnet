@@ -50,6 +50,9 @@ local all = {
         },
       },
 
+      // We configure SSO through the native OIDC support.
+      dex: { enabled: false },
+
       redis: {
         resources: {
           requests: {
