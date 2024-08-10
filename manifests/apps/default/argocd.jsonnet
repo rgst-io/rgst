@@ -40,12 +40,10 @@ local all = {
       configs: {
         cm: {
           'oidc.config': {
-            connectors: [{
-              name: 'Authentik',
-              issuer: 'https://auth.rgst.io/application/o/argocd',
-              clientID: '$oidc:OIDC_CLIENT_ID',
-              clientSecret: '$oidc:OIDC_CLIENT_SECRET',
-            }],
+            name: 'Authentik',
+            issuer: 'https://auth.rgst.io/application/o/argocd',
+            clientID: '$oidc:OIDC_CLIENT_ID',
+            clientSecret: '$oidc:OIDC_CLIENT_SECRET',
           },
         },
       },
@@ -91,6 +89,8 @@ local all = {
           enabled: true,
           annotations: {
             'cert-manager.io/cluster-issuer': 'main',
+            'nginx.ingress.kubernetes.io/backend-protocol': 'HTTP',
+            'nginx.ingress.kubernetes.io/force-ssl-redirect': 'true',
           },
           ingressClassName: 'nginx',
         },
