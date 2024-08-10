@@ -52,7 +52,7 @@ local all = {
         },
         auth: {
           oidc: {
-            issuerUrl: 'https://auth.rgst.io',
+            issuerUrl: 'https://auth.rgst.io/application/o/vcluster-platform-loft/',
             clientId: '$OIDC_CLIENT_ID',
             clientSecret: '$OIDC_CLIENT_SECRET',
             redirectURI: 'https://%s/auth/oidc/callback' % hostname,
