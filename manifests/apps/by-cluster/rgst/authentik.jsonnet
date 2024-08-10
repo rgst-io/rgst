@@ -21,7 +21,6 @@ local name = 'authentik';
 local secName = name + '-custom';
 
 local all = {
-
   namespace: k._Object('v1', 'Namespace', name) {},
   // https://artifacthub.io/packages/helm/goauthentik/authentik
   application: argo.HelmApplication(

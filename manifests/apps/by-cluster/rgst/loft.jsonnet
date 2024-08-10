@@ -14,6 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 local argo = import '../../../libs/argocd.libsonnet';
+local secrets = import '../../../libs/external-secrets.libsonnet';
 local k = import '../../../libs/k.libsonnet';
 
 local name = 'loft';
@@ -21,6 +22,7 @@ local name = 'loft';
 local hostname = 'loft.rgst.io';
 
 local all = {
+  local configSecretsName = '%s-config-secrets' % name,
   namespace: k._Object('v1', 'Namespace', name) {},
   // https://artifacthub.io/packages/helm/loft/loft
   application: argo.HelmApplication(
@@ -45,8 +47,24 @@ local all = {
         },
       },
       config: {
+        audit: {
+          enabled: true,
+        },
+        auth: {
+          oidc: {
+            enabled: true,
+            issuerUrl: 'https://auth.rgst.io',
+            clientId: '$OIDC_CLIENT_ID',
+            clientSecret: '$OIDC_CLIENT_SECRET',
+            redirectUrl: 'https://%s/auth/oidc/callback' % hostname,
+          },
+        },
         loftHost: hostname,
         devPodSubDomain: '*-%s' % hostname,
+      },
+      envValueFrom: {
+        OIDC_CLIENT_ID: { secretKeyRef: { name: configSecretsName, key: 'OIDC_CLIENT_ID' } },
+        OIDC_CLIENT_SECRET: { secretKeyRef: { name: configSecretsName, key: 'OIDC_CLIENT_SECRET' } },
       },
       ingress: {
         host: hostname,
@@ -64,6 +82,12 @@ local all = {
       },
     },
   ),
+  external_secret: secrets.ExternalSecret(name, name) {
+    all_keys:: true,
+    secret_store:: $.doppler.secret_store,
+    target:: configSecretsName,
+  },
+  doppler: secrets.DopplerSecretStore(name),
 };
 
 k.List() { items_:: all }
