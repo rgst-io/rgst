@@ -33,7 +33,7 @@ local all = {
       fullnameOverride: 'ghost-jaredallard',
       image: {
         repository: 'ghost',
-        tag: '5.89.1-alpine',
+        tag: '5.89.3-alpine',
       },
       ingress: {
         annotations: {
