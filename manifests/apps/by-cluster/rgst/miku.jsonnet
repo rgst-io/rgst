@@ -35,7 +35,7 @@ local all = {
             main: {
               image: {
                 repository: 'ghcr.io/jaredallard/miku',
-                tag: '1.2.1',
+                tag: '1.3.0',
               },
               envFrom: [{ secretRef: { name: name } }],
             },
