@@ -31,7 +31,7 @@ local all = {
   application: argo.HelmApplication(
     chart='argo-cd',
     repoURL='https://argoproj.github.io/argo-helm',
-    version='7.4.4',
+    version='7.4.5',
     values={
       global: {
         domain: fqdn,
@@ -77,6 +77,10 @@ local all = {
           },
           limits: self.requests,
         },
+        autoscaling: {
+          enabled: true,
+          minReplicas: 2,
+        },
       },
 
       server: {
@@ -103,13 +107,6 @@ local all = {
         autoscaling: {
           enabled: true,
           minReplicas: 1,
-        },
-
-        repoServer: {
-          autoscaling: {
-            enabled: true,
-            minReplicas: 2,
-          },
         },
 
         applicationSet: {
