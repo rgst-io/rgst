@@ -34,7 +34,7 @@ local all = {
         },
         replicaCount: 1,
         nodeSelector: {
-          'kubernetes.io/hostname': 'shino',
+          'kubernetes.io/hostname': 'ruka',
         },
         updateStrategy: {
           type: 'Recreate',
