@@ -108,7 +108,7 @@ local all = {
         repoServer: {
           autoscaling: {
             enabled: true,
-            minReplicas: 1,
+            minReplicas: 2,
           },
         },
 
