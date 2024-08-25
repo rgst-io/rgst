@@ -137,10 +137,6 @@ local all = {
         },
         limits: self.requests,
       },
-      nodeSelector: {
-        // More stable compute in my cluster than RPIs...
-        'kubernetes.io/hostname': 'shino',
-      },
       extraEnvSecrets: ['ghost-mysql'],
       storage: {
         requestedSize: '10Gi',
