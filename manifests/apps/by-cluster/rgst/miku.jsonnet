@@ -27,7 +27,7 @@ local all = {
     install_namespace=namespace,
     chart='app-template',
     repoURL='https://bjw-s.github.io/helm-charts/',
-    version='3.3.2',
+    version='3.4.0',
     values={
       controllers: {
         main: {
