@@ -40,11 +40,6 @@ local all = {
               },
             },
           },
-          pod: {
-            nodeSelector: {
-              'kubernetes.io/hostname': 'shino',
-            },
-          },
         },
       },
       service: {
