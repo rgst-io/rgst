@@ -35,7 +35,7 @@ local all = {
             main: {
               image: {
                 repository: ' ghcr.io/maybe-finance/maybe',
-                tag: '0.1.0-alpha.15',
+                tag: '0.1.0-alpha.16',
               },
               env: {
                 REQUIRE_INVITE_CODE: 'true',
