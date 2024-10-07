@@ -52,7 +52,7 @@ local all = {
             },
             className: 'nginx',
 
-            local host = 'immich.rgst.io',
+            local host = 'photos.rgst.io',
             hosts: [{
               host: host,
               paths: [{
