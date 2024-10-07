@@ -50,6 +50,7 @@ local all = {
             annotations: {
               'cert-manager.io/cluster-issuer': 'main',
             },
+            ingressClassName: self.className,
             className: 'nginx',
 
             local host = 'photos.rgst.io',
