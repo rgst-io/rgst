@@ -43,7 +43,7 @@ local all = {
         },
       },
       image: {
-        tag: '1.118.2',
+        tag: 'v1.118.2',
       },
 
       server: {
