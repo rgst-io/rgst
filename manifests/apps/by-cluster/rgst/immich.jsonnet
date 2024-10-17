@@ -25,7 +25,7 @@ local all = {
     chart=name,
     install_namespace=namespace,
     repoURL='https://immich-app.github.io/immich-charts',
-    version='0.8.1',
+    version='0.8.2',
     values={
       env: {  // Replaced by our secrets.
         DB_PASSWORD: null,
