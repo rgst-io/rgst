@@ -42,6 +42,9 @@ local all = {
           },
         },
       },
+      image: {
+        tag: '1.118.2',
+      },
 
       server: {
         ingress: {
