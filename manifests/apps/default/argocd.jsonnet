@@ -101,6 +101,7 @@ local all = {
             'nginx.ingress.kjubernetes.io/ssl-passthrough': 'true',
           },
           ingressClassName: 'nginx',
+          tls: true,
         },
 
         // Autoscaling
