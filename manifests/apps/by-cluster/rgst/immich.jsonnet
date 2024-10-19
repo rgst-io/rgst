@@ -22,7 +22,7 @@ local namespace = name;
 local all = {
   // https://artifacthub.io/packages/helm/immich/immich
   helm_chart: argo.HelmApplication(
-    chart=name,
+    chart='immich',
     repoURL='https://immich-app.github.io/immich-charts',
     version='0.8.2',
     install_namespace=namespace,
