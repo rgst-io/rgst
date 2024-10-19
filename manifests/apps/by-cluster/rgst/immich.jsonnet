@@ -23,9 +23,9 @@ local all = {
   // https://artifacthub.io/packages/helm/immich/immich
   helm_chart: argo.HelmApplication(
     chart=name,
-    install_namespace=namespace,
     repoURL='https://immich-app.github.io/immich-charts',
     version='0.8.2',
+    install_namespace=namespace,
     values={
       env: {  // Replaced by our secrets.
         DB_PASSWORD: null,
