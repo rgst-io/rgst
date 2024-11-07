@@ -44,7 +44,7 @@ local all = {
       },
       image: {
         // repository: 'ghcr.io/immich-app/immich-server',
-        tag: 'v1.120.0',
+        tag: 'v1.120.1',
       },
 
       server: {
