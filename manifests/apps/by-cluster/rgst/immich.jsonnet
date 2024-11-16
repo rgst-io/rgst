@@ -72,6 +72,9 @@ local all = {
 
       redis: {
         enabled: true,  // TODO(jaredallard): We should host one redis if possible.
+        master: {
+          resourcesPreset: 'medium',
+        },
       },
     },
   ),
