@@ -107,6 +107,8 @@ local external_services = [
 local all = {
   [svc.name]: svc
   for svc in external_services
+} + {
+  namespace: k._Object('v1', 'Namespace', namespace),
 };
 
 k.List() { items_:: all }
