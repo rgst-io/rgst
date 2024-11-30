@@ -34,7 +34,7 @@ local all = {
             main: {
               image: {
                 repository: 'ghcr.io/jaredallard/akkoma',
-                tag: 'v3.13.3',
+                tag: 'v3.13.2',
               },
               envFrom: [{ secretRef: { name: name } }],
             },
