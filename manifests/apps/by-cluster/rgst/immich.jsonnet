@@ -24,7 +24,7 @@ local all = {
   helm_chart: argo.HelmApplication(
     chart='immich',
     repoURL='https://immich-app.github.io/immich-charts',
-    version='0.8.5',
+    version='0.9.0',
     install_namespace=namespace,
     values={
       env: {  // Replaced by our secrets.
