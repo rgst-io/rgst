@@ -38,7 +38,7 @@ local app(name, container, app_secrets) = k.Container {
     install_namespace=namespace,
     chart='app-template',
     repoURL='https://bjw-s.github.io/helm-charts/',
-    version='3.5.1',
+    version='3.6.0',
     values={
       controllers: {
         main: {
