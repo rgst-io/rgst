@@ -52,8 +52,6 @@ local all = {
           ingressClassName: 'nginx',
           annotations: {
             'cert-manager.io/cluster-issuer': 'main',
-            // Ensure client IPs from Cloudflare are preserved
-            'nginx.ingress.kubernetes.io/configuration-snippet': 'real_ip_header CF-Connecting-IP;',
           },
           hosts: ['auth.rgst.io'],
           tls: [{
