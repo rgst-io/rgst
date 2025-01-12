@@ -72,7 +72,7 @@ local apps = [
     {
       image: {
         repository: 'ghcr.io/rickdb/plexanisync',
-        tag: '1.4.1',
+        tag: '1.4.2',
       },
       env: k.envList({
         PLEX_SECTION: 'Anime|Movies',
