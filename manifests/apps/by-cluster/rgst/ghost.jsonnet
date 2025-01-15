@@ -25,7 +25,7 @@ local all = {
     chart='ghost',
     install_namespace=namespace,
     repoURL='https://groundhog2k.github.io/helm-charts',
-    version='0.134.1',
+    version='0.144.0',
     values={
       settings: {
         url: 'https://jaredallard.dev',
