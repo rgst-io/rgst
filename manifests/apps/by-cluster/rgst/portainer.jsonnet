@@ -16,11 +16,7 @@
 local k = import '../../../libs/k.libsonnet';
 
 local all = {
-  namespace: k._Object('v1', 'Namespace', 'portainer') {
-    metadata+: {
-      name: 'portainer',
-    },
-  },
+  namespace: k._Object('v1', 'Namespace', 'portainer'),
   cronjob: k._Object('batch/v1', 'CronJob', 'update-portainer-stack') {
     metadata+: {
       name: 'update-portainer-stack',

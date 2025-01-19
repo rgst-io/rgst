@@ -92,4 +92,16 @@
       [if namespace != null then 'namespace']: namespace,
     },
   },
+
+  // ConfigMap creates a configmap with string guarantees if the data_
+  // subfield is used.
+  ConfigMap(name, namespace):: $._Object('v1', 'ConfigMap', name, namespace) {
+    local this = self,
+    data_:: {},
+    data: {
+      // ConfigMap keys must be strings.
+      [key]: std.toString(this.data_[key])
+      for key in std.objectFields(this.data_)
+    },
+  },
 }
