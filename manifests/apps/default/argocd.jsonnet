@@ -36,7 +36,7 @@ local all = {
       global: {
         domain: fqdn,
         image: {
-          tag: 'v2.14.0-rc.5',
+          tag: 'v2.14.0-rc5',
         },
       },
 
