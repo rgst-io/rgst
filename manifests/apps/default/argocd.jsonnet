@@ -35,9 +35,6 @@ local all = {
     values={
       global: {
         domain: fqdn,
-        image: {
-          tag: 'v2.14.0-rc5',
-        },
       },
 
       configs: {
