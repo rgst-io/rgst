@@ -106,21 +106,21 @@ local all = {
                   'exec gosu www-data php artisan horizon',
                 ]),
               ],
-            },
-          },
-          probes: {
-            readiness: {
-              enabled: true,
-              custom: true,
-              spec+: {
-                command: ['/bin/bash', '-euc', 'gosu www-data php artisan horizon:status | grep -q running'],
-              },
-            },
-            liveness: self.readiness {
-              spec+: {
-                initialDelaySeconds: 60,
-                failureThreshold: 5,
-                timeoutSeconds: 5,
+              probes: {
+                readiness: {
+                  enabled: true,
+                  custom: true,
+                  spec+: {
+                    command: ['/bin/bash', '-euc', 'gosu www-data php artisan horizon:status | grep -q running'],
+                  },
+                },
+                liveness: self.readiness {
+                  spec+: {
+                    initialDelaySeconds: 60,
+                    failureThreshold: 5,
+                    timeoutSeconds: 5,
+                  },
+                },
               },
             },
           },
@@ -140,9 +140,9 @@ local all = {
                   'exec gosu www-data php artisan schedule:run',
                 ]),
               ],
+              probes: {},  // No probes needed.
             },
           },
-          probes: {},  // No probes needed.
         },
       },
       defaultPodOptions: {
