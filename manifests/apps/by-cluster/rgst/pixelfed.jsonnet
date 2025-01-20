@@ -67,6 +67,27 @@ local all = {
                 { secretRef: { name: name } },
                 { configMapRef: { name: name } },
               ],
+              probes: {
+                readiness: {
+                  enabled: true,
+                  type: 'HTTP',
+                  path: '/api/service/health-check',
+                  port: 80,
+                  spec+: {
+                    httpHeaders: [{
+                      name: 'Host',
+                      value: host,
+                    }],
+                  },
+                },
+                liveness: self.readiness {
+                  spec+: {
+                    initialDelaySeconds: 60,
+                    failureThreshold: 5,
+                    timeoutSeconds: 5,
+                  },
+                },
+              },
             },
           },
           pod: {
@@ -87,6 +108,22 @@ local all = {
               ],
             },
           },
+          probes: {
+            readiness: {
+              enabled: true,
+              custom: true,
+              spec+: {
+                command: ['/bin/bash', '-euc', 'gosu www-data php artisan horizon:status | grep -q running'],
+              },
+            },
+            liveness: self.readiness {
+              spec+: {
+                initialDelaySeconds: 60,
+                failureThreshold: 5,
+                timeoutSeconds: 5,
+              },
+            },
+          },
         },
         tasks: self.main {
           type: 'cronjob',
@@ -105,6 +142,7 @@ local all = {
               ],
             },
           },
+          probes: {},  // No probes needed.
         },
       },
       defaultPodOptions: {
