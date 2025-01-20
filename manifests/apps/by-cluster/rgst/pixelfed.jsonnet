@@ -111,7 +111,11 @@ local all = {
                   enabled: true,
                   custom: true,
                   spec+: {
-                    command: ['/bin/bash', '-euc', 'gosu www-data php artisan horizon:status | grep -q running'],
+                    exec: {
+                      command: ['/bin/bash', '-euc', 'gosu www-data php artisan horizon:status | grep -q running'],
+                    },
+                    periodSeconds: 5,
+                    failureThreshold: 3,
                   },
                 },
                 liveness: self.readiness {
