@@ -224,6 +224,7 @@ local all = {
       DOCKER_DB_HOST_PORT: self.DB_PORT,
       REDIS_HOST: 'redis.%s.svc.cluster.local' % namespace,
       REDIS_PASSWORD: '',
+      QUEUE_DRIVER: 'redis',
 
       // Features
       INSTANCE_DISCOVER_PUBLIC: true,
