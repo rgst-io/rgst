@@ -234,6 +234,10 @@ local all = {
       ACTIVITY_PUB: true,
       AP_REMOTE_FOLLOW: true,
       AP_SHAREDINBOX: true,
+      IMPORT_INSTAGRAM: true,
+      IMPORT_INSTAGRAM_POST_LIMIT: 1000,
+      IMPORT_INSTAGRAM_SIZE_LIMIT: 20000,
+      PF_IMPORT_IG_PERM_MIN_ACCOUNT_AGE: 0,
 
       // User limits
       OPEN_REGISTRATION: false,  // For now.
