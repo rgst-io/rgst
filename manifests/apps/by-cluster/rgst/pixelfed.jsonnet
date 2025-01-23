@@ -238,6 +238,7 @@ local all = {
       IMPORT_INSTAGRAM_POST_LIMIT: 1000,
       IMPORT_INSTAGRAM_SIZE_LIMIT: 20000,
       PF_IMPORT_IG_PERM_MIN_ACCOUNT_AGE: 0,
+      MEDIA_TYPES: 'image/jpeg,image/png,image/gif,image/webp,image/avif,image/heic,video/mov,video/mp4',
 
       // User limits
       OPEN_REGISTRATION: false,  // For now.
