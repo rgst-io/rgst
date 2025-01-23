@@ -45,6 +45,10 @@ local all = {
     values={
       controllers: {
         main: {
+          strategy: 'RollingUpdate',
+          rollingUpdate: {
+            unavailable: '0',
+          },
           containers: {
             main: {
               image: {
