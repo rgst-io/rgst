@@ -62,6 +62,7 @@ local all = {
           },
           server: {
             ROOT_URL: 'https://' + host,
+            DISABLE_SSH: true,
           },
           service: {
             DISABLE_REGISTRATION: false,
