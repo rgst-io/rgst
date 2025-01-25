@@ -93,7 +93,7 @@ local all = {
       persistentVolumeReclaimPolicy: 'Retain',
       mountOptions: [
         'vers=3',
-        'local_lock=posix'
+        'local_lock=posix',
       ],
       nfs: {
         path: '/volume1/kubernetes/static/rmfakecloud',
