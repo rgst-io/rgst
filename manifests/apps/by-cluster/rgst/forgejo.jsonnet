@@ -63,6 +63,7 @@ local all = {
           server: {
             ROOT_URL: 'https://' + host,
             DISABLE_SSH: true,
+            ENABLE_REVERSE_PROXY_AUTHENTICATION: false,
           },
           service: {
             DISABLE_REGISTRATION: false,
