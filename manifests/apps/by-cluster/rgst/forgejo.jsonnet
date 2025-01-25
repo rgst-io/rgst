@@ -53,6 +53,7 @@ local all = {
             SCHEMA: 'forgejo',
           },
           service: {
+            DISABLE_REGISTRATION: false,
             ALLOW_ONLY_EXTERNAL_REGISTRATION: true,
             REQUIRE_SIGNIN_VIEW: true,
             ENABLE_INTERNAL_SIGNIN: false,
