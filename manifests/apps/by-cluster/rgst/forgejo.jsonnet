@@ -52,6 +52,17 @@ local all = {
             USER: self.NAME,
             SCHEMA: 'forgejo',
           },
+          mailer: {
+            ENABLED: true,
+            FROM: 'forgejo@rgst.io',
+            PROTOCOL: 'smtps',
+            SMTP_ADDR: 'smtp.mailgun.org',
+            SMTP_PORT: 465,
+            USER: 'forgejo@rgst.io',
+          },
+          server: {
+            ROOT_URL: 'https://' + host,
+          },
           service: {
             DISABLE_REGISTRATION: false,
             ALLOW_ONLY_EXTERNAL_REGISTRATION: true,
@@ -59,17 +70,23 @@ local all = {
             ENABLE_INTERNAL_SIGNIN: false,
             ENABLE_BASIC_AUTHENTICATION: false,
           },
-          server: {
-            ROOT_URL: 'https://' + host,
-          },
         },
-        additionalConfigFromEnvs: [{
-          name: 'FORGEJO__DATABASE__PASSWD',
-          valueFrom: { secretKeyRef: {
-            name: $.external_secret.metadata.name,
-            key: 'DATABASE_PASSWORD',
-          } },
-        }],
+        additionalConfigFromEnvs: [
+          {
+            name: 'FORGEJO__DATABASE__PASSWD',
+            valueFrom: { secretKeyRef: {
+              name: $.external_secret.metadata.name,
+              key: 'DATABASE_PASSWORD',
+            } },
+          },
+          {
+            name: 'FORGEJO__MAILER__PASSWD',
+            valueFrom: { secretKeyRef: {
+              name: $.external_secret.metadata.name,
+              key: 'MAIL_PASSWORD',
+            } },
+          },
+        ],
       },
       signing: {
         existingSecret: $.external_secret.metadata.name,
@@ -107,6 +124,7 @@ local all = {
       secret: { remoteRef: { key: 'OAUTH_CLIENT_SECRET' } },
       privateKey: { remoteRef: { key: 'SIGNING_SSH_PRIVATE_KEY' } },
       DATABASE_PASSWORD: { remoteRef: { key: 'DATABASE_PASSWORD' } },
+      MAIL_PASSWORD: { remoteRef: { key: 'MAIL_PASSWORD' } },
     },
     secret_store:: $.doppler.secret_store,
     target:: name + '-custom',
