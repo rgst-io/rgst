@@ -68,7 +68,6 @@ local all = {
           service: {
             DISABLE_REGISTRATION: false,
             ALLOW_ONLY_EXTERNAL_REGISTRATION: true,
-            REQUIRE_SIGNIN_VIEW: true,
             ENABLE_INTERNAL_SIGNIN: false,
             ENABLE_BASIC_AUTHENTICATION: false,
           },
@@ -120,13 +119,147 @@ local all = {
       redis: { enabled: true },
     },
   ),
+
+  local runner_image = 'code.forgejo.org/forgejo/runner:6.2.0',
+  runner: k._Object('apps/v1', 'Deployment', name + '-runner', namespace) {
+    spec: {
+      replicas: 2,
+      selector: { matchLabels: { app: name + '-runner' } },
+      strategy: {
+        type: 'Recreate',
+      },
+      template: {
+        metadata: {
+          labels: {
+            app: $.runner.spec.selector.matchLabels.app,
+          },
+        },
+        spec: {
+          restartPolicy: 'Always',
+          volumes: [
+            {
+              name: 'docker-certs',
+              emptyDir: {},
+            },
+            {
+              name: 'runner-data',
+              emptyDir: {},
+            },
+          ],
+          initContainers: [
+            {
+              name: 'runner-register',
+              image: runner_image,
+              command: [
+                'forgejo-runner',
+                'register',
+                '--no-interactive',
+                '--token',
+                '$(RUNNER_SECRET)',
+                '--name',
+                '$(RUNNER_NAME)',
+                '--instance',
+                '$(FORGEJO_INSTANCE_URL)',
+                '--labels',
+                'ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest',
+              ],
+              env: [
+                {
+                  name: 'RUNNER_NAME',
+                  valueFrom: { fieldRef: { fieldPath: 'metadata.name' } },
+                },
+                {
+                  name: 'RUNNER_SECRET',
+                  valueFrom: { secretKeyRef: { name: $.external_secret.metadata.name, key: 'RUNNER_SECRET' } },
+                },
+                {
+                  name: 'FORGEJO_INSTANCE_URL',
+                  value: 'http://forgejo-http.forgejo.svc.cluster.local:3000',
+                },
+              ],
+              resources: {
+                limits: {
+                  cpu: 4,
+                  memory: '8Gi',
+                },
+                requests: {
+                  cpu: 2,
+                  memory: '4Gi',
+                },
+              },
+              volumeMounts: [{
+                name: 'runner-data',
+                mountPath: '/data',
+              }],
+            },
+          ],
+          containers: [
+            {
+              name: 'runner',
+              image: runner_image,
+              command: [
+                'sh',
+                '-c',
+                "while ! nc -z localhost 2376 </dev/null; do echo 'waiting for docker daemon...'; sleep 5; done; exec forgejo-runner daemon",
+              ],
+              env: [
+                {
+                  name: 'DOCKER_HOST',
+                  value: 'tcp://localhost:2376',
+                },
+                {
+                  name: 'DOCKER_CERT_PATH',
+                  value: '/certs/client',
+                },
+                {
+                  name: 'DOCKER_TLS_VERIFY',
+                  value: '1',
+                },
+              ],
+              volumeMounts: [
+                {
+                  name: 'docker-certs',
+                  mountPath: '/certs',
+                },
+                {
+                  name: 'runner-data',
+                  mountPath: '/data',
+                },
+              ],
+            },
+            {
+              name: 'docker',
+              image: 'docker:27.5.1-dind',
+              env: [
+                {
+                  name: 'DOCKER_TLS_CERTDIR',
+                  value: '/certs',
+                },
+              ],
+              securityContext: {
+                privileged: true,
+              },
+              volumeMounts: [
+                {
+                  name: 'docker-certs',
+                  mountPath: '/certs',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+  },
+
   external_secret: secrets.ExternalSecret(name + '-custom', name) {
     keys:: {
       key: { remoteRef: { key: 'OAUTH_CLIENT_ID' } },
       secret: { remoteRef: { key: 'OAUTH_CLIENT_SECRET' } },
       privateKey: { remoteRef: { key: 'SIGNING_SSH_PRIVATE_KEY' } },
-      DATABASE_PASSWORD: { remoteRef: { key: 'DATABASE_PASSWORD' } },
-      MAIL_PASSWORD: { remoteRef: { key: 'MAIL_PASSWORD' } },
+    } + {
+      [k]: { remoteRef: { key: k } }
+      for k in ['DATABASE_PASSWORD', 'MAIL_PASSWORD', 'RUNNER_SECRET']
     },
     secret_store:: $.doppler.secret_store,
     target:: name + '-custom',
