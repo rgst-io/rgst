@@ -18,7 +18,7 @@ local k = import '../../../libs/k.libsonnet';
 
 local name = 'plex';
 local namespace = 'media-center';
-local node = 'ruka';
+local node = 'mocha';
 
 local all = {
   namespace: k._Object('v1', 'Namespace', namespace),
