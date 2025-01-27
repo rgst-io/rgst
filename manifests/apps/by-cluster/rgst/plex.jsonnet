@@ -46,7 +46,7 @@ local all = {
                 TZ: 'America/Los_Angeles',
                 PUID: 1031,
                 PGID: 65537,
-                VERSION: 'docker',
+                VERSION: 'latest',
                 NVIDIA_VISIBLE_DEVICES: 'all',
                 NVIDIA_DRIVER_CAPABILITIES: 'all',
               },
