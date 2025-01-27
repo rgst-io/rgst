@@ -18,7 +18,7 @@ local secrets = import '../../../libs/external-secrets.libsonnet';
 local k = import '../../../libs/k.libsonnet';
 
 local name = 'forgejo';
-local host = 'git.idlerealm.io';
+local host = 'git.rgst.io';
 local namespace = name;
 
 local all = {
@@ -124,7 +124,7 @@ local all = {
   local runner_image = 'code.forgejo.org/forgejo/runner:6.2.0',
   runner: k._Object('apps/v1', 'Deployment', name + '-runner', namespace) {
     spec: {
-      replicas: 2,
+      replicas: 4,
       selector: { matchLabels: { app: name + '-runner' } },
       strategy: {
         type: 'Recreate',
@@ -136,6 +136,9 @@ local all = {
           },
         },
         spec: {
+          nodeSelector: {
+            'kubernetes.io/hostname': 'mocha',
+          },
           restartPolicy: 'Always',
           volumes: [
             {
