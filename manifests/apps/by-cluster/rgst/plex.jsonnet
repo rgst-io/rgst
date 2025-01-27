@@ -86,27 +86,11 @@ local all = {
               ],
             },
           },
-          // initContainers: {
-          //   chown: {
-          //     image: {
-          //       repository: 'alpine',
-          //       tag: 'latest',
-          //     },
-          //     securityContext: {
-          //       runAsUser: 0,
-          //     },
-          //     command: [
-          //       'sh',
-          //       '-euc',
-          //       'chmod 0775 /data/*; chown -R 1031:65537 /data; chmod 0775 /config; chown -R 1031:65537 /config',
-          //     ],
-          //   },
-          // },
           pod: {
             nodeSelector: {
               'kubernetes.io/hostname': node,
             },
-            //runtimeClassName: 'nvidia',
+            runtimeClassName: 'nvidia',
           },
         },
       },
