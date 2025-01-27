@@ -87,6 +87,7 @@ local all = {
             },
           },
           pod: {
+            hostNetwork: true,
             nodeSelector: {
               'kubernetes.io/hostname': node,
             },
