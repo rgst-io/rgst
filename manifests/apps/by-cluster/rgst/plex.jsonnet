@@ -147,12 +147,17 @@ local all = {
         'ReadWriteOnce',
       ],
       persistentVolumeReclaimPolicy: 'Retain',
-      mountOptions: [
-        'nfsvers=4.1',
-      ],
-      nfs: {
-        path: '/volume1/kubernetes/static/plex',
-        server: '100.69.242.81',  // yui.koi-insen.ts.net
+      'local': {
+        path: '/mnt/plex',
+      },
+      nodeAffinity: {
+        required: {
+          nodeSelectorTerms: [{ matchExpressions: [{
+            key: 'kubernetes.io/hostname',
+            operator: 'In',
+            values: [node],
+          }] }],
+        },
       },
     },
   },
