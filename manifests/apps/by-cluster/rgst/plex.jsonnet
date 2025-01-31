@@ -50,6 +50,11 @@ local all = {
                 NVIDIA_VISIBLE_DEVICES: 'all',
                 NVIDIA_DRIVER_CAPABILITIES: 'all',
               },
+              resources: {
+                limits: {
+                  'amd.com/gpu': 1,
+                },
+              },
               ports: [
                 {
                   containerPort: 32400,
