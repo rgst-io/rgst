@@ -101,6 +101,12 @@ local external_services = [
     '100.69.242.81',  // yui
     5500,
   ),
+  external_service(
+    'friendica',
+    'im-a.dog',
+    '100.76.158.28',  // mocha
+    8080,
+  ),
 ];
 
 
