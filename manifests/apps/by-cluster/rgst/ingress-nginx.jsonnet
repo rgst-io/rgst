@@ -16,12 +16,15 @@
 local argo = import '../../../libs/argocd.libsonnet';
 local k = import '../../../libs/k.libsonnet';
 
-local all = {
+// nginx creates a new ingress nginx instance
+local nginx(name, node_name, cloudflare=false) = k.Container {
   // https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
   application: argo.HelmApplication(
     chart='ingress-nginx',
     repoURL='https://kubernetes.github.io/ingress-nginx',
     version='4.12.0',
+    release_name=if name == null then null else name,
+    app_name=if name == null then null else name,
     values={
       controller: {
         allowSnippetAnnotations: true,
@@ -34,12 +37,14 @@ local all = {
         },
         replicaCount: 1,
         nodeSelector: {
-          'kubernetes.io/hostname': 'ruka',
+          'kubernetes.io/hostname': node_name,
         },
         updateStrategy: {
           type: 'Recreate',
         },
-
+      },
+    } + if cloudflare then {
+      controller+: {
         // Cloudflare Origin Pull
         extraVolumes: [{
           name: 'origin-pull-certificate',
@@ -51,7 +56,7 @@ local all = {
           name: 'origin-pull-certificate',
           mountPath: '/var/lib/certificates/cloudflare',
         }],
-        config: {
+        config+: {
           'server-snippet': |||
             ssl_client_certificate /var/lib/certificates/cloudflare/cloudflare-origin.pem;
             ssl_verify_client on;
@@ -84,15 +89,15 @@ local all = {
             '2a06:98c0::/29',
             '2c0f:f248::/32',
           ]),
-          // This is the important part
+
+          // Trust Cloudflare's forwarded information.
           'use-forwarded-headers': 'true',
-          // Still works without this line because it defaults to X-Forwarded-For, but I use it anyways
           'forwarded-for-header': 'CF-Connecting-IP',
         },
       },
-    }
+    } else {},
   ),
-  origin_secret: k._Object('v1', 'Secret', 'cloudflare-origin', $.application.namespace) {
+  [if cloudflare then 'origin_secret' else null]: k._Object('v1', 'Secret', 'cloudflare-origin', $.application.namespace) {
     type: 'Opaque',
     stringData: {
       'cloudflare-origin.pem': |||
@@ -134,6 +139,11 @@ local all = {
       |||,
     },
   },
+};
+
+local all = {
+  external: nginx(null, 'ruka', true),
+  internal: nginx('internal-ingress-nginx', 'mocha'),  // Not exposed to the internet
 };
 
 k.List() { items_:: all }
