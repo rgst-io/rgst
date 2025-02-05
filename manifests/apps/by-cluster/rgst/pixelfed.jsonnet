@@ -124,7 +124,7 @@ local all = {
                 },
                 liveness: self.readiness {
                   spec+: {
-                    initialDelaySeconds: 60,
+                    initialDelaySeconds: 240,
                     failureThreshold: 5,
                     timeoutSeconds: 5,
                   },
