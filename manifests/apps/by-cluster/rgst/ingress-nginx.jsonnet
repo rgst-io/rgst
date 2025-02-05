@@ -40,7 +40,7 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
           'kubernetes.io/hostname': node_name,
         },
         ingressClassResource+: {
-          create: false,
+          enabled: false,
         },
         updateStrategy: {
           type: 'Recreate',
@@ -60,7 +60,7 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
           mountPath: '/var/lib/certificates/cloudflare',
         }],
         ingressClassResource+: {
-          create: true,
+          enabled: true,
         },
         config+: {
           'server-snippet': |||
