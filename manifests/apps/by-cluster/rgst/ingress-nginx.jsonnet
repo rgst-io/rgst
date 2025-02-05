@@ -39,6 +39,9 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
         nodeSelector: {
           'kubernetes.io/hostname': node_name,
         },
+        ingressClassResource+: {
+          create: false,
+        },
         updateStrategy: {
           type: 'Recreate',
         },
@@ -56,6 +59,9 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
           name: 'origin-pull-certificate',
           mountPath: '/var/lib/certificates/cloudflare',
         }],
+        ingressClassResource+: {
+          create: true,
+        },
         config+: {
           'server-snippet': |||
             ssl_client_certificate /var/lib/certificates/cloudflare/cloudflare-origin.pem;

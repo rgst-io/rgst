@@ -72,8 +72,8 @@ local all = {
       repoServer: {
         resources: {
           requests: {
-            memory: '256Mi',
-            cpu: '300m',
+            memory: '512Mi',
+            cpu: '1',
           },
           limits: self.requests,
         },
@@ -86,8 +86,8 @@ local all = {
       server: {
         resources: {
           requests: {
-            memory: '256Mi',
-            cpu: '500m',
+            memory: '512Mi',
+            cpu: '1',
           },
           limits: self.requests,
         },
