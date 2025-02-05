@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Jared Allard <jared@rgst.io>
+// Copyright (C) 2025 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../../../libs/argocd.libsonnet';
-local k = import '../../../libs/k.libsonnet';
+local argo = import '../../../../vendor/jsonnet-libs/argocd.libsonnet';
+local k = import '../../../../vendor/jsonnet-libs/k.libsonnet';
 
 // nginx creates a new ingress nginx instance
 local nginx(name, node_name, cloudflare=false) = k.Container {

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://git.rgst.io/homelab/jsonnet-libs.git",
+          "subdir": ""
+        }
+      },
+      "version": "0625bfcd1c59af06b74cb2dbbfc55e87bd4d50b0",
+      "sum": "LFGbnsGEWw0KY0HF0i3XkQQ7o03npDSPpJ1gHwEhHjg="
+    }
+  ],
+  "legacyImports": false
+}
