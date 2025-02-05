@@ -99,6 +99,7 @@ local all = {
       ingress: {
         enabled: true,
         annotations: {
+          'nginx.ingress.kubernetes.io/proxy-body-size': '512M',
           'cert-manager.io/cluster-issuer': 'main',
         },
         className: 'nginx',
