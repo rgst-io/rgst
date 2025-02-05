@@ -90,12 +90,6 @@ local external_service(name, hostname, address, port) = k.Container {
 // Create applications here using the app() function.
 local external_services = [
   external_service(
-    'skybridge',
-    'skybridge.rgst.io',
-    '100.89.247.22',  // portainer
-    8080
-  ),
-  external_service(
     'kavita',
     'books.rgst.io',
     '100.69.242.81',  // yui
