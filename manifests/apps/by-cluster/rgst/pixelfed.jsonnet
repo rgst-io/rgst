@@ -84,13 +84,6 @@ local all = {
                     }],
                   },
                 },
-                liveness: self.readiness {
-                  spec+: {
-                    initialDelaySeconds: 240,
-                    failureThreshold: 5,
-                    timeoutSeconds: 5,
-                  },
-                },
               },
             },
           },
@@ -120,13 +113,6 @@ local all = {
                     },
                     periodSeconds: 5,
                     failureThreshold: 3,
-                  },
-                },
-                liveness: self.readiness {
-                  spec+: {
-                    initialDelaySeconds: 240,
-                    failureThreshold: 5,
-                    timeoutSeconds: 5,
                   },
                 },
               },
