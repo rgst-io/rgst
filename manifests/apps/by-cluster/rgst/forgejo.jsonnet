@@ -29,7 +29,7 @@ local all = {
     install_namespace=namespace,
     chart='forgejo',
     repoURL='code.forgejo.org/forgejo-helm',
-    version='11.0.1',
+    version='11.0.3',
     values={
       nodeSelector: {
         'kubernetes.io/hostname': 'ruka',
