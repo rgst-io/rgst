@@ -91,6 +91,7 @@ local all = {
         ],
       },
       signing: {
+        enabled: true,
         existingSecret: $.external_secret.metadata.name,
       },
       persistence: {
