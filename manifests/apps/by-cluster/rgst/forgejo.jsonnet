@@ -71,6 +71,7 @@ local all = {
             REQUIRE_SIGNIN_VIEW: false,
             ENABLE_INTERNAL_SIGNIN: false,
             ENABLE_BASIC_AUTHENTICATION: false,
+            FORGEJO__MAILER__ENABLED: true,
           },
         },
         additionalConfigFromEnvs: [
