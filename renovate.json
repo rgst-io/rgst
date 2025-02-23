@@ -23,6 +23,15 @@
       "matchStrings": [
         "repository: '(?<depName>.+?)',\\s+tag: '(?<currentValue>.+?)',"
       ]
+    },
+    {
+      "customType": "regex",
+      "depTypeTemplate": "docker",
+      "description": "Update Docker image versions in jsonnet (one-line)",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker",
+      "fileMatch": ["^manifests/apps/.*.jsonnet$"],
+      "matchStrings": ["image: '(?<depName>.+?):(?<currentValue>.+?)',"]
     }
   ]
 }

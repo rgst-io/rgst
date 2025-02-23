@@ -123,7 +123,7 @@ local all = {
     },
   ),
 
-  local runner_image = 'code.forgejo.org/forgejo/runner:6.2.0',
+  local runner_image = 'code.forgejo.org/forgejo/runner:6.2.2',
   runner: k._Object('apps/v1', 'Deployment', name + '-runner', namespace) {
     spec: {
       replicas: 4,
@@ -235,7 +235,7 @@ local all = {
             },
             {
               name: 'docker',
-              image: 'docker:27.5.1-dind',
+              image: 'docker:28.0.0-dind',
               env: [
                 {
                   name: 'DOCKER_TLS_CERTDIR',
