@@ -236,7 +236,7 @@ local all = {
             },
             {
               name: 'docker',
-              image: 'docker:28.0.0-dind',
+              image: 'docker:28.0.1-dind',
               env: [
                 {
                   name: 'DOCKER_TLS_CERTDIR',
