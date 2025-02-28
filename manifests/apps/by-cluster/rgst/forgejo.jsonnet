@@ -64,10 +64,8 @@ local all = {
             SMTP_PORT: 465,
             USER: 'forgejo@rgst.io',
           },
-          repository: {
-            'pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
-            signing: { MERGES: 'always' },
-          },
+          'repository.pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
+          'repository.signing': { MERGES: 'always' },
           server: {
             ROOT_URL: 'https://' + host,
             DISABLE_SSH: true,
