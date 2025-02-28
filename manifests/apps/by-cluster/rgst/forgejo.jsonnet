@@ -45,6 +45,10 @@ local all = {
           actions: {
             DEFAULT_ACTIONS_URL: 'https://github.com',
           },
+          admin: {
+            DEFAULT_EMAIL_NOTIFICATIONS: 'onmention',
+            SEND_NOTIFICATION_EMAIL_ON_NEW_USER: true,
+          },
           database: {
             DB_TYPE: 'postgres',
             HOST: '100.109.240.128',  // ruka.koi-insen.ts.net
@@ -71,7 +75,7 @@ local all = {
             REQUIRE_SIGNIN_VIEW: false,
             ENABLE_INTERNAL_SIGNIN: false,
             ENABLE_BASIC_AUTHENTICATION: false,
-            FORGEJO__MAILER__ENABLED: true,
+            ENABLE_NOTIFY_MAIL: true,
           },
         },
         additionalConfigFromEnvs: [
