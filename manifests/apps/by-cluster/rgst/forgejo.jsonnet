@@ -64,6 +64,10 @@ local all = {
             SMTP_PORT: 465,
             USER: 'forgejo@rgst.io',
           },
+          repository: {
+            DEFAULT_MERGE_STYLE: 'squash',
+            MERGES: 'always',
+          },
           server: {
             ROOT_URL: 'https://' + host,
             DISABLE_SSH: true,
