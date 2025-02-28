@@ -65,8 +65,8 @@ local all = {
             USER: 'forgejo@rgst.io',
           },
           repository: {
-            DEFAULT_MERGE_STYLE: 'squash',
-            MERGES: 'always',
+            'pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
+            signing: { MERGES: 'always' },
           },
           server: {
             ROOT_URL: 'https://' + host,
