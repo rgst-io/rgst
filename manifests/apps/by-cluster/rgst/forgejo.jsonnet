@@ -66,7 +66,9 @@ local all = {
           },
           'repository.pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
           'repository.signing': {
-            SIGNING_KEY: 'default',
+            SIGNING_KEY: '76193178098A55D00D388D48C969F001BABC0EE1',
+            SIGNING_NAME: 'git.rgst.io Signing Key',
+            SIGNING_EMAIL: 'forgejo@rgst.io',
             INITIAL_COMMIT: 'always',
             CRUD_ACTIONS: 'always',
             WIKI: 'never',
