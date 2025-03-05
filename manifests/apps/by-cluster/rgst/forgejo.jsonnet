@@ -28,7 +28,7 @@ local all = {
     app_name=name,
     install_namespace=namespace,
     chart='forgejo',
-    repoURL='oci://code.forgejo.org/forgejo-helm',
+    repoURL='https://code.forgejo.org/forgejo-helm',
     version='11.0.3',
     values={
       nodeSelector: {
