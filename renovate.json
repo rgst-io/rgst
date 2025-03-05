@@ -6,8 +6,8 @@
       "customType": "regex",
       "depTypeTemplate": "helm",
       "description": "Update Helm chart versions in jsonnet",
-      "datasourceTemplate": "helm",
-      "versioningTemplate": "helm",
+      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
+      "versioningTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
       "fileMatch": ["^manifests/apps/.*.jsonnet$"],
       "matchStrings": [
         "(?://! renovate datasource=(?<datasource>.+?)\\s+)?chart='(?<depName>.+?)',\\s+repoURL='(?<registryUrl>.+?)',\\s+version='(?<currentValue>.+?)',"
