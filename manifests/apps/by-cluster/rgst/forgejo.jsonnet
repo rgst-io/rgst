@@ -29,7 +29,7 @@ local all = {
     install_namespace=namespace,
     //! renovate datasource=docker
     chart='forgejo',
-    repoURL='https://code.forgejo.org/forgejo-helm',
+    repoURL='code.forgejo.org/forgejo-helm',
     version='11.0.3',
     values={
       nodeSelector: {
