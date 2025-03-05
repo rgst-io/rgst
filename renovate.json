@@ -4,7 +4,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "depTypeTemplate": "helm",
+      "depNameTemplate": "{{#if datasource}}{{product}}{{/if}}",
+      "depTypeTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
       "description": "Update Helm chart versions in jsonnet",
       "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
       "versioningTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
