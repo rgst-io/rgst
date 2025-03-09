@@ -228,18 +228,11 @@ local all = {
           containers: [{
             name: 'runner',
             image: 'code.forgejo.org/forgejo/runner:6.2.2',
-            command: ['/bin/bash', '-euo', 'pipefail', '-c'],
-            args: [
-              |||
-                touch /var/run/docker.sock
-                mount -o ro,bind /docker-socket/docker.sock /var/run/docker.sock
-                exec forgejo-runner daemon
-              |||,
-            ],
+            args: ['daemon'],
             volumeMounts: [
               {
                 name: 'docker-socket',
-                mountPath: '/docker-sock/',
+                mountPath: '/var/run',
               },
               {
                 name: 'runner-data',
