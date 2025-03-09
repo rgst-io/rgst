@@ -175,7 +175,7 @@ local all = {
               name: name,
               emptyDir: {},
             }
-            for name in ['dind-sock', 'dind-etc', 'dind-home', 'runner-data']
+            for name in ['dind-sock', 'dind-home', 'runner-data']
           ] + [{
             name: 'runner-config',
             configMap: {
@@ -240,10 +240,6 @@ local all = {
                 {
                   name: 'dind-sock',
                   mountPath: dind_sock_dir,
-                },
-                {
-                  name: 'dind-etc',
-                  mountPath: '/etc',
                 },
                 {
                   name: 'dind-home',
