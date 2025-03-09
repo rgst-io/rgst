@@ -146,6 +146,7 @@ local all = {
           file: '.runner',
           envs: {
             DOCKER_HOST: 'tcp://localhost:2376',
+            DOCKER_TLS_VERIFY: '0',
           },
           capacity: 2,
         },
@@ -224,6 +225,7 @@ local all = {
               ],
               env: k.envList({
                 DOCKER_HOST: 'tcp://localhost:2376',
+                DOCKER_TLS_VERIFY: '0',
               }),
               volumeMounts: [
                 {
@@ -241,12 +243,6 @@ local all = {
             {
               name: 'docker',
               image: 'docker:28.0.1-dind-rootless',
-              env: k.envList({
-                DOCKER_TLS_CERTDIR: '',
-              }),
-              // Mounting them all the way through to act isn't working
-              // so we need to disable TLS for now.
-              args: ['--tls=false'],
               securityContext: {
                 seccompProfile: { type: 'Unconfined' },
                 appArmorProfile: { type: 'Unconfined' },
