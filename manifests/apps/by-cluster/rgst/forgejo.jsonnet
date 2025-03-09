@@ -228,7 +228,7 @@ local all = {
           containers: [{
             name: 'runner',
             image: 'code.forgejo.org/forgejo/runner:6.2.2',
-            args: ['daemon'],
+            command: ['forgejo-runner', 'daemon'],
             volumeMounts: [
               {
                 name: 'docker-socket',
