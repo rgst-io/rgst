@@ -272,6 +272,9 @@ local all = {
             name: 'runner',
             image: 'code.forgejo.org/forgejo/runner:6.2.2',
             command: ['forgejo-runner', 'daemon'],
+            env: k.envList({
+              DOCKER_HOST: 'unix:///run/docker/docker.sock',
+            }),
             volumeMounts: [
               {
                 name: 'dind-sock',
