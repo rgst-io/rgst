@@ -240,7 +240,6 @@ local all = {
             {
               name: 'docker',
               image: 'docker:28.0.1-dind-rootless',
-              command: ['dockerd'],
               args: [
                 '--host',
                 'unix://' + dind_sock,
