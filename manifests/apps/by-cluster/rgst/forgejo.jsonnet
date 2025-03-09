@@ -147,7 +147,7 @@ local all = {
           capacity: 2,
         },
         container: {
-          valid_volumes: ['**'],
+          valid_volumes: ['/run/docker/docker.sock'],
           force_pull: true,  // TODO(jaredallard): Periodic re-pull?
           // Expose our socket into the container.
           options: '-v /run/docker/docker.sock:/var/run/docker.sock:ro',
@@ -172,10 +172,7 @@ local all = {
             'kubernetes.io/hostname': 'mocha',
           },
           volumes: [
-            {
-              name: name,
-              emptyDir: {},
-            }
+            { name: name, emptyDir: {} }
             for name in ['dind-sock', 'dind-home', 'runner-data']
           ] + [{
             name: 'runner-config',
@@ -252,7 +249,7 @@ local all = {
           containers: [{
             name: 'runner',
             image: 'code.forgejo.org/forgejo/runner:6.2.2',
-            command: ['forgejo-runner', 'daemon'],
+            command: ['forgejo-runner', 'daemon', '--config', 'config.yaml'],
             env: k.envList({
               DOCKER_HOST: 'unix:///run/docker/docker.sock',
             }),
