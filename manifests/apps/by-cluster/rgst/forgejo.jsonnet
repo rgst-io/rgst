@@ -211,6 +211,7 @@ local all = {
             },
             {
               name: 'setup-dind',
+              image: 'docker:28.0.1-dind-rootless',
               command: ['sh', '-ex', '-c'],
               args: [
                 |||
@@ -272,7 +273,7 @@ local all = {
             command: ['forgejo-runner', 'daemon'],
             volumeMounts: [
               {
-                name: 'docker-socket',
+                name: 'dind-sock',
                 mountPath: dind_sock_dir,
                 readOnly: true,
               },
