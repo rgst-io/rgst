@@ -214,9 +214,9 @@ local all = {
             },
             {
               name: 'docker',
-              image: 'docker:28.0.1-dind-rootless',
+              image: 'docker:28.0.1-dind',
               args: ['-H', 'unix:///docker-socket/docker.sock'],
-              securityContext: { privileged: true, runAsUser: 1000, fsGroup: [1000] },
+              securityContext: { privileged: true },
               restartPolicy: 'Always',  // sidecar
               volumeMounts: [{
                 name: 'docker-socket',
@@ -227,6 +227,7 @@ local all = {
           containers: [{
             name: 'runner',
             image: 'code.forgejo.org/forgejo/runner:6.2.2',
+            args: ['daemon'],
             volumeMounts: [
               {
                 name: 'docker-socket',
