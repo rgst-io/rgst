@@ -149,6 +149,10 @@ local all = {
           labels: {
             app: $.runner.spec.selector.matchLabels.app,
           },
+          annotations: {
+            'container.apparmor.security.beta.kubernetes.io/buildkitd': 'unconfined',
+            'container.seccomp.security.alpha.kubernetes.io/buildkitd': 'unconfined',
+          },
         },
         spec: {
           nodeSelector: {
