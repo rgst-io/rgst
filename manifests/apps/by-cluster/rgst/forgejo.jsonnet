@@ -149,10 +149,6 @@ local all = {
           labels: {
             app: $.runner.spec.selector.matchLabels.app,
           },
-          annotations: {
-            'container.apparmor.security.beta.kubernetes.io/docker': 'unconfined',
-            'container.seccomp.security.alpha.kubernetes.io/docker': 'unconfined',
-          },
         },
         spec: {
           nodeSelector: {
@@ -249,6 +245,8 @@ local all = {
                 'unix://' + dind_sock,
               ],
               securityContext: {
+                seccompProfile: { type: 'Unconfined' },
+                appArmorProfile: { type: 'Unconfined' },
                 privileged: true,
                 runAsUser: 1000,
                 runAsGroup: 1000,
