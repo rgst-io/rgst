@@ -138,11 +138,9 @@ local all = {
       redis: { enabled: true },
     },
   ),
-
-  local runner_image = 'code.forgejo.org/forgejo/runner:6.2.2',
   runner: k._Object('apps/v1', 'Deployment', name + '-runner', namespace) {
     spec: {
-      replicas: 4,
+      replicas: 2,
       selector: { matchLabels: { app: name + '-runner' } },
       strategy: {
         type: 'Recreate',
@@ -160,7 +158,7 @@ local all = {
           restartPolicy: 'Always',
           volumes: [
             {
-              name: 'docker-certs',
+              name: 'docker-socket',
               emptyDir: {},
             },
             {
@@ -171,7 +169,7 @@ local all = {
           initContainers: [
             {
               name: 'runner-register',
-              image: runner_image,
+              image: 'code.forgejo.org/forgejo/runner:6.2.2',
               command: [
                 'forgejo-runner',
                 'register',
@@ -214,61 +212,33 @@ local all = {
                 mountPath: '/data',
               }],
             },
-          ],
-          containers: [
-            {
-              name: 'runner',
-              image: runner_image,
-              command: [
-                'sh',
-                '-c',
-                "while ! nc -z localhost 2376 </dev/null; do echo 'waiting for docker daemon...'; sleep 5; done; exec forgejo-runner daemon",
-              ],
-              env: [
-                {
-                  name: 'DOCKER_HOST',
-                  value: 'tcp://localhost:2376',
-                },
-                {
-                  name: 'DOCKER_CERT_PATH',
-                  value: '/certs/client',
-                },
-                {
-                  name: 'DOCKER_TLS_VERIFY',
-                  value: '1',
-                },
-              ],
-              volumeMounts: [
-                {
-                  name: 'docker-certs',
-                  mountPath: '/certs',
-                },
-                {
-                  name: 'runner-data',
-                  mountPath: '/data',
-                },
-              ],
-            },
             {
               name: 'docker',
-              image: 'docker:28.0.1-dind',
-              env: [
-                {
-                  name: 'DOCKER_TLS_CERTDIR',
-                  value: '/certs',
-                },
-              ],
-              securityContext: {
-                privileged: true,
-              },
-              volumeMounts: [
-                {
-                  name: 'docker-certs',
-                  mountPath: '/certs',
-                },
-              ],
+              image: 'docker:28.0.1-dind-rootless',
+              args: ['-H', 'unix:///docker-socket/docker.sock'],
+              securityContext: { privileged: true, runAsUser: 1000, fsGroup: [1000] },
+              restartPolicy: 'Always',  // sidecar
+              volumeMounts: [{
+                name: 'docker-socket',
+                mountPath: '/docker-socket/',
+              }],
             },
           ],
+          containers: [{
+            name: 'runner',
+            image: 'code.forgejo.org/forgejo/runner:6.2.2',
+            volumeMounts: [
+              {
+                name: 'docker-socket',
+                mountPath: '/var/run/docker.sock',
+                subPath: 'docker.sock',
+              },
+              {
+                name: 'runner-data',
+                mountPath: '/data',
+              },
+            ],
+          }],
         },
       },
     },
