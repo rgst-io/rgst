@@ -215,6 +215,7 @@ local all = {
             {
               name: 'docker',
               image: 'docker:28.0.1-dind',
+              command: ['dockerd'],
               args: ['-H', 'unix:///docker-socket/docker.sock'],
               securityContext: { privileged: true },
               restartPolicy: 'Always',  // sidecar
@@ -227,12 +228,18 @@ local all = {
           containers: [{
             name: 'runner',
             image: 'code.forgejo.org/forgejo/runner:6.2.2',
-            args: ['daemon'],
+            command: ['/bin/bash', '-euo', 'pipefail', '-c'],
+            args: [
+              |||
+                touch /var/run/docker.sock
+                mount -o ro,bind /docker-socket/docker.sock /var/run/docker.sock
+                exec forgejo-runner daemon
+              |||,
+            ],
             volumeMounts: [
               {
                 name: 'docker-socket',
-                mountPath: '/var/run/docker.sock',
-                subPath: 'docker.sock',
+                mountPath: '/docker-sock/',
               },
               {
                 name: 'runner-data',
