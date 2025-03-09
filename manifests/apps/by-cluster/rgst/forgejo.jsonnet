@@ -146,7 +146,6 @@ local all = {
           file: '.runner',
           envs: {
             DOCKER_HOST: 'tcp://localhost:2376',
-            DOCKER_TLS_VERIFY: '0',
           },
           capacity: 2,
         },
@@ -225,7 +224,6 @@ local all = {
               ],
               env: k.envList({
                 DOCKER_HOST: 'tcp://localhost:2376',
-                DOCKER_TLS_VERIFY: '0',
               }),
               volumeMounts: [
                 {
