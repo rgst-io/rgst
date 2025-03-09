@@ -214,7 +214,7 @@ local all = {
             },
             {
               name: 'docker',
-              image: 'docker:28.0.1-dind',
+              image: 'docker:28.0.1-dind-rootless',
               command: ['dockerd'],
               args: ['-H', 'unix:///docker-socket/docker.sock'],
               securityContext: { privileged: true },
