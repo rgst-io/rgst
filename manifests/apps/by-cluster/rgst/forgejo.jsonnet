@@ -138,12 +138,12 @@ local all = {
       redis: { enabled: true },
     },
   ),
-  runner: k._Object('apps/v1', 'Deployment', name + '-runner', namespace) {
+  runner: k._Object('apps/v1', 'StatefulSet', name + '-runner', namespace) {
     spec: {
       replicas: 2,
       selector: { matchLabels: { app: name + '-runner' } },
       strategy: {
-        type: 'Recreate',
+        type: 'RollingUpdate',
       },
       template: {
         metadata: {
@@ -155,17 +155,15 @@ local all = {
           nodeSelector: {
             'kubernetes.io/hostname': 'mocha',
           },
-          restartPolicy: 'Always',
           volumes: [
             {
-              name: 'docker-socket',
+              name: name,
               emptyDir: {},
-            },
-            {
-              name: 'runner-data',
-              emptyDir: {},
-            },
+            }
+            for name in ['dind-sock', 'dind-etc', 'dind-home', 'runner-data']
           ],
+          local dind_sock_dir = '/run/docker',
+          local dind_sock = dind_sock_dir + '/docker.sock',
           initContainers: [
             {
               name: 'runner-register',
@@ -213,16 +211,61 @@ local all = {
               }],
             },
             {
+              name: 'setup-dind',
+              command: ['sh', '-ex', '-c'],
+              args: [
+                |||
+                  cp -a /etc/. /dind-etc/
+                  echo 'runner:x:1000:1000:runner:/home/runner:/bin/ash' >> /dind-etc/passwd
+                  echo 'runner:x:1000:' >> /dind-etc/group
+                  echo 'runner:100000:65536' >> /dind-etc/subgid
+                  echo 'runner:100000:65536' >>  /dind-etc/subuid
+                  chmod 755 /dind-etc;
+                  chmod u=rwx,g=rx+s,o=rx /dind-home
+                  chown 1000:1000 /dind-home
+                ||| % { dock_sock: dind_sock },
+              ],
+              securityContext: { runAsUser: 0 },
+              volumeMounts: [
+                {
+                  name: 'dind-etc',
+                  mountPath: '/dind-etc',
+                },
+                {
+                  name: 'dind-home',
+                  mountPath: '/dind-home',
+                },
+              ],
+            },
+            {
               name: 'docker',
               image: 'docker:28.0.1-dind-rootless',
               command: ['dockerd'],
-              args: ['-H', 'unix:///docker-socket/docker.sock'],
-              securityContext: { privileged: true },
+              args: [
+                '--host',
+                'unix://' + dind_sock,
+              ],
+              securityContext: {
+                privileged: true,
+                runAsUser: '1000',
+                runAsGroup: '1000',
+                fsGroups: [1000],
+              },
               restartPolicy: 'Always',  // sidecar
-              volumeMounts: [{
-                name: 'docker-socket',
-                mountPath: '/docker-socket/',
-              }],
+              volumeMounts: [
+                {
+                  name: 'dind-sock',
+                  mountPath: dind_sock_dir,
+                },
+                {
+                  name: 'dind-etc',
+                  mountPath: '/etc',
+                },
+                {
+                  name: 'dind-home',
+                  mountPath: '/home/runner',
+                },
+              ],
             },
           ],
           containers: [{
@@ -232,7 +275,8 @@ local all = {
             volumeMounts: [
               {
                 name: 'docker-socket',
-                mountPath: '/var/run',
+                mountPath: dind_sock_dir,
+                readOnly: true,
               },
               {
                 name: 'runner-data',
