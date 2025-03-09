@@ -142,9 +142,8 @@ local all = {
     spec: {
       replicas: 2,
       selector: { matchLabels: { app: name + '-runner' } },
-      strategy: {
-        type: 'RollingUpdate',
-      },
+      serviceName: name + '-runner',
+      updateStrategy: { type: 'RollingUpdate' },
       template: {
         metadata: {
           labels: {
@@ -247,9 +246,8 @@ local all = {
               ],
               securityContext: {
                 privileged: true,
-                runAsUser: '1000',
-                runAsGroup: '1000',
-                fsGroups: [1000],
+                runAsUser: 1000,
+                runAsGroup: 1000,
               },
               restartPolicy: 'Always',  // sidecar
               volumeMounts: [
