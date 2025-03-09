@@ -150,8 +150,8 @@ local all = {
             app: $.runner.spec.selector.matchLabels.app,
           },
           annotations: {
-            'container.apparmor.security.beta.kubernetes.io/buildkitd': 'unconfined',
-            'container.seccomp.security.alpha.kubernetes.io/buildkitd': 'unconfined',
+            'container.apparmor.security.beta.kubernetes.io/docker': 'unconfined',
+            'container.seccomp.security.alpha.kubernetes.io/docker': 'unconfined',
           },
         },
         spec: {
