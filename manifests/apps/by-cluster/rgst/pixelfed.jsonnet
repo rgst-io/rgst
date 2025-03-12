@@ -54,7 +54,7 @@ local all = {
               image: {
                 repository: 'ghcr.io/jaredallard/pixelfed',
                 // https://github.com/jaredallard/pixelfed/tree/release-0.12.4
-                tag: 'v0.12.4-jaredallard.2',
+                tag: 'v0.12.4-jaredallard.4',
               },
               command: [
                 'bash',
