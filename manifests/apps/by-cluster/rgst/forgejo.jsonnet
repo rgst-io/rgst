@@ -197,7 +197,7 @@ local all = {
                 '--instance',
                 '$(FORGEJO_INSTANCE_URL)',
                 '--labels',
-                'ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest',
+                'ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-24.04',
               ],
               env: k.envList({
                 RUNNER_NAME: { fieldRef: { fieldPath: 'metadata.name' } },
