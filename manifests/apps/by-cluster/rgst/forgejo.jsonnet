@@ -116,7 +116,8 @@ local all = {
       ingress: {
         enabled: true,
         annotations: {
-          'nginx.ingress.kubernetes.io/proxy-body-size': '512M',
+          // Docker image pushes need this to be disabled
+          'nginx.ingress.kubernetes.io/proxy-body-size': '0',
           'cert-manager.io/cluster-issuer': 'main',
         },
         className: 'nginx',
