@@ -136,7 +136,7 @@ local all = {
       postgresql: { enabled: false },  // We use the shared Postgres instance.
       'postgresql-ha': { enabled: false },
       'redis-cluster': { enabled: false },
-      redis: { enabled: true, resourcesPreset: 'medium' },
+      redis: { enabled: true, master: { resourcesPreset: 'medium' } },
     },
   ),
   runner_config: k.ConfigMap(name + '-runner-config', namespace) {
