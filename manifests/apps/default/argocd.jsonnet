@@ -18,7 +18,7 @@
 // local cluster_name = std.extVar('cluster_name');
 // local cluster_domain = std.extVar('config_cluster_domain');
 // local fqdn = '%s.%s' % [cluster_name, cluster_domain];
-local fqdn = 'argocd.rgst.io';
+local fqdn = 'argocd.koi-insen.ts.net';
 
 local argo = import '../../libs/argocd.libsonnet';
 local secrets = import '../../libs/external-secrets.libsonnet';
@@ -95,12 +95,8 @@ local all = {
         // Ingress Object
         ingress: {
           enabled: true,
-          annotations: {
-            'cert-manager.io/cluster-issuer': 'main',
-            'nginx.ingress.kubernetes.io/backend-protocol': 'HTTPS',
-            'nginx.ingress.kjubernetes.io/ssl-passthrough': 'true',
-          },
-          ingressClassName: 'nginx',
+          hostname: 'argocd',
+          ingressClassName: 'tailscale',
           tls: true,
         },
 
