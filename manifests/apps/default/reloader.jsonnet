@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local argo = import '../../libs/argocd.libsonnet';
+local argo = import '../../../vendor/jsonnet-libs/argocd.libsonnet';
 
 // https://artifacthub.io/packages/helm/stakater/reloader
 argo.HelmApplication(

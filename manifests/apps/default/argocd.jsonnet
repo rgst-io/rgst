@@ -20,9 +20,9 @@
 // local fqdn = '%s.%s' % [cluster_name, cluster_domain];
 local fqdn = 'argocd.koi-insen.ts.net';
 
-local argo = import '../../libs/argocd.libsonnet';
-local secrets = import '../../libs/external-secrets.libsonnet';
-local k = import '../../libs/k.libsonnet';
+local argo = import '../../../vendor/jsonnet-libs/argocd.libsonnet';
+local secrets = import '../../../vendor/jsonnet-libs/external-secrets.libsonnet';
+local k = import '../../../vendor/jsonnet-libs/k.libsonnet';
 
 local name = 'argocd';
 
@@ -95,7 +95,7 @@ local all = {
         // Ingress Object
         ingress: {
           enabled: true,
-          hostname: 'argocd',
+          hostname: 'q',
           ingressClassName: 'tailscale',
           tls: true,
         },
