@@ -95,7 +95,7 @@ local all = {
         // Ingress Object
         ingress: {
           enabled: true,
-          hostname: 'q',
+          hostname: 'argocd',
           ingressClassName: 'tailscale',
           tls: true,
         },
