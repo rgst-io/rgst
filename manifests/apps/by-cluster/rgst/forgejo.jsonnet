@@ -297,7 +297,7 @@ local all = {
             },
             {
               name: 'docker',
-              image: 'docker:28.0.1-dind-rootless',
+              image: 'docker:28.0.2-dind-rootless',
               args: [
                 '--host',
                 'unix://' + dind_sock,
