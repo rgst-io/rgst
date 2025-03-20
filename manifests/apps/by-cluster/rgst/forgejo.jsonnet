@@ -195,7 +195,7 @@ local all = {
             paths: [{
               backend: {
                 service: {
-                  name: 'forgejo-http',
+                  name: 'anubis',
                   port: {
                     name: 'http',
                   },
