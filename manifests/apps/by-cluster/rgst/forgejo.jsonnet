@@ -141,7 +141,7 @@ local all = {
               image: 'ghcr.io/techarohq/anubis:v1.13.0',
               env: k.envList({
                 BIND: ':8080',
-                DIFFICULTY: '10',
+                DIFFICULTY: '5',
                 METRICS_BIND: ':9090',
                 SERVE_ROBOTS_TXT: 'true',
                 TARGET: 'http://forgejo-http.forgejo.svc.cluster.local:3000',
