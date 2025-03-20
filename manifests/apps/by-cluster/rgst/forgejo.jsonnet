@@ -131,7 +131,7 @@ local all = {
         labels: selectors,
       },
       spec: {
-        replicas: 2,
+        replicas: 1,
         selector: { matchLabels: selectors },
         template: {
           metadata: { labels: selectors },
