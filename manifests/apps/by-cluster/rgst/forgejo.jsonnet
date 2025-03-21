@@ -113,106 +113,32 @@ local all = {
       persistence: {
         size: '1Ti',
       },
-      ingress: { enabled: false },  // Managed by anubis
-      postgresql: { enabled: false },  // We use the shared Postgres instance.
-      'postgresql-ha': { enabled: false },
-      'redis-cluster': { enabled: false },
-      redis: { enabled: true, master: { resourcesPreset: 'medium' } },
-    },
-  ),
-
-  anubis: k.Container {
-    local selectors = {
-      'app.kubernetes.io/instance': 'anubis',
-      'app.kubernetes.io/name': 'anubis',
-    },
-    deployment: k._Object('apps/v1', 'Deployment', 'anubis', namespace) {
-      metadata+: {
-        labels: selectors,
-      },
-      spec: {
-        replicas: 1,
-        selector: { matchLabels: selectors },
-        template: {
-          metadata: { labels: selectors },
-          spec: {
-            containers: [{
-              name: 'main',
-              image: 'ghcr.io/techarohq/anubis:v1.13.0',
-              env: k.envList({
-                BIND: ':8080',
-                DIFFICULTY: '4',
-                METRICS_BIND: ':9090',
-                SERVE_ROBOTS_TXT: 'true',
-                TARGET: 'http://forgejo-http.forgejo.svc.cluster.local:3000',
-              }),
-              resources: {
-                requests: {
-                  cpu: '500m',
-                  memory: '512Mi',
-                },
-                limits: self.requests,
-              },
-              ports: [{ name: 'http', containerPort: 8080 }],
-              securityContext: {
-                runAsUser: 1000,
-                runAsGroup: self.runAsUser,
-                runAsNonRoot: true,
-                allowPrivilegeEscalation: false,
-                capabilities: { drop: ['ALL'] },
-                seccompProfile: { type: 'RuntimeDefault' },
-              },
-            }],
-          },
-        },
-      },
-    },
-    service: k._Object('v1', 'Service', 'anubis', namespace) {
-      spec: {
-        ports: [{
-          name: 'http',
-          port: 8080,
-          protocol: 'TCP',
-          targetPort: 'http',
-        }],
-        selector: selectors,
-        sessionAffinity: 'None',
-        type: 'ClusterIP',
-      },
-    },
-    ingress: k._Object('networking.k8s.io/v1', 'Ingress', name, namespace) {
-      metadata+: {
-        annotations+: {
+      ingress: {
+        enabled: true,
+        annotations: {
+          // Docker image pushes need this to be disabled
+          'nginx.ingress.kubernetes.io/proxy-body-size': '0',
           'cert-manager.io/cluster-issuer': 'main',
-          'nginx.ingress.kubernetes.io/proxy-body-size': '0',  // Needed for docker images.
         },
-      },
-      spec: {
-        ingressClassName: 'nginx',
-        rules: [{
+        className: 'anubis',
+        hosts: [{
           host: host,
-          http: {
-            paths: [{
-              backend: {
-                service: {
-                  name: 'anubis',
-                  port: {
-                    name: 'http',
-                  },
-                },
-              },
-              path: '/',
-              pathType: 'Prefix',
-            }],
-          },
+          paths: [{
+            path: '/',
+            pathType: 'Prefix',
+          }],
         }],
         tls: [{
           hosts: [host],
           secretName: std.strReplace(host, '.', '-'),
         }],
       },
+      postgresql: { enabled: false },  // We use the shared Postgres instance.
+      'postgresql-ha': { enabled: false },
+      'redis-cluster': { enabled: false },
+      redis: { enabled: true, master: { resourcesPreset: 'medium' } },
     },
-  },
+  ),
 
   runner_config: k.ConfigMap(name + '-runner-config', namespace) {
     data_:: {
