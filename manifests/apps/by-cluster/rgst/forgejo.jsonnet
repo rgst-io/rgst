@@ -247,6 +247,31 @@ local all = {
                 },
               ],
             },
+            {
+              name: 'preload-docker-images',
+              image: 'docker:28.0.2-dind-rootless',
+              command: [
+                '/bin/sh',
+                '-ce',
+              ],
+              env: k.envList({
+                DOCKER_HOST: 'unix:///run/docker/docker.sock',
+              }),
+              args: [
+                std.join(
+                  ' && ',
+                  [
+                    'docker version',
+                    'docker pull ghcr.io/catthehacker/ubuntu:act-24.04',
+                  ],
+                ),
+              ],
+              volumeMounts: [{
+                name: 'dind-sock',
+                mountPath: dind_sock_dir,
+                readOnly: true,
+              }],
+            },
           ],
           containers: [{
             name: 'runner',
