@@ -19,6 +19,6 @@ local argo = import '../../../vendor/jsonnet-libs/argocd.libsonnet';
 argo.HelmApplication(
   chart='reloader',
   repoURL='https://stakater.github.io/stakater-charts',
-  version='2.0.0',
+  version='2.1.0',
   values={}
 )
