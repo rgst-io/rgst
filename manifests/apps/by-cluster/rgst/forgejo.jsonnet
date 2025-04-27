@@ -30,7 +30,7 @@ local all = {
     //! renovate datasource=docker
     chart='forgejo',
     repoURL='code.forgejo.org/forgejo-helm',
-    version='12.1.0',
+    version='12.2.0',
     values={
       nodeSelector: {
         'kubernetes.io/hostname': 'ruka',
