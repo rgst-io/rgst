@@ -309,7 +309,7 @@ local all = {
     install_namespace=namespace,
     chart='redis',
     repoURL='https://groundhog2k.github.io/helm-charts',
-    version='2.0.0',
+    version='2.0.1',
     values={
       image: {
         repository: 'redis',
