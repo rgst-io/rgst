@@ -4,7 +4,7 @@ golang = "1.24.3"
 "go:github.com/yannh/kubeconform/cmd/kubeconform" = "v0.6.7"
 "go:github.com/mikefarah/yq/v4" = "v4.45.1"
 "go:github.com/google/go-jsonnet/cmd/jsonnet" = "v0.20.0"
-"go:github.com/google/go-jsonnet/cmd/jsonnet-lint" = "v0.20.0"
+"go:github.com/google/go-jsonnet/cmd/jsonnet-lint" = "v0.21.0"
 
 [tasks.lint]
 description = "Run linters"
