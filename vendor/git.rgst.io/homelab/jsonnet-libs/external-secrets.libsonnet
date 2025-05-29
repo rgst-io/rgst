@@ -22,7 +22,7 @@ local k = import './k.libsonnet';
     name: secStore.metadata.name,
   },
 
-  ExternalSecret(name, namespace):: k._Object('external-secrets.io/v1beta1', 'ExternalSecret', name, namespace) {
+  ExternalSecret(name, namespace):: k._Object('external-secrets.io/v1', 'ExternalSecret', name, namespace) {
     keys:: {},
     all_keys:: false,
     assert std.length(self.keys) > 0 || self.all_keys : 'Either keys or all_keys must be set',
@@ -42,7 +42,7 @@ local k = import './k.libsonnet';
     },
   },
 
-  SecretStore(name, namespace):: k._Object('external-secrets.io/v1beta1', 'SecretStore', name, namespace) {
+  SecretStore(name, namespace):: k._Object('external-secrets.io/v1', 'SecretStore', name, namespace) {
     local this = self,
     doppler_:: {
       secret: {
