@@ -1,6 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "customManagers": [
     {
       "customType": "regex",
@@ -9,7 +11,9 @@
       "description": "Update Helm chart versions in jsonnet",
       "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
       "versioningTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
-      "fileMatch": ["^manifests/apps/.*.jsonnet$"],
+      "managerFilePatterns": [
+        "/^manifests/apps/.*.jsonnet$/"
+      ],
       "matchStrings": [
         "(?://! renovate datasource=(?<datasource>.+?)\\s+)?chart='(?<depName>.+?)',\\s+repoURL='(?<registryUrl>.+?)',\\s+version='(?<currentValue>.+?)',"
       ]
@@ -20,7 +24,9 @@
       "description": "Update Docker image versions in jsonnet",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
-      "fileMatch": ["^manifests/apps/.*.jsonnet$"],
+      "managerFilePatterns": [
+        "/^manifests/apps/.*.jsonnet$/"
+      ],
       "matchStrings": [
         "repository: '(?<depName>.+?)',\\s+tag: '(?<currentValue>.+?)',"
       ]
@@ -31,8 +37,12 @@
       "description": "Update Docker image versions in jsonnet (one-line)",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
-      "fileMatch": ["^manifests/apps/.*.jsonnet$"],
-      "matchStrings": ["image: '(?<depName>.+?):(?<currentValue>.+?)',"]
+      "managerFilePatterns": [
+        "/^manifests/apps/.*.jsonnet$/"
+      ],
+      "matchStrings": [
+        "image: '(?<depName>.+?):(?<currentValue>.+?)',"
+      ]
     }
   ]
 }
