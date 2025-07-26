@@ -135,8 +135,8 @@ local all = {
       },
       postgresql: { enabled: false },  // We use the shared Postgres instance.
       'postgresql-ha': { enabled: false },
-      'redis-cluster': { enabled: false },
-      redis: { enabled: true, master: { resourcesPreset: 'medium' } },
+      'valkey-cluster': { enabled: false },
+      valkey: { enabled: true, master: { resourcesPreset: 'medium' } },
     },
   ),
 
