@@ -30,7 +30,7 @@ local all = {
     //! renovate datasource=docker
     chart='forgejo',
     repoURL='code.forgejo.org/forgejo-helm',
-    version='12.5.4',
+    version='13.0.1',
     values={
       nodeSelector: {
         'kubernetes.io/hostname': 'ruka',
@@ -135,8 +135,8 @@ local all = {
       },
       postgresql: { enabled: false },  // We use the shared Postgres instance.
       'postgresql-ha': { enabled: false },
-      'redis-cluster': { enabled: false },
-      redis: { enabled: true, master: { resourcesPreset: 'medium' } },
+      'valkey-cluster': { enabled: false },
+      valkey: { enabled: true, master: { resourcesPreset: 'medium' } },
     },
   ),
 
