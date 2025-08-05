@@ -313,7 +313,7 @@ local all = {
     values={
       image: {
         repository: 'redis',
-        tag: '8.0.3',
+        tag: '8.2.0',
       },
     }
   ),
