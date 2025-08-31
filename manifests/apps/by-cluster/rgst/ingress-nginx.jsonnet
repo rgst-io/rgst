@@ -22,7 +22,7 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
   application: argo.HelmApplication(
     chart='ingress-nginx',
     repoURL='https://kubernetes.github.io/ingress-nginx',
-    version='4.13.1',
+    version='4.13.2',
     release_name=if name == null then null else name,
     app_name=if name == null then null else name,
     values={
