@@ -223,7 +223,7 @@ local all = {
             },
             {
               name: 'docker',
-              image: 'docker:28.3.3-dind-rootless',
+              image: 'docker:28.4.0-dind-rootless',
               args: [
                 '--host',
                 'unix://' + dind_sock,
@@ -249,7 +249,7 @@ local all = {
             },
             {
               name: 'preload-docker-images',
-              image: 'docker:28.3.3-dind-rootless',
+              image: 'docker:28.4.0-dind-rootless',
               command: [
                 '/bin/sh',
                 '-ce',
