@@ -31,7 +31,7 @@ local all = {
   application: argo.HelmApplication(
     chart='argo-cd',
     repoURL='https://argoproj.github.io/argo-helm',
-    version='9.0.0',
+    version='9.0.1',
     values={
       global: {
         domain: fqdn,
