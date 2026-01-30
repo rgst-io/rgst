@@ -83,13 +83,22 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
         web+: { forwardedHeaders+: { trustedIPs: cloudflare_cidrs } },
         websecure+: { forwardedHeaders+: { trustedIPs: cloudflare_cidrs } },
       },
-      tlsOptions: {
-        default: {
-          sniStrict: true,
-          clientAuth: {
-            secretNames: ['cloudflare-origin'],
-            clientAuthType: 'RequireAndVerifyClientCert',
-          },
+      providers: {
+        file: {
+          enabled: true,
+          content: std.manifestYamlDoc({
+            tls: {
+              options: {
+                default: {
+                  sniStrict: true,
+                  clientAuth: {
+                    secretNames: ['cloudflare-origin'],
+                    clientAuthType: 'RequireAndVerifyClientCert',
+                  },
+                },
+              },
+            },
+          }),
         },
       },
       ingressClass: { enabled: true },
@@ -136,18 +145,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
         },
       }],
     } else {},
-  ) + {
-    spec+: {
-      ignoreDifferences: [
-        {
-          group: 'rbac.authorization.k8s.io',
-          kind: 'ClusterRole',
-          name: 'internal-traefik-internal-traefik',
-          jsonPointers: ['/rules'],
-        },
-      ],
-    },
-  },
+  ),
 };
 
 local all = {
