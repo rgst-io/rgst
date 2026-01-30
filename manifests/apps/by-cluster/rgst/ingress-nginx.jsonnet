@@ -16,8 +16,8 @@
 local argo = import '../../../../vendor/jsonnet-libs/argocd.libsonnet';
 local k = import '../../../../vendor/jsonnet-libs/k.libsonnet';
 
-// nginx creates a new ingress nginx instance
-local nginx(name, node_name, cloudflare=false) = k.Container {
+// traefik creates a new traefik instance
+local traefik(name, node_name, cloudflare=false) = k.Container {
   // https://artifacthub.io/packages/helm/traefik/traefik
   application: argo.HelmApplication(
     chart='traefik',
@@ -144,8 +144,8 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
 };
 
 local all = {
-  external: nginx(null, 'ruka', true),
-  internal: nginx('internal-ingress-nginx', 'mocha'),  // Not exposed to the internet
+  external: traefik(null, 'ruka', true),
+  //internal: traefik('internal-traefik', 'mocha'),  // Not exposed to the internet
 };
 
 k.List() { items_:: all }
