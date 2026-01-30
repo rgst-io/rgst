@@ -39,6 +39,7 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
       updateStrategy: {
         type: 'Recreate',
       },
+      hostNetwork: true,
       ingressClass: { enabled: false },  // Only cloudflare one creates one.
     } + if cloudflare then {
       // curl https://www.cloudflare.com/ips-v4/ | sed 's/^/"/' | sed 's/$/",/' | pbcopy
