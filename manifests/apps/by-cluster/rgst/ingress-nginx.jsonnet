@@ -84,7 +84,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
         },
       },
       volumes: [{
-        name: 'origin-pull-certificate',
+        name: 'cloudflare-origin',
         type: 'secret',
         mountPath: '/certs',
       }],
