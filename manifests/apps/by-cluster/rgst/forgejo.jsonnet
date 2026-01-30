@@ -120,7 +120,7 @@ local all = {
           'nginx.ingress.kubernetes.io/proxy-body-size': '0',
           'cert-manager.io/cluster-issuer': 'main',
         },
-        className: 'traefik',
+        className: 'anubis',
         hosts: [{
           host: host,
           paths: [{
