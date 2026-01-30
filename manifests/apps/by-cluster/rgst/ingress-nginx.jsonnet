@@ -89,16 +89,11 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
           forwardedHeaders+: { trustedIPs: cloudflare_cidrs },
         },
       },
-      volumes: [{
-        name: 'cloudflare-origin',
-        type: 'secret',
-        mountPath: '/certs',
-      }],
       tlsOptions: {
         default: {
           sniStrict: true,
           clientAuth: {
-            caFiles: ['/certs/cloudflare-origin.pem'],
+            secretNames: ['cloudflare-origin'],
             clientAuthType: 'RequireAndVerifyClientCert',
           },
         },
@@ -107,7 +102,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
       extraObjects: [k._Object('v1', 'Secret', 'cloudflare-origin', $.application.namespace) {
         type: 'Opaque',
         stringData: {
-          'cloudflare-origin.pem': |||
+          'ca.crt': |||
             -----BEGIN CERTIFICATE-----
             MIIGCjCCA/KgAwIBAgIIV5G6lVbCLmEwDQYJKoZIhvcNAQENBQAwgZAxCzAJBgNV
             BAYTAlVTMRkwFwYDVQQKExBDbG91ZEZsYXJlLCBJbmMuMRQwEgYDVQQLEwtPcmln
