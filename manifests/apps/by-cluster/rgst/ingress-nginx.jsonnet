@@ -25,7 +25,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
     version='39.0.0',
     release_name=if name == null then null else name,
     app_name=if name == null then null else name,
-    install_namespace=if name == null then null else name,
+    install_namespace=if name == null then 'traefik' else name,
     values={
       providers: { kubernetesIngressNginx: { enabled: true } },
       service: {
