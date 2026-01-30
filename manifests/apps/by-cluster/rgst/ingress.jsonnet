@@ -30,7 +30,6 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
       service: {
         type: 'ClusterIP',
       },
-      // Temporary while we migrate away from hostPort.
       securityContext+: {
         capabilities: {
           add: ['NET_BIND_SERVICE'],
@@ -41,6 +40,10 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
       },
       nodeSelector: {
         'kubernetes.io/hostname': node_name,
+      },
+      ports+: {
+        web+: { port: 80, hostPort: self.port },
+        websecure+: { port: 443, hostPort: self.port },
       },
       updateStrategy: {
         type: 'Recreate',
@@ -77,16 +80,8 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
         '2c0f:f248::/32',
       ],
       ports+: {
-        web+: {
-          port: 80,
-          hostPort: 80,
-          forwardedHeaders+: { trustedIPs: cloudflare_cidrs },
-        },
-        websecure+: {
-          port: 443,
-          hostPort: 443,
-          forwardedHeaders+: { trustedIPs: cloudflare_cidrs },
-        },
+        web+: { forwardedHeaders+: { trustedIPs: cloudflare_cidrs } },
+        websecure+: { forwardedHeaders+: { trustedIPs: cloudflare_cidrs } },
       },
       tlsOptions: {
         default: {
