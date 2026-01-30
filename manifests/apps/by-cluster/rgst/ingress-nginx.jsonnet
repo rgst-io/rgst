@@ -70,16 +70,16 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
         '2a06:98c0::/29',
         '2c0f:f248::/32',
       ],
-      ports: {
-        web: {
+      ports+: {
+        web+: {
           port: 80,
           hostPort: 80,
-          forwardedHeaders: { trustedIPs: cloudflare_cidrs },
+          forwardedHeaders+: { trustedIPs: cloudflare_cidrs },
         },
-        webSecure: {
+        webSecure+: {
           port: 443,
           hostPort: 443,
-          forwardedHeaders: { trustedIPs: cloudflare_cidrs },
+          forwardedHeaders+: { trustedIPs: cloudflare_cidrs },
         },
       },
       volumes: [{
