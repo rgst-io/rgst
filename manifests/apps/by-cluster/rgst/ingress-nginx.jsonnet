@@ -45,7 +45,7 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
       // curl https://www.cloudflare.com/ips-v6/ | sed 's/^/"/' | sed 's/$/",/' | pbcopy
       //
       // Last Updated: Jan 29, 2025
-      local cloudflare_cidrs = std.join(',', [
+      local cloudflare_cidrs = [
         '173.245.48.0/20',
         '103.21.244.0/22',
         '103.22.200.0/22',
@@ -68,7 +68,7 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
         '2405:8100::/32',
         '2a06:98c0::/29',
         '2c0f:f248::/32',
-      ]),
+      ],
       ports: {
         web: self.webSecure,
         webSecure: {
