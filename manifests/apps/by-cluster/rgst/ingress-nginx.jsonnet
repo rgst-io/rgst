@@ -88,13 +88,11 @@ local nginx(name, node_name, cloudflare=false) = k.Container {
         mountPath: '/certs',
       }],
       tlsOptions: {
-        options: {
-          default: {
-            sniStrict: true,
-            clientAuth: {
-              caFiles: ['/certs/cloudflare-origin.pem'],
-              clientAuthType: 'RequireAndVerifyClientCert',
-            },
+        default: {
+          sniStrict: true,
+          clientAuth: {
+            caFiles: ['/certs/cloudflare-origin.pem'],
+            clientAuthType: 'RequireAndVerifyClientCert',
           },
         },
       },
