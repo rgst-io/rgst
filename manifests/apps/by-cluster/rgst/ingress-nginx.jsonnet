@@ -32,11 +32,12 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
         type: 'ClusterIP',
       },
       // Temporary while we migrate away from hostPort.
-      podSecurityContext: {
+      securityContext+: {
         runAsUser: 0,
         runAsGroup: 0,
         runAsNonRoot: false,
       },
+      podSecurityContext: self.securityContext,
       deployment: {
         dnsPolicy: 'ClusterFirstWithHostNet',
       },
