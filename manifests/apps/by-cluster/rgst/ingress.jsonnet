@@ -136,7 +136,18 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
         },
       }],
     } else {},
-  ),
+  ) + {
+    spec+: {
+      ignoreDifferences: [
+        {
+          group: 'rbac.authorization.k8s.io',
+          kind: 'ClusterRole',
+          name: 'internal-traefik-internal-traefik',
+          jsonPointers: ['/rules'],
+        },
+      ],
+    },
+  },
 };
 
 local all = {
