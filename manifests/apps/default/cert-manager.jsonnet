@@ -24,7 +24,7 @@ local all = {
   application: argo.HelmApplication(
     chart='cert-manager',
     repoURL='https://charts.jetstack.io',
-    version='v1.19.2',
+    version='v1.19.3',
     values={
       installCRDs: true,
     },
