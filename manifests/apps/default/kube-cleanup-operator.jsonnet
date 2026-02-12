@@ -19,7 +19,7 @@ argo.HelmApplication(
   //! renovate datasource=docker
   chart='kube-cleanup-operator',
   repoURL='ghcr.io/jaredallard/helm-charts',
-  version='0.8.5',
+  version='0.8.6',
   values={
     rbac: { create: true, global: true },
     args: [
