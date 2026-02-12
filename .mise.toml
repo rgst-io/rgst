@@ -5,6 +5,7 @@ golang = "1.25.7"
 "go:github.com/mikefarah/yq/v4" = "v4.52.2"
 "go:github.com/google/go-jsonnet/cmd/jsonnet" = "v0.21.0"
 "go:github.com/google/go-jsonnet/cmd/jsonnet-lint" = "v0.21.0"
+go-jsonnet = "latest"
 
 [tasks.lint]
 description = "Run linters"

@@ -16,18 +16,12 @@
 local argo = import '../../../vendor/jsonnet-libs/argocd.libsonnet';
 
 argo.HelmApplication(
+  //! renovate datasource=docker
   chart='kube-cleanup-operator',
-  repoURL='https://charts.lwolf.org',
-  version='1.0.4',
+  repoURL='ghcr.io/jaredallard/helm-charts/kube-cleanup-operator',
+  version='0.8.5',
   values={
-    image: {
-      repository: 'quay.io/lwolf/kube-cleanup-operator',
-      tag: '0.8.4',
-    },
-    rbac: {
-      create: true,
-      global: true,
-    },
+    rbac: { create: true, global: true },
     args: [
       '--delete-failed-after=60m',
       '--delete-successful-after=60m',
