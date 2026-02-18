@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Jared Allard <jared@rgst.io>
+// Copyright (C) 2026 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,8 +26,13 @@ local k = import './k.libsonnet';
         server: 'https://kubernetes.default.svc',
       },
       syncPolicy: {
+        syncOptions_:: {
+          CreateNamespace: true,
+          ServerSideApply: true
+        },
         syncOptions: [
-          'CreateNamespace=true',
+          '%s=%s' % [k, std.toString(self.syncOptions_[k])]
+          for k in std.objectFields(self.syncOptions_)
         ],
         automated: {
           prune: true,

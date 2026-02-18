@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Jared Allard <jared@rgst.io>
+// Copyright (C) 2026 Jared Allard <jared@rgst.io>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
