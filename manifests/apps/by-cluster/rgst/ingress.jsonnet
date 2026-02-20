@@ -22,7 +22,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
   application: argo.HelmApplication(
     chart='traefik',
     repoURL='https://traefik.github.io/charts',
-    version='39.0.1',
+    version='39.0.2',
     release_name=if name == null then null else name,
     app_name=if name == null then null else name,
     install_namespace=if name == null then 'traefik' else name,
