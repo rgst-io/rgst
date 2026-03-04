@@ -23,7 +23,10 @@ local namespace = name;
 
 local nodes = {
   'control-plane': 'ruka',
-  runner: 'mocha',
+  runners: [
+    { node_name: 'mocha', arch: 'amd64' },
+    { node_name: 'pikachu', arch: 'arm64' },
+  ],
 };
 
 local all = {
@@ -99,7 +102,7 @@ local all = {
           security: {
             PASSWORD_HASH_ALGO: 'argon2',
             PASSWORD_CHECK_PWN: true,
-            GLOBAL_TWO_FACTOR_REQUIREMENT: 'admin'
+            GLOBAL_TWO_FACTOR_REQUIREMENT: 'admin',
           },
           server: {
             ROOT_URL: 'https://' + host,
@@ -216,150 +219,163 @@ local all = {
       }),
     },
   },
-  runner: k._Object('apps/v1', 'StatefulSet', name + '-runner', namespace) {
-    spec: {
-      replicas: 1,
-      selector: { matchLabels: { app: name + '-runner' } },
-      serviceName: name + '-runner',
-      updateStrategy: { type: 'RollingUpdate' },
-      template: {
-        metadata: {
-          labels: {
-            app: $.runner.spec.selector.matchLabels.app,
-          },
-        },
-        spec: {
-          nodeSelector: {
-            'kubernetes.io/hostname': nodes.runner,
-          },
-          volumes: [
-            { name: name, emptyDir: {} }
-            for name in ['dind-sock', 'dind-home', 'runner-data']
-          ] + [{
-            name: 'runner-config',
-            configMap: {
-              name: all.runner_config.metadata.name,
+
+  runners: k.Container() {
+    ['runner_%s' % runner.node_name]: k._Object('apps/v1', 'StatefulSet', name + '-runner' + '-' + runner.node_name, namespace) {
+      spec: {
+        replicas: 1,
+        selector: { matchLabels: { app: name + '-runner' } },
+        serviceName: name + '-runner',
+        updateStrategy: { type: 'RollingUpdate' },
+        template: {
+          metadata: {
+            labels: {
+              app: $.runner.spec.selector.matchLabels.app,
             },
-          }],
-          local dind_sock_dir = '/run/docker',
-          local dind_sock = dind_sock_dir + '/docker.sock',
-          initContainers: [
-            {
-              name: 'runner-register',
+          },
+          spec: {
+            nodeSelector: {
+              'kubernetes.io/hostname': runner.node_name,
+            },
+            volumes: [
+              { name: name, emptyDir: {} }
+              for name in ['dind-sock', 'dind-home', 'runner-data']
+            ] + [{
+              name: 'runner-config',
+              configMap: {
+                name: all.runner_config.metadata.name,
+              },
+            }],
+            local dind_sock_dir = '/run/docker',
+            local dind_sock = dind_sock_dir + '/docker.sock',
+            local images = [
+              { version: '24.04', latest: true },
+            ],
+            initContainers: [
+              {
+                name: 'runner-register',
+                image: 'code.forgejo.org/forgejo/runner:12.7.1',
+                command: [
+                  'forgejo-runner',
+                  'register',
+                  '--no-interactive',
+                  '--token',
+                  '$(RUNNER_SECRET)',
+                  '--name',
+                  '$(RUNNER_NAME)',
+                  '--instance',
+                  '$(FORGEJO_INSTANCE_URL)',
+                ] + std.flattenArrays([
+                  [
+                    'ubuntu-%s%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [image.version, if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
+                  ] + (
+                    if image.latest then [
+                      'ubuntu-latest%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
+                    ] else []
+                  )
+                  for image in images
+                ]),
+                env: k.envList({
+                  RUNNER_NAME: { fieldRef: { fieldPath: 'metadata.name' } },
+                  RUNNER_SECRET: { secretKeyRef: { name: $.external_secret.metadata.name, key: 'RUNNER_SECRET' } },
+                  FORGEJO_INSTANCE_URL: 'http://forgejo-http.forgejo.svc.cluster.local:3000',
+                }),
+                resources: {
+                  limits: {
+                    cpu: 6,
+                    memory: '12Gi',
+                  },
+                  requests: {
+                    cpu: 2,
+                    memory: '4Gi',
+                  },
+                },
+                volumeMounts: [{
+                  name: 'runner-data',
+                  mountPath: '/data',
+                }],
+              },
+              {
+                name: 'docker',
+                image: 'docker:29.2.1-dind-rootless',
+                args: [
+                  '--host',
+                  'unix://' + dind_sock,
+                ],
+                securityContext: {
+                  seccompProfile: { type: 'Unconfined' },
+                  appArmorProfile: { type: 'Unconfined' },
+                  privileged: true,
+                  runAsUser: 1000,
+                  runAsGroup: 1000,
+                },
+                restartPolicy: 'Always',  // sidecar
+                volumeMounts: [
+                  {
+                    name: 'dind-sock',
+                    mountPath: dind_sock_dir,
+                  },
+                  {
+                    name: 'dind-home',
+                    mountPath: '/home/rootless',
+                  },
+                ],
+              },
+              {
+                name: 'preload-docker-images',
+                image: 'docker:29.2.1-dind-rootless',
+                command: ['/bin/sh', '-ce'],
+                env: k.envList({
+                  DOCKER_HOST: 'unix:///run/docker/docker.sock',
+                }),
+                args: [
+                  std.join(
+                    ' && ',
+                    [
+                      'docker version',
+                    ] + [
+                      'docker pull ghcr.io/catthehacker/ubuntu:act-%s' % image.version
+                      for image in images
+                    ],
+                  ),
+                ],
+                volumeMounts: [{
+                  name: 'dind-sock',
+                  mountPath: dind_sock_dir,
+                  readOnly: true,
+                }],
+              },
+            ],
+            containers: [{
+              name: 'runner',
               image: 'code.forgejo.org/forgejo/runner:12.7.1',
-              command: [
-                'forgejo-runner',
-                'register',
-                '--no-interactive',
-                '--token',
-                '$(RUNNER_SECRET)',
-                '--name',
-                '$(RUNNER_NAME)',
-                '--instance',
-                '$(FORGEJO_INSTANCE_URL)',
-                '--labels',
-                'ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-24.04',
-              ],
+              command: ['forgejo-runner', 'daemon', '--config', 'config.yaml'],
               env: k.envList({
-                RUNNER_NAME: { fieldRef: { fieldPath: 'metadata.name' } },
-                RUNNER_SECRET: { secretKeyRef: { name: $.external_secret.metadata.name, key: 'RUNNER_SECRET' } },
-                FORGEJO_INSTANCE_URL: 'http://forgejo-http.forgejo.svc.cluster.local:3000',
+                DOCKER_HOST: 'unix:///run/docker/docker.sock',
               }),
-              resources: {
-                limits: {
-                  cpu: 6,
-                  memory: '12Gi',
-                },
-                requests: {
-                  cpu: 2,
-                  memory: '4Gi',
-                },
-              },
-              volumeMounts: [{
-                name: 'runner-data',
-                mountPath: '/data',
-              }],
-            },
-            {
-              name: 'docker',
-              image: 'docker:29.2.1-dind-rootless',
-              args: [
-                '--host',
-                'unix://' + dind_sock,
-              ],
-              securityContext: {
-                seccompProfile: { type: 'Unconfined' },
-                appArmorProfile: { type: 'Unconfined' },
-                privileged: true,
-                runAsUser: 1000,
-                runAsGroup: 1000,
-              },
-              restartPolicy: 'Always',  // sidecar
               volumeMounts: [
                 {
                   name: 'dind-sock',
                   mountPath: dind_sock_dir,
+                  readOnly: true,
                 },
                 {
-                  name: 'dind-home',
-                  mountPath: '/home/rootless',
+                  name: 'runner-data',
+                  mountPath: '/data',
+                },
+                {
+                  name: 'runner-config',
+                  mountPath: '/data/config.yaml',
+                  subPath: 'config.yaml',
+                  readOnly: true,
                 },
               ],
-            },
-            {
-              name: 'preload-docker-images',
-              image: 'docker:29.2.1-dind-rootless',
-              command: [
-                '/bin/sh',
-                '-ce',
-              ],
-              env: k.envList({
-                DOCKER_HOST: 'unix:///run/docker/docker.sock',
-              }),
-              args: [
-                std.join(
-                  ' && ',
-                  [
-                    'docker version',
-                    'docker pull ghcr.io/catthehacker/ubuntu:act-24.04',
-                  ],
-                ),
-              ],
-              volumeMounts: [{
-                name: 'dind-sock',
-                mountPath: dind_sock_dir,
-                readOnly: true,
-              }],
-            },
-          ],
-          containers: [{
-            name: 'runner',
-            image: 'code.forgejo.org/forgejo/runner:12.7.1',
-            command: ['forgejo-runner', 'daemon', '--config', 'config.yaml'],
-            env: k.envList({
-              DOCKER_HOST: 'unix:///run/docker/docker.sock',
-            }),
-            volumeMounts: [
-              {
-                name: 'dind-sock',
-                mountPath: dind_sock_dir,
-                readOnly: true,
-              },
-              {
-                name: 'runner-data',
-                mountPath: '/data',
-              },
-              {
-                name: 'runner-config',
-                mountPath: '/data/config.yaml',
-                subPath: 'config.yaml',
-                readOnly: true,
-              },
-            ],
-          }],
+            }],
+          },
         },
       },
-    },
+    }
+    for runner in nodes.runners
   },
 
   external_secret: secrets.ExternalSecret(name + '-custom', name) {
