@@ -22,7 +22,7 @@ local name = 'cert-manager';
 local all = {
   // https://artifacthub.io/packages/helm/cert-manager/cert-manager
   application: argo.HelmApplication(
-    chart='calico',
+    chart='tigera-operator',
     repoURL='https://docs.tigera.io/calico/charts',
     version='v3.31.4',
     values={
