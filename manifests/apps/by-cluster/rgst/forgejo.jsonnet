@@ -53,6 +53,7 @@ local all = {
           },
           admin: {
             DEFAULT_EMAIL_NOTIFICATIONS: 'onmention',
+            DISABLE_REGULAR_ORG_CREATION: true,
             SEND_NOTIFICATION_EMAIL_ON_NEW_USER: true,
           },
           database: {
@@ -82,7 +83,6 @@ local all = {
             // If you're seeing this and would like access, reach out to
             // me :)
             MAX_CREATION_LIMIT: 0,
-            DISABLE_REGULAR_ORG_CREATION: true,
             ALLOW_FORK_WITHOUT_MAXIMUM_LIMIT: false,
           },
           'repository.pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
