@@ -220,8 +220,9 @@ local all = {
     },
   },
 
-  runners: k.Container() {
+  runners: k.Container {
     ['runner_%s' % runner.node_name]: k._Object('apps/v1', 'StatefulSet', name + '-runner' + '-' + runner.node_name, namespace) {
+      local this = self,
       spec: {
         replicas: 1,
         selector: { matchLabels: { app: name + '-runner' } },
@@ -230,7 +231,7 @@ local all = {
         template: {
           metadata: {
             labels: {
-              app: $.runner.spec.selector.matchLabels.app,
+              app: this.spec.selector.matchLabels.app,
             },
           },
           spec: {
