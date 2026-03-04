@@ -71,6 +71,10 @@ local all = {
             SMTP_PORT: 465,
             USER: 'forgejo@rgst.io',
           },
+          oauth2_client: {
+            ENABLE_AUTO_REGISTRATION: true,
+            ACCOUNT_LINKING: 'disabled',
+          },
           repository: {
             // We limit users by default to be unable to create any
             // repos, orgs, and forks.
@@ -92,13 +96,18 @@ local all = {
             WIKI: 'never',
             MERGES: 'always',
           },
+          security: {
+            PASSWORD_HASH_ALGO: 'argon2',
+            PASSWORD_CHECK_PWN: true,
+            GLOBAL_TWO_FACTOR_REQUIREMENT: 'admin'
+          },
           server: {
             ROOT_URL: 'https://' + host,
             DISABLE_SSH: true,
             ENABLE_REVERSE_PROXY_AUTHENTICATION: false,
           },
           service: {
-            DISABLE_REGISTRATION: true,
+            DISABLE_REGISTRATION: false,
             ALLOW_ONLY_EXTERNAL_REGISTRATION: true,
             REQUIRE_SIGNIN_VIEW: false,
             ENABLE_INTERNAL_SIGNIN: false,
