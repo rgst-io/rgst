@@ -72,6 +72,7 @@ local all = {
           },
           'repository.pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
           'repository.signing': {
+            DEFAULT_TRUST_MODEL: 'committer',
             SIGNING_KEY: '76193178098A55D00D388D48C969F001BABC0EE1',
             SIGNING_NAME: 'git.rgst.io Signing Key',
             SIGNING_EMAIL: 'forgejo@rgst.io',
@@ -86,7 +87,7 @@ local all = {
             ENABLE_REVERSE_PROXY_AUTHENTICATION: false,
           },
           service: {
-            DISABLE_REGISTRATION: false,
+            DISABLE_REGISTRATION: true,
             ALLOW_ONLY_EXTERNAL_REGISTRATION: true,
             REQUIRE_SIGNIN_VIEW: false,
             ENABLE_INTERNAL_SIGNIN: false,
