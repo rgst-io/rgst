@@ -21,6 +21,11 @@ local name = 'forgejo';
 local host = 'git.rgst.io';
 local namespace = name;
 
+local nodes = {
+  'control-plane': 'ruka',
+  runner: 'mocha',
+};
+
 local all = {
   namespace: k._Object('v1', 'Namespace', name) {},
   // https://artifacthub.io/packages/helm/forgejo-helm/forgejo
@@ -33,7 +38,7 @@ local all = {
     version='16.2.0',
     values={
       nodeSelector: {
-        'kubernetes.io/hostname': 'ruka',
+        'kubernetes.io/hostname': nodes['control-plane'],
       },
       gitea: {
         oauth: [{
@@ -111,7 +116,9 @@ local all = {
         existingSecret: $.external_secret.metadata.name,
       },
       persistence: {
-        size: '1Ti',
+        size: $.gitea_pv.spec.capacity.storage,
+        create: false,
+        claimName: $.gitea_pvc.metadata.name,
       },
       ingress: {
         enabled: true,
@@ -139,6 +146,37 @@ local all = {
       valkey: { enabled: true, master: { resourcesPreset: 'medium' } },
     },
   ),
+
+  gitea_pvc: k._Object('v1', 'PersistentVolumeClaim', 'forgejo-gitea-shared-storage', namespace) {
+    spec: {
+      storageClassName: '',
+      accessModes: ['ReadWriteOnce'],
+      resources: {
+        requests: { storage: $.gitea_pv.spec.capacity.storage },
+      },
+      volumeName: $.gitea_pv.metadata.name,
+    },
+  },
+  gitea_pv: k._Object('v1', 'PersistentVolume', 'forgejo-gitea-shared-storage') {
+    spec: {
+      storageClassName: '',
+      capacity: {
+        storage: '500Gi',
+      },
+      accessModes: ['ReadWriteOnce'],
+      persistentVolumeReclaimPolicy: 'Retain',
+      'local': { path: '/mnt/db/forgejo' },
+      nodeAffinity: {
+        required: {
+          nodeSelectorTerms: [{ matchExpressions: [{
+            key: 'kubernetes.io/hostname',
+            operator: 'In',
+            values: [nodes['control-plane']],
+          }] }],
+        },
+      },
+    },
+  },
 
   runner_config: k.ConfigMap(name + '-runner-config', namespace) {
     data_:: {
@@ -171,7 +209,7 @@ local all = {
         },
         spec: {
           nodeSelector: {
-            'kubernetes.io/hostname': 'mocha',
+            'kubernetes.io/hostname': nodes.runner,
           },
           volumes: [
             { name: name, emptyDir: {} }
