@@ -266,16 +266,19 @@ local all = {
                   '$(RUNNER_NAME)',
                   '--instance',
                   '$(FORGEJO_INSTANCE_URL)',
-                ] + std.flattenArrays([
-                  [
-                    'ubuntu-%s%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [image.version, if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
-                  ] + (
-                    if image.latest then [
-                      'ubuntu-latest%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
-                    ] else []
-                  )
-                  for image in images
-                ]),
+                ] + [
+                  '--labels',
+                  std.join(',', std.flattenArrays([
+                    [
+                      'ubuntu-%s%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [image.version, if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
+                    ] + (
+                      if image.latest then [
+                        'ubuntu-latest%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
+                      ] else []
+                    )
+                    for image in images
+                  ])),
+                ],
                 env: k.envList({
                   RUNNER_NAME: { fieldRef: { fieldPath: 'metadata.name' } },
                   RUNNER_SECRET: { secretKeyRef: { name: $.external_secret.metadata.name, key: 'RUNNER_SECRET' } },
