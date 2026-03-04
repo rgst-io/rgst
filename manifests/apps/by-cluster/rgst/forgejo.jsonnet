@@ -62,6 +62,7 @@ local all = {
             USER: self.NAME,
             SCHEMA: 'forgejo',
           },
+          moderation: { enabled: true },
           mailer: {
             ENABLED: true,
             FROM: 'forgejo@rgst.io',
@@ -69,6 +70,16 @@ local all = {
             SMTP_ADDR: 'smtp.mailgun.org',
             SMTP_PORT: 465,
             USER: 'forgejo@rgst.io',
+          },
+          repository: {
+            // We limit users by default to be unable to create any
+            // repos, orgs, and forks.
+            //
+            // If you're seeing this and would like access, reach out to
+            // me :)
+            MAX_CREATION_LIMIT: 0,
+            DISABLE_REGULAR_ORG_CREATION: true,
+            ALLOW_FORK_WITHOUT_MAXIMUM_LIMIT: false,
           },
           'repository.pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
           'repository.signing': {
