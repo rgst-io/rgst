@@ -25,7 +25,7 @@ local nodes = {
   'control-plane': 'ruka',
   runners: [
     { node_name: 'mocha', arch: 'amd64' },
-    { node_name: 'pikachu', arch: 'arm64' },
+    { node_name: 'pikachu', arch: 'arm' },
   ],
 };
 
@@ -270,10 +270,10 @@ local all = {
                   '--labels',
                   std.join(',', std.flattenArrays([
                     [
-                      'ubuntu-%s%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [image.version, if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
+                      'ubuntu-%s%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [image.version, if runner.arch == 'arm' then '-' + runner.arch else '', image.version],
                     ] + (
                       if image.latest then [
-                        'ubuntu-latest%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [if runner.arch == 'arm64' then '-' + runner.arch else '', image.version],
+                        'ubuntu-latest%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [if runner.arch == 'arm' then '-' + runner.arch else '', image.version],
                       ] else []
                     )
                     for image in images
