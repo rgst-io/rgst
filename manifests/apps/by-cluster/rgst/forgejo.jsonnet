@@ -220,12 +220,44 @@ local all = {
     },
   },
 
+  runner_network_policy: k._Object('networking.k8s.io/v1', 'NetworkPolicy', name + '-runner-egress', namespace) {
+    spec: {
+      podSelector: {
+        matchExpressions: [{
+          key: 'app',
+          operator: 'In',
+          values: [name + '-runner-' + runner.node_name for runner in nodes.runners],
+        }],
+      },
+      policyTypes: ['Egress'],
+      egress: [{
+        to: [{
+          ipBlock: {
+            cidr: '0.0.0.0/0',
+            except: [
+              '100.64.0.0/10',  // Tailscale CGNAT range.
+              '192.168.0.0/16',  // LAN
+            ],
+          },
+        }, {
+          ipBlock: {
+            cidr: '::/0',
+            except: [
+              'fd7a:115c:a1e0::/48',  // Tailscale IPv6 ULA range.
+            ],
+          },
+        }],
+      }],
+    },
+  },
+
+
   runners: k.Container {
     ['runner_%s' % runner.node_name]: k._Object('apps/v1', 'StatefulSet', name + '-runner' + '-' + runner.node_name, namespace) {
       local this = self,
       spec: {
         replicas: 1,
-        selector: { matchLabels: { app: name + '-runner' } },
+        selector: { matchLabels: { app: name + '-runner' + '-' + runner.node_name } },
         serviceName: name + '-runner',
         updateStrategy: { type: 'RollingUpdate' },
         template: {
