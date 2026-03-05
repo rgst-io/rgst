@@ -220,34 +220,34 @@ local all = {
     },
   },
 
-  runner_network_policy: k._Object('networking.k8s.io/v1', 'NetworkPolicy', name + '-runner-egress', namespace) {
+  runner_network_policy: k._Object('projectcalico.org/v3', 'NetworkPolicy', name + '-runner-egress', namespace) {
     spec: {
-      podSelector: {
-        matchExpressions: [{
-          key: 'app',
-          operator: 'In',
-          values: [name + '-runner-' + runner.node_name for runner in nodes.runners],
-        }],
-      },
-      policyTypes: ['Egress'],
-      egress: [{
-        to: [{
-          ipBlock: {
-            cidr: '0.0.0.0/0',
-            except: [
+      selector: 'app in { ' + std.join(', ', ["'%s'" % runner_label for runner_label in [
+        name + '-runner-' + runner.node_name
+        for runner in nodes.runners
+      ]]) + ' }',
+      types: ['Egress'],
+      egress: [
+        {
+          action: 'Allow',
+          destination: {
+            nets: ['0.0.0.0/0'],
+            notNets: [
               '100.64.0.0/10',  // Tailscale CGNAT range.
               '192.168.0.0/16',  // LAN
             ],
           },
-        }, {
-          ipBlock: {
-            cidr: '::/0',
-            except: [
+        },
+        {
+          action: 'Allow',
+          destination: {
+            nets: ['::/0'],
+            notNets: [
               'fd7a:115c:a1e0::/48',  // Tailscale IPv6 ULA range.
             ],
           },
-        }],
-      }],
+        },
+      ],
     },
   },
 
