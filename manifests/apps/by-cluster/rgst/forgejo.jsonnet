@@ -301,7 +301,7 @@ local all = {
               },
               {
                 name: 'docker',
-                image: 'docker:29.2.1-dind-rootless',
+                image: 'docker:29.2.1-dind',
                 args: [
                   '--host',
                   'unix://' + dind_sock,
@@ -310,8 +310,6 @@ local all = {
                   seccompProfile: { type: 'Unconfined' },
                   appArmorProfile: { type: 'Unconfined' },
                   privileged: true,
-                  runAsUser: 1000,
-                  runAsGroup: 1000,
                 },
                 restartPolicy: 'Always',  // sidecar
                 volumeMounts: [
@@ -327,7 +325,7 @@ local all = {
               },
               {
                 name: 'preload-docker-images',
-                image: 'docker:29.2.1-dind-rootless',
+                image: 'docker:29.2.1-dind',
                 command: ['/bin/sh', '-ce'],
                 env: k.envList({
                   DOCKER_HOST: 'unix:///run/docker/docker.sock',
