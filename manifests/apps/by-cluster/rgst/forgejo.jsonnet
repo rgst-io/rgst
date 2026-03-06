@@ -301,7 +301,7 @@ local all = {
               },
               {
                 name: 'docker',
-                image: 'docker:29.2.1-dind',
+                image: 'docker:29.3.0-dind',
                 args: [
                   '--host',
                   'unix://' + dind_sock,
@@ -325,7 +325,7 @@ local all = {
               },
               {
                 name: 'preload-docker-images',
-                image: 'docker:29.2.1-dind',
+                image: 'docker:29.3.0-dind',
                 command: ['/bin/sh', '-ce'],
                 env: k.envList({
                   DOCKER_HOST: 'unix:///run/docker/docker.sock',
@@ -355,6 +355,7 @@ local all = {
               env: k.envList({
                 DOCKER_HOST: 'unix:///run/docker/docker.sock',
               }),
+              securityContext: { runAsUser: 0, runAsGroup: 0 },
               volumeMounts: [
                 {
                   name: 'dind-sock',
