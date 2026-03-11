@@ -59,25 +59,16 @@ local all = {
             DISABLE_REGULAR_ORG_CREATION: true,
             SEND_NOTIFICATION_EMAIL_ON_NEW_USER: true,
           },
+          // https://forgejo.org/docs/next/admin/config-cheat-sheet/#git---timeout-settings-gittimeout
+          'git.timeout': {
+            MIGRATE: 60 * 30,  // 30 minutes in seconds
+          },
           database: {
             DB_TYPE: 'postgres',
             HOST: '100.109.240.128',  // ruka.koi-insen.ts.net
             NAME: 'forgejo',
             USER: self.NAME,
             SCHEMA: 'forgejo',
-          },
-          moderation: { enabled: true },
-          mailer: {
-            ENABLED: true,
-            FROM: 'forgejo@rgst.io',
-            PROTOCOL: 'smtps',
-            SMTP_ADDR: 'smtp.mailgun.org',
-            SMTP_PORT: 465,
-            USER: 'forgejo@rgst.io',
-          },
-          oauth2_client: {
-            ENABLE_AUTO_REGISTRATION: true,
-            ACCOUNT_LINKING: 'disabled',
           },
           repository: {
             // We limit users by default to be unable to create any
@@ -116,6 +107,19 @@ local all = {
             ENABLE_INTERNAL_SIGNIN: false,
             ENABLE_BASIC_AUTHENTICATION: false,
             ENABLE_NOTIFY_MAIL: true,
+          },
+          moderation: { enabled: true },
+          mailer: {
+            ENABLED: true,
+            FROM: 'forgejo@rgst.io',
+            PROTOCOL: 'smtps',
+            SMTP_ADDR: 'smtp.mailgun.org',
+            SMTP_PORT: 465,
+            USER: 'forgejo@rgst.io',
+          },
+          oauth2_client: {
+            ENABLE_AUTO_REGISTRATION: true,
+            ACCOUNT_LINKING: 'disabled',
           },
         },
         additionalConfigFromEnvs: [
