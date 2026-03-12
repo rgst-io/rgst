@@ -44,6 +44,7 @@ local all = {
         'kubernetes.io/hostname': nodes['control-plane'],
       },
       gitea: {
+        admin: { username: '' },
         oauth: [{
           name: 'Authentik',
           provider: 'openidConnect',
@@ -59,16 +60,22 @@ local all = {
             DISABLE_REGULAR_ORG_CREATION: true,
             SEND_NOTIFICATION_EMAIL_ON_NEW_USER: true,
           },
-          // https://forgejo.org/docs/next/admin/config-cheat-sheet/#git---timeout-settings-gittimeout
-          'git.timeout': {
-            MIGRATE: 60 * 60,  // 1 hour in seconds
-          },
           database: {
             DB_TYPE: 'postgres',
             HOST: '100.109.240.128',  // ruka.koi-insen.ts.net
             NAME: 'forgejo',
             USER: self.NAME,
             SCHEMA: 'forgejo',
+          },
+          DEFAULT: {
+            APP_NAME: 'git.rgst.io',
+          },
+          git: {
+            GC_ARGS: '--aggressive --auto',
+          },
+          // https://forgejo.org/docs/next/admin/config-cheat-sheet/#git---timeout-settings-gittimeout
+          'git.timeout': {
+            MIGRATE: 60 * 60,  // 1 hour in seconds
           },
           repository: {
             // We limit users by default to be unable to create any
@@ -168,10 +175,6 @@ local all = {
           secretName: std.strReplace(host, '.', '-'),
         }],
       },
-      postgresql: { enabled: false },  // We use the shared Postgres instance.
-      'postgresql-ha': { enabled: false },
-      'valkey-cluster': { enabled: false },
-      valkey: { enabled: true, master: { resourcesPreset: 'medium' } },
     },
   ),
 
@@ -384,6 +387,24 @@ local all = {
     }
     for runner in nodes.runners
   },
+
+  valkey_helm_chart: argo.HelmApplication(
+    app_name=name + '-valkey',
+    install_namespace=namespace,
+    chart='valkey',
+    repoURL='https://valkey.io/valkey-helm/',
+    version='0.9.3',
+    values={
+      image: {
+        repository: 'valkey/valkey',
+        tag: '9.0.3',
+      },
+      dataStorage: {
+        className: 'nfs-client',
+        requestedSize: '20Gi',
+      },
+    }
+  ),
 
   external_secret: secrets.ExternalSecret(name + '-custom', name) {
     keys:: {
