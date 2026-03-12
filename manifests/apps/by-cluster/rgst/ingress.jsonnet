@@ -41,6 +41,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
       nodeSelector: {
         'kubernetes.io/hostname': node_name,
       },
+      logs: { access: { enabled: true, format: 'common' } },
       ports+: {
         web+: { port: 80, hostPort: self.port },
         websecure+: { port: 443, hostPort: self.port },
