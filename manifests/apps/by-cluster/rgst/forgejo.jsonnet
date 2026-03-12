@@ -61,7 +61,7 @@ local all = {
           },
           // https://forgejo.org/docs/next/admin/config-cheat-sheet/#git---timeout-settings-gittimeout
           'git.timeout': {
-            MIGRATE: 60 * 30,  // 30 minutes in seconds
+            MIGRATE: 60 * 60,  // 1 hour in seconds
           },
           database: {
             DB_TYPE: 'postgres',
