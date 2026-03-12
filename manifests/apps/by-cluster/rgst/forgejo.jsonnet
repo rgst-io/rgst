@@ -45,6 +45,18 @@ local all = {
       },
       gitea: {
         admin: { username: '' },
+        queue: {
+          TYPE: 'redis',
+          CONN_STR: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/0',
+        },
+        cache: {
+          ADAPTER: 'redis',
+          HOST: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/1',
+        },
+        session: {
+          PROVIDER: 'redis',
+          PROVIDER_CONFIG: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/2',
+        },
         oauth: [{
           name: 'Authentik',
           provider: 'openidConnect',
@@ -400,6 +412,7 @@ local all = {
         tag: '9.0.3',
       },
       dataStorage: {
+        enabled: true,
         className: 'nfs-client',
         requestedSize: '20Gi',
       },
