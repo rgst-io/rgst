@@ -45,18 +45,6 @@ local all = {
       },
       gitea: {
         admin: { username: '' },
-        queue: {
-          TYPE: 'redis',
-          CONN_STR: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/0',
-        },
-        cache: {
-          ADAPTER: 'redis',
-          HOST: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/1',
-        },
-        session: {
-          PROVIDER: 'redis',
-          PROVIDER_CONFIG: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/2',
-        },
         oauth: [{
           name: 'Authentik',
           provider: 'openidConnect',
@@ -71,6 +59,10 @@ local all = {
             DEFAULT_EMAIL_NOTIFICATIONS: 'onmention',
             DISABLE_REGULAR_ORG_CREATION: true,
             SEND_NOTIFICATION_EMAIL_ON_NEW_USER: true,
+          },
+          cache: {
+            ADAPTER: 'redis',
+            HOST: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/1',
           },
           database: {
             DB_TYPE: 'postgres',
@@ -97,6 +89,10 @@ local all = {
             // me :)
             MAX_CREATION_LIMIT: 0,
             ALLOW_FORK_WITHOUT_MAXIMUM_LIMIT: false,
+          },
+          queue: {
+            TYPE: 'redis',
+            CONN_STR: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/0',
           },
           'repository.pull-requests': { DEFAULT_MERGE_STYLE: 'squash', DEFAULT_UPDATE_STYLE: 'rebase' },
           'repository.signing': {
@@ -126,6 +122,10 @@ local all = {
             ENABLE_INTERNAL_SIGNIN: false,
             ENABLE_BASIC_AUTHENTICATION: false,
             ENABLE_NOTIFY_MAIL: true,
+          },
+          session: {
+            PROVIDER: 'redis',
+            PROVIDER_CONFIG: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/2',
           },
           moderation: { enabled: true },
           mailer: {
