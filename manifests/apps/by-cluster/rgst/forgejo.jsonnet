@@ -38,7 +38,7 @@ local all = {
     //! renovate datasource=docker
     chart='forgejo',
     repoURL='code.forgejo.org/forgejo-helm',
-    version='16.2.0',
+    version='16.2.1',
     values={
       nodeSelector: {
         'kubernetes.io/hostname': nodes['control-plane'],
