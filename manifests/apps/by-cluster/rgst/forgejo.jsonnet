@@ -24,7 +24,7 @@ local namespace = name;
 local nodes = {
   'control-plane': 'ruka',
   runners: [
-    { node_name: 'mocha', arch: 'amd64' },
+    { node_name: 'squirtle', arch: 'amd64' },
     { node_name: 'pikachu', arch: 'arm' },
   ],
 };

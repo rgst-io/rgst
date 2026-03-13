@@ -156,7 +156,7 @@ local traefik(name, node_name, cloudflare=false) = k.Container {
 
 local all = {
   external: traefik(null, 'ruka', true),
-  internal: traefik('internal-traefik', 'mocha'),  // Not exposed to the internet
+  internal: traefik('internal-traefik', 'squirtle'),  // Not exposed to the internet
 };
 
 k.List() { items_:: all }
