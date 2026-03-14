@@ -24,8 +24,8 @@ local namespace = name;
 local nodes = {
   'control-plane': 'ruka',
   runners: [
-    { node_name: 'squirtle', arch: 'amd64' },
-    { node_name: 'pikachu', arch: 'arm' },
+    { node_name: 'squirtle', arch: 'amd64', replicas: 3 },
+    { node_name: 'pikachu', arch: 'arm', replicas: 2 },
   ],
 };
 
@@ -241,7 +241,7 @@ local all = {
     ['runner_%s' % runner.node_name]: k._Object('apps/v1', 'StatefulSet', name + '-runner' + '-' + runner.node_name, namespace) {
       local this = self,
       spec: {
-        replicas: 1,
+        replicas: runner.replicas,
         selector: { matchLabels: { app: name + '-runner' + '-' + runner.node_name } },
         serviceName: name + '-runner',
         updateStrategy: { type: 'RollingUpdate' },
@@ -308,7 +308,7 @@ local all = {
                   },
                   requests: {
                     cpu: 2,
-                    memory: '4Gi',
+                    memory: '2Gi',
                   },
                 },
                 volumeMounts: [{
