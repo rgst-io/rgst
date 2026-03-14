@@ -140,6 +140,13 @@ local all = {
             ENABLE_AUTO_REGISTRATION: true,
             ACCOUNT_LINKING: 'disabled',
           },
+          webhook: {
+            // https://forgejo.org/docs/latest/admin/config-cheat-sheet/#webhook-webhook
+            ALLOWED_HOST_LIST: std.join(',', [
+              'external',
+              'atlantis.atlantis.svc.cluster.local',
+            ]),
+          },
         },
         additionalConfigFromEnvs: [
           {
