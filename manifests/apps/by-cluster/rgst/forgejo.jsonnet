@@ -119,8 +119,8 @@ local all = {
             DISABLE_REGISTRATION: false,
             ALLOW_ONLY_EXTERNAL_REGISTRATION: true,
             REQUIRE_SIGNIN_VIEW: false,
-            ENABLE_INTERNAL_SIGNIN: true,
-            ENABLE_BASIC_AUTHENTICATION: true,
+            ENABLE_INTERNAL_SIGNIN: false,
+            ENABLE_BASIC_AUTHENTICATION: false,
             ENABLE_NOTIFY_MAIL: true,
           },
           session: {
