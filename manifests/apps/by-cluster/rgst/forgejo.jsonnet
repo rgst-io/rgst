@@ -145,6 +145,7 @@ local all = {
             ALLOWED_HOST_LIST: std.join(',', [
               'external',
               'atlantis.atlantis.svc.cluster.local',
+              'renovate-renovate-operator.renovate.svc.cluster.local',
             ]),
           },
         },
