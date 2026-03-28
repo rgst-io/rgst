@@ -132,7 +132,7 @@ local all = {
             STORAGE_TYPE: 'minio',
             SERVE_DIRECT: true,
             MINIO_USE_SSL: true,
-            MINIO_ENDPOINT: 'https://c41358b3e2e8f5345933f0d433e3abef.r2.cloudflarestorage.com',
+            MINIO_ENDPOINT: 'c41358b3e2e8f5345933f0d433e3abef.r2.cloudflarestorage.com',
             MINIO_BUCKET: 'user-content-git-rgst-io',
             MINIO_LOCATION: 'auto',
             MINIO_CHECKSUM_ALGORITHM: 'md5',
