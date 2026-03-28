@@ -306,9 +306,11 @@ local all = {
                   std.join(',', std.flattenArrays([
                     [
                       'ubuntu-%s%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [image.version, if runner.arch == 'arm' then '-' + runner.arch else '', image.version],
+                      'ubuntu-%s-multiarch:docker://ghcr.io/catthehacker/ubuntu:act-%s' % image.version,
                     ] + (
                       if image.latest then [
                         'ubuntu-latest%s:docker://ghcr.io/catthehacker/ubuntu:act-%s' % [if runner.arch == 'arm' then '-' + runner.arch else '', image.version],
+                        'ubuntu-latest-multiarch:docker://ghcr.io/catthehacker/ubuntu:act-%s' % image.version,
                       ] else []
                     )
                     for image in images
