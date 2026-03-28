@@ -40,6 +40,7 @@ local all = {
     repoURL='code.forgejo.org/forgejo-helm',
     version='16.2.1',
     values={
+      local this = self,
       nodeSelector: {
         'kubernetes.io/hostname': nodes['control-plane'],
       },
@@ -127,6 +128,15 @@ local all = {
             PROVIDER: 'redis',
             PROVIDER_CONFIG: 'redis://forgejo-valkey.forgejo.svc.cluster.local:6379/2',
           },
+          storage: {
+            STORAGE_TYPE: 'minio',
+            SERVE_DIRECT: true,
+            MINIO_USE_SSL: true,
+            MINIO_ENDPOINT: 'https://c41358b3e2e8f5345933f0d433e3abef.r2.cloudflarestorage.com',
+            MINIO_BUCKET: 'user-content-git-rgst-io',
+            MINIO_LOCATION: 'auto',
+            MINIO_CHECKSUM_ALGORITHM: 'md5',
+          },
           moderation: { enabled: true },
           mailer: {
             ENABLED: true,
@@ -149,21 +159,21 @@ local all = {
             ]),
           },
         },
+        additionalConfigFromEnvs_:: {
+          FORGEJO__DATABASE__PASSWD: 'DATABASE_PASSWORD',
+          FORGEJO__MAILER__PASSWD: 'MAIL_PASSWORD',
+          FORGEJO__STORAGE__MINIO_ACCESS_KEY_ID: 'MINIO_ACCESS_KEY_ID',
+          FORGEJO__STORAGE__MINIO_SECRET_ACCESS_KEY: 'MINIO_SECRET_ACCESS_KEY',
+        },
         additionalConfigFromEnvs: [
           {
-            name: 'FORGEJO__DATABASE__PASSWD',
+            name: k,
             valueFrom: { secretKeyRef: {
               name: $.external_secret.metadata.name,
-              key: 'DATABASE_PASSWORD',
+              key: this.gitea.additionalConfigFromEnvs_[k],
             } },
-          },
-          {
-            name: 'FORGEJO__MAILER__PASSWD',
-            valueFrom: { secretKeyRef: {
-              name: $.external_secret.metadata.name,
-              key: 'MAIL_PASSWORD',
-            } },
-          },
+          }
+          for k in std.objectFields(this.gitea.additionalConfigFromEnvs_)
         ],
       },
       signing: {
@@ -432,7 +442,13 @@ local all = {
       privateKey: { remoteRef: { key: 'SIGNING_SSH_PRIVATE_KEY' } },
     } + {
       [k]: { remoteRef: { key: k } }
-      for k in ['DATABASE_PASSWORD', 'MAIL_PASSWORD', 'RUNNER_SECRET']
+      for k in [
+        'DATABASE_PASSWORD',
+        'MAIL_PASSWORD',
+        'RUNNER_SECRET',
+        'MINIO_ACCESS_KEY_ID',
+        'MINIO_SECRET_ACCESS_KEY',
+      ]
     },
     secret_store:: $.doppler.secret_store,
     target:: name + '-custom',
