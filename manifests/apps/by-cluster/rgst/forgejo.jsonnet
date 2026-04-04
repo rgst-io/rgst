@@ -290,7 +290,7 @@ local all = {
             initContainers: [
               {
                 name: 'runner-register',
-                image: 'code.forgejo.org/forgejo/runner:12.7.3',
+                image: 'code.forgejo.org/forgejo/runner:12.8.0',
                 command: [
                   'forgejo-runner',
                   'register',
@@ -387,7 +387,7 @@ local all = {
             ],
             containers: [{
               name: 'runner',
-              image: 'code.forgejo.org/forgejo/runner:12.7.3',
+              image: 'code.forgejo.org/forgejo/runner:12.8.0',
               command: ['forgejo-runner', 'daemon', '--config', 'config.yaml'],
               env: k.envList({
                 DOCKER_HOST: 'unix:///run/docker/docker.sock',
